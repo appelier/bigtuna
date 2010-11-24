@@ -14,3 +14,4 @@ capybara*.html
 config/*.yml
 
 builds/*
+test/files/*
