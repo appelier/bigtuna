@@ -9,6 +9,6 @@
 %ol
   - @builds.each do |build|
     %li
-      %strong= link_to("#{build.commit[0, 10]} @ #{build.created_at}", build_path(build))
+      %strong= link_to(build.display_name, build_path(build))
       %br
       %strong= build.status
