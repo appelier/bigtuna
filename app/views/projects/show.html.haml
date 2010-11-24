@@ -8,7 +8,7 @@
 
 %ol
   - @builds.each do |build|
-    %li
+    %li{:class => build.status}
       %strong= link_to(build.display_name, build_path(build))
       %br
       %strong= build.status

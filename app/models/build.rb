@@ -1,22 +1,19 @@
 class Build < ActiveRecord::Base
-  STATUS_PROGRESS = "progress"
-  STATUS_OK = "ok"
-  STATUS_FAILED = "failed"
+  STATUS_PROGRESS = "status_build_in_progress"
+  STATUS_OK = "status_build_ok"
+  STATUS_FAILED = "status_build_failed"
   belongs_to :project
-  after_destroy :remove_build_dir
+  before_destroy :remove_build_dir
 
   def perform
+    stdout = ""
     project_dir = project.build_dir
     self.started_at = Time.now
     self.build_dir = File.join(project_dir, self.scheduled_at.strftime("%Y%m%d%H%M%S") + "_" + commit[0, 10])
-    command = "git clone #{project.vcs_source} \"#{self.build_dir}\""
-    Rails.logger.debug("BigTuna executing: #{command}")
-    `#{command}`
-    command = "cd #{self.build_dir} && #{project.task} 2>&1"
-    Rails.logger.debug("BigTuna executing: #{command}")
-    self.stdout = `#{command}`
+    stdout << Runner.execute("git clone #{project.vcs_source} #{self.build_dir} 2>&1")
+    stdout << Runner.execute("cd #{self.build_dir} && #{project.task} 2>&1")
     status = $?.exitstatus
-    Rails.logger.debug("BigTuna exit status: #{status}")
+    self.stdout = stdout
     if status == 0
       self.status = STATUS_OK
     else
@@ -30,8 +27,13 @@ class Build < ActiveRecord::Base
     "#{commit[0, 10]} @ #{self.scheduled_at.strftime("%Y-%m-%d %H:%M:%S")}"
   end
 
+  def error(job, exception)
+    Rails.logger.warn(exception.backtrace)
+  end
+
   private
   def remove_build_dir
+    Rails.logger.debug("[BigTuna] Removing build dir #{self.build_dir}")
     FileUtils.rm_rf(self.build_dir)
   end
 end

@@ -1,0 +1,11 @@
+.status_build_in_progress {
+  background-color: yellow;
+}
+
+.status_build_ok {
+  background-color: green;
+}
+
+.status_build_failed {
+  background-color: red;
+}
