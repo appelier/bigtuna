@@ -12,10 +12,11 @@ class Build < ActiveRecord::Base
     command = "git clone #{project.vcs_source} \"#{self.build_dir}\""
     Rails.logger.debug("BigTuna executing: #{command}")
     `#{command}`
-    command = "cd #{self.build_dir} && #{project.task} 2>&1 | tee big_tuna.log"
+    command = "cd #{self.build_dir} && #{project.task} 2>&1"
     Rails.logger.debug("BigTuna executing: #{command}")
     self.stdout = `#{command}`
     status = $?.exitstatus
+    Rails.logger.debug("BigTuna exit status: #{status}")
     if status == 0
       self.status = STATUS_OK
     else

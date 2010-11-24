@@ -33,6 +33,6 @@ class BuildingTest < ActionController::IntegrationTest
     job = Delayed::Job.order("created_at DESC").first
     job.invoke_job
     visit project_path(project)
-    assert ! page.has_content?("failure")
+    assert page.has_content?("failed")
   end
 end
