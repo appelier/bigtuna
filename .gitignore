@@ -1,0 +1,14 @@
+.bundle
+log/*.log
+tmp/**/*
+
+.DS_Store
+*.swp
+*.swo
+
+test/fixtures
+test/functional
+test/performance
+capybara*.html
+
+config/*.yml
