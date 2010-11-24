@@ -8,4 +8,7 @@
   = f.label(:vcs_source)
   = f.text_field(:vcs_source)
 %div
+  = f.label(:max_builds)
+  = f.text_field(:max_builds)
+%div
   = f.submit(f.object.new_record? ? "Create" : "Update")

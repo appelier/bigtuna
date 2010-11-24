@@ -3,16 +3,14 @@ class Build < ActiveRecord::Base
   STATUS_OK = "ok"
   STATUS_FAILED = "failed"
   belongs_to :project
+  after_destroy :remove_build_dir
 
-  # Delayed::Job interface
   def perform
-    # FileUtils.mkdir_p(File.join("builds", project_dir))
     project_dir = project.build_dir
-    # FileUtils.mkdir_p(File.join("builds", project_dir))
-    build_dir = File.join(project_dir, Time.now.strftime("%Y%m%d%H%M") + "_" + commit)
-    command = "git clone #{project.vcs_source} \"#{build_dir}\""
+    self.build_dir = File.join(project_dir, Time.now.strftime("%Y%m%d%H%M") + "_" + commit)
+    command = "git clone #{project.vcs_source} \"#{self.build_dir}\""
     `#{command}`
-    self.stdout = `cd #{build_dir} && rake 2>&1 | tee rake.log`
+    self.stdout = `cd #{self.build_dir} && rake 2>&1 | tee rake.log`
     status = $?.exitstatus
     if status == 0
       self.status = STATUS_OK
@@ -20,6 +18,7 @@ class Build < ActiveRecord::Base
       self.status = STATUS_FAILED
     end
     self.save!
+    project.truncate_builds!
   end
 
   def after(job)
@@ -36,5 +35,10 @@ class Build < ActiveRecord::Base
     Rails.logger.debug("Job error hook")
     Rails.logger.debug(job.inspect)
     Rails.logger.debug(exception.inspect)
+  end
+
+  private
+  def remove_build_dir
+    FileUtils.rm_rf(self.build_dir)
   end
 end

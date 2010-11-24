@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101124114955) do
+ActiveRecord::Schema.define(:version => 20101124143253) do
 
   create_table "builds", :force => true do |t|
     t.integer  "project_id"
@@ -19,6 +19,7 @@ ActiveRecord::Schema.define(:version => 20101124114955) do
     t.text     "stdout"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "build_dir"
   end
 
   create_table "delayed_jobs", :force => true do |t|
@@ -42,6 +43,7 @@ ActiveRecord::Schema.define(:version => 20101124114955) do
     t.string   "vcs_source", :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "max_builds"
   end
 
 end

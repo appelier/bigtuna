@@ -1,15 +1,14 @@
 class ProjectsController < ApplicationController
+  before_filter :locate_project, :only => [:show, :build, :edit, :update]
   def index
     @projects = Project.order("created_at DESC")
   end
 
   def show
-    @project = Project.find(params[:id])
-    @builds = @project.builds.order("created_at DESC")
+    @builds = @project.builds.order("created_at DESC").limit(@project.max_builds)
   end
 
   def build
-    @project = Project.find(params[:id])
     @project.build!
     redirect_to(project_path(@project))
   end
@@ -25,5 +24,18 @@ class ProjectsController < ApplicationController
     else
       render :new
     end
+  end
+
+  def edit
+  end
+
+  def update
+    @project.update_attributes!(params[:project])
+    redirect_to project_path(@project)
+  end
+
+  private
+  def locate_project
+    @project = Project.find(params[:id])
   end
 end
