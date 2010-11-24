@@ -1,4 +1,7 @@
 class Build < ActiveRecord::Base
+  STATUS_PROGRESS = "progress"
+  STATUS_OK = "ok"
+  STATUS_FAILED = "failed"
   belongs_to :project
 
   # Delayed::Job interface
@@ -10,11 +13,13 @@ class Build < ActiveRecord::Base
     command = "git clone #{project.vcs_source} \"#{build_dir}\""
     `#{command}`
     self.stdout = `cd #{build_dir} && rake 2>&1 | tee rake.log`
-    Rails.logger.debug("*" * 5000)
-    Rails.logger.debug(self.stdout.inspect)
-    Rails.logger.debug(self.save!)
-    Rails.logger.debug("*" * 5000)
-    return false
+    status = $?.exitstatus
+    if status == 0
+      self.status = STATUS_OK
+    else
+      self.status = STATUS_FAILED
+    end
+    self.save!
   end
 
   def after(job)

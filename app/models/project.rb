@@ -3,7 +3,7 @@ class Project < ActiveRecord::Base
 
   def build!
     commit = `git log --format=oneline --max-count=1`.split(" ")[0]
-    build = self.builds.create!(:commit => commit)
+    build = self.builds.create!(:commit => commit, :status => Build::STATUS_PROGRESS)
     Delayed::Job.enqueue(build)
   end
 

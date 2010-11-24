@@ -1,3 +1,12 @@
 %h2= @project.name
 %span= @project.vcs_type
 %span= @project.vcs_source
+
+= link_to("Build now", build_project_path(@project))
+
+%ol
+  - @builds.each do |build|
+    %li
+      %strong= link_to(build.created_at, build_path(build))
+      %br
+      %strong= build.status
