@@ -1,0 +1,11 @@
+%div
+  = f.label(:name)
+  = f.text_field(:name)
+%div
+  = f.label(:vcs_type)
+  = f.text_field(:vcs_type)
+%div
+  = f.label(:vcs_source)
+  = f.text_field(:vcs_source)
+%div
+  = f.submit(f.object.new_record? ? "Create" : "Update")

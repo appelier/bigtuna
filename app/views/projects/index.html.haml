@@ -1,0 +1,4 @@
+= link_to("Add project", new_project_path)
+%ol
+  - @projects.each do |project|
+    %li= link_to(project.name, project_path(project))

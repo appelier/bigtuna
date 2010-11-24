@@ -1,0 +1,26 @@
+development:
+  adapter: postgresql
+  encoding: utf8
+  database: big_tuna_development
+  pool: 5
+  username: msq
+  password:
+  template: template0
+
+test:
+  adapter: postgresql
+  encoding: utf8
+  database: big_tuna_test
+  pool: 5
+  username: msq
+  password:
+  template: template0
+
+production:
+  adapter: postgresql
+  encoding: utf8
+  database: big_tuna_production
+  pool: 5
+  username: msq
+  password:
+  template: template0

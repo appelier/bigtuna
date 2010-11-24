@@ -12,3 +12,4 @@ test/performance
 capybara*.html
 
 config/*.yml
+builds
