@@ -19,8 +19,8 @@ class BuildingTest < ActionController::IntegrationTest
     end
     job = Delayed::Job.order("created_at DESC").first
     job.invoke_job
-    visit project_path(project)
-    assert page.has_content?("ok")
+    visit "/"
+    assert page.has_css?("#project_#{project.id}.#{Build::STATUS_OK}")
   end
 
   test "project build can fail" do
@@ -32,7 +32,7 @@ class BuildingTest < ActionController::IntegrationTest
     end
     job = Delayed::Job.order("created_at DESC").first
     job.invoke_job
-    visit project_path(project)
-    assert page.has_content?("failed")
+    visit "/"
+    assert page.has_css?("#project_#{project.id}.#{Build::STATUS_FAILED}")
   end
 end

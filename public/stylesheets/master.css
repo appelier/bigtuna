@@ -1,11 +1,19 @@
-.status_build_in_progress {
-  background-color: yellow;
-}
-
-.status_build_ok {
-  background-color: green;
-}
-
-.status_build_failed {
-  background-color: red;
-}
+body                           { font-family: "Georgia", serif; font-size: 1.3em; line-height: 1.3em; width: 800px; margin: 0 auto; }
+a                              { color: #000; text-decoration: none; }
+a:hover                        { text-decoration: underline; }
+h1, h2, h3, h4                 { font-family: "Verdana", sans-serif; }
+ul, ol                         { margin: 0; padding: 0; }
+#listing                       { font-size: 1.5em; line-height: 1.5em; list-style-type: none; font-family: "Verdana", sans-serif; font-weight: bold; margin: 20px; }
+#listing td                    { padding: 10px; margin: 3px; }
+#listing td.name               { padding: 10px 30px; }
+#listing td.info               { font-size: 0.4em; color: #000; font-family: "Georgia", serif; line-height: 1.2em; }
+pre.output                     { background: #111; color: #fff; padding: 0.5em; overflow: auto; max-height: 20em; line-height: 0.9em; font-size: 0.8em; }
+.status_build_in_progress      { background-color: #ededa4; }
+.status_build_in_progress a    { color: #000; }
+.status_not_built              { background-color: #a0ccdb; }
+.status_build_in_queue         { background-color: #a0ccdb; }
+.status_build_ok               { background-color: #a1d6a1; }
+.status_build_ok a             { color: #365E36; }
+.status_build_failed           { background-color: #e6b5b5; }
+.status_build_failed a         { color: #994848; }
+.button                        { padding: 10px; margin: 20px; font-weight: bold; font-family: "Verdana", sans-serif; }

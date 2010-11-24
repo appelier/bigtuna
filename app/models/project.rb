@@ -7,8 +7,19 @@ class Project < ActiveRecord::Base
   end
 
   def build!
-    commit = `cd #{self.vcs_source}; git log --format=oneline --max-count=1`.split(" ")[0]
-    build = self.builds.create!(:commit => commit, :status => Build::STATUS_PROGRESS, :scheduled_at => Time.now)
+    commit_info = `cd #{self.vcs_source}; git log --max-count=1 --format="%H%n%an%n%ae%n%ad%n%s"`.split("\n")
+    commit_hash = commit_info.shift
+    author = commit_info.shift
+    email = commit_info.shift
+    date = Time.parse(commit_info.shift)
+    message = commit_info.join("\n")
+    build = self.builds.create!(:commit => commit_hash,
+                                :author => author,
+                                :email => email,
+                                :committed_at => date,
+                                :commit_message => message,
+                                :status => Build::STATUS_IN_QUEUE,
+                                :scheduled_at => Time.now)
     Delayed::Job.enqueue(build)
   end
 

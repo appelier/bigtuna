@@ -1,4 +1,5 @@
 class Build < ActiveRecord::Base
+  STATUS_IN_QUEUE = "status_build_in_queue"
   STATUS_PROGRESS = "status_build_in_progress"
   STATUS_OK = "status_build_ok"
   STATUS_FAILED = "status_build_failed"
@@ -6,6 +7,7 @@ class Build < ActiveRecord::Base
   before_destroy :remove_build_dir
 
   def perform
+    self.update_attributes!(:status => STATUS_PROGRESS)
     stdout = ""
     project_dir = project.build_dir
     self.started_at = Time.now
@@ -24,11 +26,7 @@ class Build < ActiveRecord::Base
   end
 
   def display_name
-    "#{commit[0, 10]} @ #{self.scheduled_at.strftime("%Y-%m-%d %H:%M:%S")}"
-  end
-
-  def error(job, exception)
-    Rails.logger.warn(exception.backtrace)
+    commit[0, 7]
   end
 
   private

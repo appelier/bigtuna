@@ -6,9 +6,15 @@
 
 = link_to("Build now", build_project_path(@project))
 
-%ol
-  - @builds.each do |build|
-    %li{:class => build.status}
-      %strong= link_to(build.display_name, build_path(build))
-      %br
-      %strong= build.status
+%table#listing
+  %tbody
+    - @builds.each do |build|
+      %tr{:class => build.status}
+        %td
+          %strong= link_to(build.display_name, build_path(build))
+        %td.info
+          = ("author: " + link_to(build.author, "mailto:#{build.email}")).html_safe
+          %br
+          = "message: " + truncate(build.commit_message, :length => 35)
+          %br
+          = "scheduled at: " + build.scheduled_at.strftime("%Y-%m-%d %H:%M")
