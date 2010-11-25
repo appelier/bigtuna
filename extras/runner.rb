@@ -22,6 +22,7 @@ class Runner
     old_env = ENV.clone
     ENV.clear
     ORIGINAL_ENV.each { |key, value| ENV[key] = value }
+    ENV["RAILS_ENV"] = "test"
     # ENV["HOME"] = "/Users/msq"
     # ENV["PWD"] = "/Users/msq/Development/big_tuna.git/#{dir}"
     result = blk.call
