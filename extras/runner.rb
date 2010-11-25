@@ -21,6 +21,7 @@ class Runner
     old_env = ENV.clone
     ENV.clear
     ORIGINAL_ENV.each { |key, value| ENV[key] = value }
+    ENV["RAILS_ENV"] = "test"
     result = blk.call
     result
   ensure
