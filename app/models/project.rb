@@ -1,6 +1,6 @@
 class Project < ActiveRecord::Base
   STATUS_NOT_BUILT = "status_not_built"
-  has_many :builds
+  has_many :builds, :dependent => :destroy
 
   def recent_build
     builds.order("created_at DESC").first
@@ -18,7 +18,6 @@ class Project < ActiveRecord::Base
                                 :email => email,
                                 :committed_at => date,
                                 :commit_message => message,
-                                :status => Build::STATUS_IN_QUEUE,
                                 :scheduled_at => Time.now)
     Delayed::Job.enqueue(build)
   end
@@ -28,7 +27,7 @@ class Project < ActiveRecord::Base
   end
 
   def truncate_builds!
-    builds.order("created_at DESC").offset(self.max_builds).each do |build|
+    builds.order("created_at DESC").offset(self.max_builds + 1).each do |build|
       build.destroy
     end
   end

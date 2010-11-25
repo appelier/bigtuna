@@ -8,6 +8,9 @@ class BuildingTest < ActionController::IntegrationTest
 
   def teardown
     FileUtils.rm_rf("test/files/repo")
+    FileUtils.rm_rf("builds/valid")
+    FileUtils.rm_rf("builds/invalid")
+    super
   end
 
   test "one can successfully build a project" do
