@@ -11,10 +11,9 @@ class Build < ActiveRecord::Base
     self.update_attributes!(:status => STATUS_PROGRESS)
     stdout = ""
     self.started_at = Time.now
-    stdout << Runner.execute("git clone #{project.vcs_source} #{self.build_dir} 2>&1")
-    Dir.chdir(self.build_dir) do
-      stdout << Runner.execute("bundle install --deployment && #{project.task} 2>&1")
-    end
+    stdout << Runner.execute(Dir.pwd, "git clone #{project.vcs_source} #{self.build_dir} 2>&1")
+    stdout << Runner.execute(self.build_dir, "bundle install --path=../bundle --deployment 2>&1")
+    stdout << Runner.execute(self.build_dir, "#{project.task} 2>&1")
     status = $?.exitstatus
     self.stdout = stdout
     if status == 0
