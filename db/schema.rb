@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101124231621) do
+ActiveRecord::Schema.define(:version => 20101125005836) do
 
   create_table "builds", :force => true do |t|
     t.integer  "project_id"
@@ -51,6 +51,7 @@ ActiveRecord::Schema.define(:version => 20101124231621) do
     t.datetime "updated_at"
     t.integer  "max_builds"
     t.string   "task"
+    t.string   "hook_name"
   end
 
 end

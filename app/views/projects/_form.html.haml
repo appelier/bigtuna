@@ -14,4 +14,7 @@
   = f.label(:max_builds)
   = f.text_field(:max_builds)
 %div
+  = f.label(:hook_name)
+  = f.text_field(:hook_name)
+%div
   = f.submit(f.object.new_record? ? "Create" : "Update")
