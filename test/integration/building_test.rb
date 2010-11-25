@@ -14,7 +14,7 @@ class BuildingTest < ActionController::IntegrationTest
   end
 
   test "one can successfully build a project" do
-    project = Project.make(:task => "ls -al file", :name => "Valid", :vcs_source => "test/files/repo", :vcs_type => "git")
+    project = Project.make(:steps => "ls -al file", :name => "Valid", :vcs_source => "test/files/repo", :vcs_type => "git")
     visit "/"
     click_link_or_button "Valid"
     assert_difference("Delayed::Job.count", +1) do
@@ -27,7 +27,7 @@ class BuildingTest < ActionController::IntegrationTest
   end
 
   test "project build can fail" do
-    project = Project.make(:task => "ls -al file_doesnt_exist", :name => "Invalid", :vcs_source => "test/files/repo", :vcs_type => "git")
+    project = Project.make(:steps => "ls -al file_doesnt_exist", :name => "Invalid", :vcs_source => "test/files/repo", :vcs_type => "git")
     visit "/"
     click_link_or_button "Invalid"
     assert_difference("Delayed::Job.count", +1) do

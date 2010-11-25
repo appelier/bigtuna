@@ -3,17 +3,20 @@ class Build < ActiveRecord::Base
   STATUS_PROGRESS = "status_build_in_progress"
   STATUS_OK = "status_build_ok"
   STATUS_FAILED = "status_build_failed"
+
   belongs_to :project
   before_destroy :remove_build_dir
   before_create :set_build_values
 
   def perform
     self.update_attributes!(:status => STATUS_PROGRESS)
-    stdout = ""
     self.started_at = Time.now
-    stdout << Runner.execute(Dir.pwd, "git clone #{project.vcs_source} #{self.build_dir} 2>&1")
-    stdout << Runner.execute(self.build_dir, "bundle install --path=../bundle --deployment 2>&1")
-    stdout << Runner.execute(self.build_dir, "#{project.task} 2>&1")
+    step_output = []
+    step_output << {:step => "vcs_fetch", :output => Runner.execute(Dir.pwd, "git clone #{project.vcs_source} #{self.build_dir} 2>&1")}
+    project.steps.split("\n").each do |step|
+      output = Runner.execute(self.build_dir, "#{step} 2>&1")
+      step_output << {:step => step, :output => output}
+    end
     status = $?.exitstatus
     self.stdout = stdout
     if status == 0

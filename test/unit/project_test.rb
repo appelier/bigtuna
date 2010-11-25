@@ -4,7 +4,7 @@ class ProjectTest < ActiveSupport::TestCase
   def setup
     super
     `cd test/files; mkdir repo; cd repo; git init; echo "my file" > file; git add file; git commit -m "my file added"`
-    @project = Project.make(:task => "ls -al file", :name => "Project", :vcs_source => "test/files/repo", :vcs_type => "git", :max_builds => 1)
+    @project = Project.make(:steps => "ls -al file", :name => "Project", :vcs_source => "test/files/repo", :vcs_type => "git", :max_builds => 1)
   end
 
   def teardown
