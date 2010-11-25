@@ -8,12 +8,13 @@ class Runner
         io.each_line do |line|
           buffer << line
         end
-        status = $?.exitstatus
-        output = buffer.join("\n")
-        Rails.logger.debug("[BigTuna] output: #{output}")
-        Rails.logger.debug("[BigTuna] exit status: #{status}")
-        output
       end
+      status = $?.exitstatus
+      output = buffer.join("\n")
+      Rails.logger.debug("[BigTuna] output: #{output}")
+      Rails.logger.debug("[BigTuna] exit status: #{status}")
+      raise Runner::Error.new(status, output) if status != 0
+      output
     end
   end
 
@@ -28,6 +29,14 @@ class Runner
     ENV.clear
     old_env.each do |key, value|
       ENV[key] = value
+    end
+  end
+
+  class Error < Exception
+    attr_reader :exit_code, :output
+
+    def initialize(exit_code, output)
+      @exit_code, @output = exit_code, output
     end
   end
 end

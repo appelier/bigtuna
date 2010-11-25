@@ -1,3 +1,6 @@
 %h2= "Build #{@build.commit}"
 %span= "Dir: #{@build.build_dir}"
-%pre.output= @build.stdout
+
+- (@build.stdout || []).each do |step|
+  %h3= step[:command]
+  %pre.output= step[:output]

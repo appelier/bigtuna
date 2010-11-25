@@ -32,4 +32,28 @@ class ProjectTest < ActiveSupport::TestCase
       @project.destroy
     end
   end
+
+  test "stdout is grouped by command" do
+    project = Project.make(:steps => "git diff file\necho 'lol'", :name => "Project", :vcs_source => "test/files/repo", :vcs_type => "git", :max_builds => 1)
+    job = project.build!
+    job.invoke_job
+    build = project.builds.order("created_at DESC").first
+    steps = build.stdout
+    assert_equal 3, steps.size # 2 + clone task
+    assert_equal "git diff file 2>&1", steps[1][:command]
+    assert_equal "echo 'lol' 2>&1", steps[2][:command]
+    assert_equal Build::STATUS_OK, build.status
+  end
+
+  test "build is stopped when task returns with non-zero exit code" do
+    project = Project.make(:steps => "ls -al file\nls -al not_a_file\necho 'not_here'", :name => "Project", :vcs_source => "test/files/repo", :vcs_type => "git", :max_builds => 1)
+    job = project.build!
+    job.invoke_job
+    build = project.builds.order("created_at DESC").first
+    steps = build.stdout
+    assert_equal 3, steps.size # 2 + clone task
+    assert_equal "ls -al file 2>&1", steps[1][:command]
+    assert_equal "ls -al not_a_file 2>&1", steps[2][:command]
+    assert_equal Build::STATUS_FAILED, build.status
+  end
 end
