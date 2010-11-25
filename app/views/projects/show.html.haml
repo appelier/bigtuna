@@ -1,12 +1,11 @@
-%h2= @project.name
 = link_to("Edit", edit_project_path(@project))
-%br
-%span= @project.vcs_type
-%span= @project.vcs_source
 
 = link_to("Build now", build_project_path(@project))
 
 %table#listing
+  %thead
+    %tr
+      %th{:colspan => 2}= @project.name
   %tbody
     - @builds.each do |build|
       %tr{:class => build.status}

@@ -7,7 +7,7 @@ ul, ol                         { margin: 0; padding: 0; }
 #listing td                    { padding: 10px; margin: 3px; }
 #listing td.name               { padding: 10px 30px; }
 #listing td.info               { font-size: 0.4em; color: #000; font-family: "Georgia", serif; line-height: 1.2em; }
-pre.output                     { background: #111; color: #fff; padding: 0.5em; overflow: auto; max-height: 20em; line-height: 0.9em; font-size: 0.8em; }
+pre.output                     { background: #111; color: #fff; padding: 0.5em; overflow: auto; max-height: 35em; line-height: 1.0em; font-size: 0.6em; }
 .status_build_in_progress      { background-color: #ededa4; }
 .status_build_in_progress a    { color: #000; }
 .status_not_built              { background-color: #a0ccdb; }
