@@ -20,8 +20,10 @@ class Runner
   def self.with_clean_env(&blk)
     old_env = ENV.clone
     ENV.delete("BUNDLE_GEMFILE")
+    ENV["PWD"] = Dir.pwd
     result = blk.call
     ENV["BUNDLE_GEMFILE"] = old_env["BUNDLE_GEMFILE"]
+    ENV["PWD"] = old_env["PWD"]
     result
   end
 end
