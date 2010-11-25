@@ -18,7 +18,7 @@ class Build < ActiveRecord::Base
       step_output << {:step => step, :output => output}
     end
     status = $?.exitstatus
-    self.stdout = stdout
+    self.stdout = step_output.map { |e| "####\nSTEP: #{e[:step]}\n####\n#{e[:output]}" }.join("\n\n\n\n")
     if status == 0
       self.status = STATUS_OK
     else
