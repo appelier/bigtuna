@@ -1,13 +1,12 @@
 class Runner
   def self.execute(dir, command)
-    Rails.logger.debug("[BigTuna] executing in #{dir}: #{command}")
-    with_clean_env do
+    end_command = "cd #{dir}; #{command}"
+    Rails.logger.debug("[BigTuna] executing: #{end_command}")
+    with_clean_env(dir) do
       buffer = []
-      Dir.chdir(dir) do
-        IO.popen(command) do |io|
-          io.each_line do |line|
-            buffer << line
-          end
+      IO.popen(end_command) do |io|
+        io.each_line do |line|
+          buffer << line
         end
       end
 
@@ -19,14 +18,16 @@ class Runner
     end
   end
 
-  def self.with_clean_env(&blk)
+  def self.with_clean_env(dir, &blk)
     old_env = ENV.clone
-    ENV.delete("BUNDLE_GEMFILE")
-    ENV["BUNDLE_APP_CONFIG"] = Dir.pwd + "/.bundle/config"
-    ENV["PWD"] = Dir.pwd
+    ENV.clear
+    ORIGINAL_ENV.each { |key, value| ENV[key] = value }
+    # ENV["HOME"] = "/Users/msq"
+    # ENV["PWD"] = "/Users/msq/Development/big_tuna.git/#{dir}"
     result = blk.call
     result
   ensure
+    ENV.clear
     old_env.each do |key, value|
       ENV[key] = value
     end

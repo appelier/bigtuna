@@ -12,7 +12,7 @@ class Build < ActiveRecord::Base
     stdout = ""
     self.started_at = Time.now
     stdout << Runner.execute(Dir.pwd, "git clone #{project.vcs_source} #{self.build_dir} 2>&1")
-    stdout << Runner.execute(self.build_dir, "bundle install --path=../bundle --deployment 2>&1")
+    stdout << Runner.execute(self.build_dir, "bundle install --path=/Users/msq/Development/big_tuna.git/builds/trimetack/bundle --deployment 2>&1")
     stdout << Runner.execute(self.build_dir, "#{project.task} 2>&1")
     status = $?.exitstatus
     self.stdout = stdout
