@@ -1,6 +1,6 @@
 require "integration_test_helper"
 
-class BuildingTest < ActionController::IntegrationTest
+class ProjectsTest < ActionController::IntegrationTest
   def setup
     super
     `cd test/files; mkdir repo; cd repo; git init; echo "my file" > file; git add file; git commit -m "my file added"`
@@ -37,5 +37,15 @@ class BuildingTest < ActionController::IntegrationTest
     job.invoke_job
     visit "/"
     assert page.has_css?("#project_#{project.id}.#{Build::STATUS_FAILED}")
+  end
+
+  test "removing projects from list" do
+    project = Project.make(:steps => "ls -al file", :name => "Valid", :vcs_source => "test/files/repo", :vcs_type => "git")
+    visit "/"
+    click_link_or_button "Valid"
+    click_link "Remove project"
+    assert_difference("Project.count", -1) do
+      click_button "Yes, I'm sure"
+    end
   end
 end

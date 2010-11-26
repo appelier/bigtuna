@@ -1,5 +1,5 @@
 class ProjectsController < ApplicationController
-  before_filter :locate_project, :only => [:show, :build, :edit, :update]
+  before_filter :locate_project, :only => [:show, :build, :edit, :update, :remove, :destroy]
   def index
     @projects = Project.order("created_at DESC")
   end
@@ -32,6 +32,14 @@ class ProjectsController < ApplicationController
   def update
     @project.update_attributes!(params[:project])
     redirect_to project_path(@project)
+  end
+
+  def remove
+  end
+
+  def destroy
+    @project.destroy
+    redirect_to projects_path
   end
 
   private

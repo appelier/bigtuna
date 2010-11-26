@@ -63,4 +63,14 @@ class ProjectTest < ActiveSupport::TestCase
     assert_equal "echo 'not_here' 2>&1", steps[3][:command]
     assert_equal Build::STATUS_FAILED, build.status
   end
+
+  test "removing project removes its build folder" do
+    job = @project.build!
+    job.invoke_job
+    assert File.exist?(@project.build_dir)
+    assert_difference("Dir[File.join('builds', '*')].size", -1) do
+      @project.destroy
+    end
+    assert ! File.exist?(@project.build_dir)
+  end
 end

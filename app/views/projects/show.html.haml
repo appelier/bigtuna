@@ -1,6 +1,7 @@
 #listing
   %h2= @project.name
   = link_to("Edit", edit_project_path(@project), :class => "button")
+  = link_to("Remove project", remove_project_path(@project), :class => "button")
   = link_to("Build now", build_project_path(@project), :class => "button")
   %tbody
     - @builds.each do |build|

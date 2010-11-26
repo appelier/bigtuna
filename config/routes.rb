@@ -1,6 +1,6 @@
 BigTuna::Application.routes.draw do
   resources :projects do
-    member { get "build" }
+    member { get "build"; get "remove" }
   end
   resources :builds
   match "/hooks/:hook_name", :to => "hooks#post_commit"

@@ -1,6 +1,7 @@
 class Project < ActiveRecord::Base
   STATUS_NOT_BUILT = "status_not_built"
   has_many :builds, :dependent => :destroy
+  before_destroy :remove_build_folder
 
   def recent_build
     builds.order("created_at DESC").first
@@ -39,5 +40,14 @@ class Project < ActiveRecord::Base
   def status
     build = recent_build
     build.nil? ? STATUS_NOT_BUILT : build.status
+  end
+
+  private
+  def remove_build_folder
+    if File.directory?(self.build_dir)
+      FileUtils.rm_rf(self.build_dir)
+    else
+      Rails.logger.debug("[BigTuna] Couldn't find build dir: %p" % [self.build_dir])
+    end
   end
 end
