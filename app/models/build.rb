@@ -48,7 +48,7 @@ class Build < ActiveRecord::Base
       [Dir.pwd, "git clone #{project.vcs_source} #{self.build_dir} 2>&1"]
     ]
     project.steps.split("\n").each do |step|
-      step = step.strip
+      step = process_step_command(step)
       all_steps << [self.build_dir, "#{step} 2>&1"]
     end
     output = []
@@ -67,5 +67,12 @@ class Build < ActiveRecord::Base
     end
     status = exit_code == 0 ? STATUS_OK : STATUS_FAILED
     [status, output]
+  end
+
+  def process_step_command(cmd)
+    cmd.gsub!("%build_dir%", self.build_dir)
+    cmd.gsub!("%project_dir%", self.project.build_dir)
+    cmd.strip!
+    cmd
   end
 end

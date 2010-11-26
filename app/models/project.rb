@@ -27,7 +27,7 @@ class Project < ActiveRecord::Base
   end
 
   def build_dir
-    File.join("builds", name.downcase.gsub(/[^A-Za-z0-9]/, "_"))
+    File.join(Rails.root, "builds", name.downcase.gsub(/[^A-Za-z0-9]/, "_"))
   end
 
   def truncate_builds!
