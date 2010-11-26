@@ -13,3 +13,6 @@
           = "message: " + truncate(build.commit_message, :length => 35)
           %br
           = "scheduled at: " + build.scheduled_at.strftime("%Y-%m-%d %H:%M")
+        .info
+          = form_tag(build_path(build), :method => "DELETE") do
+            %button{:type => "submit"} Delete

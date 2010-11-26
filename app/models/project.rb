@@ -27,7 +27,7 @@ class Project < ActiveRecord::Base
   end
 
   def truncate_builds!
-    builds.order("created_at DESC").offset(self.max_builds + 1).each do |build|
+    builds.order("created_at DESC").offset(self.max_builds).each do |build|
       build.destroy
     end
   end
