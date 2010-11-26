@@ -4,15 +4,15 @@
   %h2 Dir
   %p.step= "#{@build.build_dir}"
 
-%ol
-  %h2 Steps
-  - (@build.stdout || []).each_with_index do |step, index|
-    %li{:id => "step_#{index + 1}"}
-      %p.step= step[:command]
-      %span.exit_code= step[:exit_code] || "Task was not executed"
-      - if step[:exit_code] and step[:output]
-        #output
-          %pre= step[:output]
+  #steps
+    %h2 Steps
+    - (@build.stdout || []).each_with_index do |step, index|
+      %div{:id => "step_#{index + 1}"}
+        %p.step= step[:command]
+        %span.exit_code= step[:exit_code] || "Task was not executed"
+        - if step[:exit_code] and step[:output]
+          #output
+            %pre= step[:output]
 %br
 = link_to("Back", project_path(@build.project), :class => "button")
 
