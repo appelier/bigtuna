@@ -54,12 +54,15 @@ class Build < ActiveRecord::Base
     exit_code = 0
     all_steps.each do |dir, command|
       begin
-        output << {:command => command, :output => Runner.execute(dir, command)}
+        output << {:command => command, :output => Runner.execute(dir, command), :exit_code => 0}
       rescue Runner::Error => e
-        output << {:command => command, :output => e.output}
+        output << {:command => command, :output => e.output, :exit_code => e.exit_code}
         exit_code = e.exit_code
         break
       end
+    end
+    all_steps[output.size .. -1].each do |not_executed_step|
+      output << {:command => not_executed_step[1], :output => nil, :exit_code => nil}
     end
     status = exit_code == 0 ? STATUS_OK : STATUS_FAILED
     [status, output]

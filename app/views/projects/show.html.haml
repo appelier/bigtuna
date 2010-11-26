@@ -10,7 +10,7 @@
     - @builds.each do |build|
       %tr{:class => build.status}
         %td
-          %strong= link_to(build.display_name, build_path(build))
+          %tt= link_to(build.display_name, build_path(build))
         %td.info
           = ("author: " + link_to(build.author, "mailto:#{build.email}")).html_safe
           %br

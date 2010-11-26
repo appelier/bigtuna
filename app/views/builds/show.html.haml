@@ -1,6 +1,10 @@
 %h2= "Build #{@build.commit}"
 %span= "Dir: #{@build.build_dir}"
 
-- (@build.stdout || []).each do |step|
-  %h3= step[:command]
-  %pre.output= step[:output]
+%ol#steps
+  - (@build.stdout || []).each_with_index do |step, index|
+    %li{:id => "step_#{index + 1}"}
+      %h3= step[:command]
+      %span.exit_code= step[:exit_code] || "Task was not executed"
+      - if step[:exit_code] and step[:output]
+        %pre.output= step[:output]
