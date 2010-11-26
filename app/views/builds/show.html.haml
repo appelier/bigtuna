@@ -1,6 +1,15 @@
-%h2= "Build #{@build.commit}"
-%span= "Dir: #{@build.build_dir}"
+#build
+  %h2 Build
+  %p.step= "#{@build.commit}"
+  %h2 Dir
+  %p.step= "#{@build.build_dir}"
 
-- (@build.stdout || []).each do |step|
-  %h3= step[:command]
-  %pre.output= step[:output]
+
+  %h2 Steps
+  - (@build.stdout || []).each do |step|
+    %p.step= step[:command]
+    #output
+      %pre= step[:output]
+
+%br
+= link_to("Back", project_path(@build.project), :class => "button")

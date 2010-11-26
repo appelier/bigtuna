@@ -1,20 +1,26 @@
 %div
   = f.label(:name)
-  = f.text_field(:name)
+  %br
+  = f.text_field(:name, :class => 'textfield')
 %div
   = f.label(:steps)
-  = f.text_area(:steps)
+  %br
+  = f.text_area(:steps, :class => 'textarea')
 %div
   = f.label(:vcs_type)
-  = f.text_field(:vcs_type)
+  %br
+  = f.text_field(:vcs_type, :class => 'textfield')
 %div
   = f.label(:vcs_source)
-  = f.text_field(:vcs_source)
+  %br
+  = f.text_field(:vcs_source, :class => 'textfield')
 %div
   = f.label(:max_builds)
-  = f.text_field(:max_builds)
+  %br
+  = f.text_field(:max_builds, :class => 'textfield')
 %div
   = f.label(:hook_name)
-  = f.text_field(:hook_name)
+  %br
+  = f.text_field(:hook_name, :class => 'textfield')
 %div
   = f.submit(f.object.new_record? ? "Create" : "Update")

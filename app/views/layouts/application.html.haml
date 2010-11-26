@@ -2,13 +2,15 @@
 %html
   %head
     %title BigTuna Continuous Integration
+    = stylesheet_link_tag "reset.css"
     = stylesheet_link_tag "master.css"
     = csrf_meta_tag
     %meta{:"http-equiv" => "Content-Type", :content => "text/html;charset=UTF-8"}
     %meta{:name => "keywords", :content => "keywords"}
     %meta{:name => "description", :content => "description"}
   %body
-    %header
+    #header
       %h1= link_to("BigTuna", root_path)
+      %h2 Continuous Integration
     #content
       = yield

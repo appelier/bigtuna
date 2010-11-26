@@ -1,13 +1,14 @@
-%table#listing
-  %tbody
-    - @projects.each do |project|
-      %tr{:class => project.status, :id => dom_id(project)}
-        %td.name= link_to(project.name, project_path(project))
-        %td.info
-          - if project.recent_build
-            = "commit: " + project.recent_build.commit[0, 7]
-            %br
-            = ("author: " + link_to(project.recent_build.author, "mailto:#{project.recent_build.email}")).html_safe
-            %br
-            = "message: " + truncate(project.recent_build.commit_message, :length => 35)
-= link_to("Add project", new_project_path, :class => "button")
+#listing
+  %h2 Projects
+  = link_to("Add project", new_project_path, :class => "button")
+  - @projects.each do |project|
+    %div{:class => project.status, :id => dom_id(project)}
+      .name
+        %p= link_to(project.name, project_path(project))
+      .info
+        - if project.recent_build
+          = "last commit: " + project.recent_build.commit[0, 7]
+          %br
+          = ("author: " + link_to(project.recent_build.author, "mailto:#{project.recent_build.email}")).html_safe
+          %br
+          = "message: " + truncate(project.recent_build.commit_message, :length => 35)

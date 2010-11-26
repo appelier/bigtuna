@@ -1,17 +1,13 @@
-= link_to("Edit", edit_project_path(@project))
-
-= link_to("Build now", build_project_path(@project))
-
-%table#listing
-  %thead
-    %tr
-      %th{:colspan => 2}= @project.name
+#listing
+  %h2= @project.name
+  = link_to("Edit", edit_project_path(@project), :class => "button")
+  = link_to("Build now", build_project_path(@project), :class => "button")
   %tbody
     - @builds.each do |build|
-      %tr{:class => build.status}
-        %td
-          %strong= link_to(build.display_name, build_path(build))
-        %td.info
+      %div{:class => build.status, :id => dom_id(build)}
+        .name
+          %p= link_to(build.display_name, build_path(build))
+        .info
           = ("author: " + link_to(build.author, "mailto:#{build.email}")).html_safe
           %br
           = "message: " + truncate(build.commit_message, :length => 35)
