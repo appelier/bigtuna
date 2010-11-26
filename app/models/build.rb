@@ -49,7 +49,7 @@ class Build < ActiveRecord::Base
 
   def execute_steps
     all_steps = [
-      [Dir.pwd, "git clone #{project.vcs_source} #{self.build_dir}"]
+      [Dir.pwd, lambda { project.vcs.clone(self.build_dir) }]
     ]
     project.steps.split("\n").each do |step|
       step = process_step_command(step)
@@ -59,7 +59,12 @@ class Build < ActiveRecord::Base
     exit_code = 0
     all_steps.each do |dir, command|
       begin
-        output << {:command => command, :output => Runner.execute(dir, command), :exit_code => 0}
+        if command.is_a?(Proc)
+          out, command = command.call
+        else
+          out = Runner.execute(dir, command)
+        end
+        output << {:command => command, :output => out, :exit_code => 0}
       rescue Runner::Error => e
         output << {:command => command, :output => e.output, :exit_code => e.exit_code}
         exit_code = e.exit_code

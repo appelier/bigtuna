@@ -11,18 +11,8 @@ class Project < ActiveRecord::Base
   end
 
   def build!
-    commit_info = `cd #{self.vcs_source}; git log --max-count=1 --format="%H%n%an%n%ae%n%ad%n%s"`.split("\n")
-    commit_hash = commit_info.shift
-    author = commit_info.shift
-    email = commit_info.shift
-    date = Time.parse(commit_info.shift)
-    message = commit_info.join("\n")
-    build = self.builds.create!(:commit => commit_hash,
-                                :author => author,
-                                :email => email,
-                                :committed_at => date,
-                                :commit_message => message,
-                                :scheduled_at => Time.now)
+    head_info, head_command = vcs.head_info
+    build = self.builds.create!(head_info.merge(:scheduled_at => Time.now))
     Delayed::Job.enqueue(build)
   end
 
@@ -43,6 +33,16 @@ class Project < ActiveRecord::Base
   def status
     build = recent_build
     build.nil? ? STATUS_NOT_BUILT : build.status
+  end
+
+  def vcs
+    return @vcs if @vcs
+    case vcs_type
+    when "git"
+      @vcs = VCS::Git.new(self.vcs_source)
+    else
+      raise ArgumentError.new("VCS not supported: %p" % [vcs_type])
+    end
   end
 
   private

@@ -22,5 +22,10 @@
   = f.label(:hook_name)
   %br
   = f.text_field(:hook_name, :class => 'textfield')
+  %br
+  %span.hint
+    POST to
+    %tt http://big.tuna.host/hooks/:hook_name:
+    to build automatically
 %div
   = f.submit(f.object.new_record? ? "Create" : "Update")
