@@ -9,7 +9,7 @@
 %div
   = f.label(:vcs_type)
   %br
-  = f.text_field(:vcs_type, :class => 'textfield')
+  = f.select(:vcs_type, BigTuna::VCS_BACKENDS.map { |value, klass| [klass::NAME, value] }, :class => 'textfield')
 %div
   = f.label(:vcs_source)
   %br

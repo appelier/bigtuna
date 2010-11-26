@@ -37,12 +37,9 @@ class Project < ActiveRecord::Base
 
   def vcs
     return @vcs if @vcs
-    case vcs_type
-    when "git"
-      @vcs = VCS::Git.new(self.vcs_source)
-    else
-      raise ArgumentError.new("VCS not supported: %p" % [vcs_type])
-    end
+    klass = BigTuna::VCS_BACKENDS.assoc(vcs_type)[1]
+    raise ArgumentError.new("VCS not supported: %p" % [vcs_type]) if klass.nil?
+    @vcs = klass.new(self.vcs_source)
   end
 
   private

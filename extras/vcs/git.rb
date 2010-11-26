@@ -1,5 +1,7 @@
 module VCS
   class Git
+    NAME = "Git"
+
     def initialize(dir)
       raise ArgumentError.new("Repository not found under %p" % [dir]) unless File.directory?(dir)
       @dir = dir
