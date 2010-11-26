@@ -11,4 +11,9 @@
           %br
           = ("author: " + link_to(project.recent_build.author, "mailto:#{project.recent_build.email}")).html_safe
           %br
-          = "message: " + truncate(project.recent_build.commit_message, :length => 35)
+          = "message: " + truncate(project.recent_build.commit_message, :length => 55)
+      .info
+        - if ! project.first?
+          = link_to("Up", arrange_project_path(project, :up => true))
+        - if ! project.last?
+          = link_to("Down", arrange_project_path(project, :down => true))

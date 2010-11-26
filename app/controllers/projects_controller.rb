@@ -1,7 +1,7 @@
 class ProjectsController < ApplicationController
-  before_filter :locate_project, :only => [:show, :build, :edit, :update, :remove, :destroy]
+  before_filter :locate_project, :only => [:show, :build, :edit, :update, :remove, :destroy, :arrange]
   def index
-    @projects = Project.order("created_at DESC")
+    @projects = Project.order("position ASC")
   end
 
   def show
@@ -39,6 +39,15 @@ class ProjectsController < ApplicationController
 
   def destroy
     @project.destroy
+    redirect_to projects_path
+  end
+
+  def arrange
+    if params[:up]
+      @project.move_higher
+    elsif params[:down]
+      @project.move_lower
+    end
     redirect_to projects_path
   end
 

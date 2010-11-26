@@ -1,7 +1,10 @@
 class Project < ActiveRecord::Base
   STATUS_NOT_BUILT = "status_not_built"
+
   has_many :builds, :dependent => :destroy
   before_destroy :remove_build_folder
+
+  acts_as_list
 
   def recent_build
     builds.order("created_at DESC").first

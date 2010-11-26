@@ -11,7 +11,7 @@
         .info
           = ("author: " + link_to(build.author, "mailto:#{build.email}")).html_safe
           %br
-          = "message: " + truncate(build.commit_message, :length => 35)
+          = "message: " + truncate(build.commit_message, :length => 55)
           %br
           = "scheduled at: " + build.scheduled_at.strftime("%Y-%m-%d %H:%M")
         .info

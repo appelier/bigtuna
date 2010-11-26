@@ -9,6 +9,7 @@ class ProjectsTest < ActionController::IntegrationTest
   def teardown
     FileUtils.rm_rf("test/files/repo")
     FileUtils.rm_rf("builds/valid")
+    FileUtils.rm_rf("builds/valid2")
     FileUtils.rm_rf("builds/invalid")
     super
   end
@@ -46,6 +47,29 @@ class ProjectsTest < ActionController::IntegrationTest
     click_link "Remove project"
     assert_difference("Project.count", -1) do
       click_button "Yes, I'm sure"
+    end
+  end
+
+  test "user can reorder projects on project list" do
+    project1 = Project.make(:steps => "echo 'ha'", :name => "Valid", :vcs_source => "test/files/repo", :vcs_type => "git")
+    project2 = Project.make(:steps => "echo 'sa'", :name => "Valid2", :vcs_source => "test/files/repo", :vcs_type => "git")
+    visit "/"
+    within("#project_#{project2.id}") do
+      assert page.has_content?("Up")
+      assert ! page.has_content?("Down")
+    end
+    within("#project_#{project1.id}") do
+      assert page.has_content?("Down")
+      assert ! page.has_content?("Up")
+    end
+    click_link "Down"
+    within("#project_#{project1.id}") do
+      assert page.has_content?("Up")
+      assert ! page.has_content?("Down")
+    end
+    within("#project_#{project2.id}") do
+      assert page.has_content?("Down")
+      assert ! page.has_content?("Up")
     end
   end
 end
