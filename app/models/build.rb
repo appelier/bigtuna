@@ -45,11 +45,11 @@ class Build < ActiveRecord::Base
 
   def execute_steps
     all_steps = [
-      [Dir.pwd, "git clone #{project.vcs_source} #{self.build_dir} 2>&1"]
+      [Dir.pwd, "git clone #{project.vcs_source} #{self.build_dir}"]
     ]
     project.steps.split("\n").each do |step|
       step = process_step_command(step)
-      all_steps << [self.build_dir, "#{step} 2>&1"]
+      all_steps << [self.build_dir, step]
     end
     output = []
     exit_code = 0

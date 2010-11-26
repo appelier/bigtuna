@@ -1,6 +1,6 @@
 class Runner
   def self.execute(dir, command)
-    end_command = "cd #{dir}; #{command}"
+    end_command = "cd #{dir}; #{command} 2>&1"
     Rails.logger.debug("[BigTuna] executing: #{end_command}")
     with_clean_env(dir) do
       buffer = []
