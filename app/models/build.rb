@@ -3,6 +3,7 @@ class Build < ActiveRecord::Base
   STATUS_PROGRESS = "status_build_in_progress"
   STATUS_OK = "status_build_ok"
   STATUS_FAILED = "status_build_failed"
+  STATUS_BUILDER_ERROR = "status_builder_error"
 
   belongs_to :project
   before_destroy :remove_build_dir
@@ -17,6 +18,9 @@ class Build < ActiveRecord::Base
     self.status = status
     self.save!
     project.truncate_builds!
+  rescue Exception
+    self.status = STATUS_BUILDER_ERROR
+    self.save!
   end
 
   def display_name
@@ -25,12 +29,16 @@ class Build < ActiveRecord::Base
 
   private
   def remove_build_dir
-    FileUtils.rm_rf(self.build_dir) if File.directory?(self.build_dir)
+    if File.directory?(self.build_dir)
+      FileUtils.rm_rf(self.build_dir)
+    else
+      Rails.logger.debug("[BigTuna] Couldn't find build dir: %p" % [self.build_dir])
+    end
   end
 
   def set_build_values
     project_dir = project.build_dir
-    self.build_dir = File.join(project_dir, self.scheduled_at.strftime("%Y%m%d%H%M%S") + "_" + commit[0, 10])
+    self.build_dir = File.join(project_dir, self.scheduled_at.strftime("%Y%m%d%H%M%S") + "_" + commit[0, 7] + "_" + rand(32**8).to_s(36))
     self.status = STATUS_IN_QUEUE
     self.scheduled_at = Time.now
   end
