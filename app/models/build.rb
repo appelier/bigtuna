@@ -48,6 +48,7 @@ class Build < ActiveRecord::Base
       [Dir.pwd, "git clone #{project.vcs_source} #{self.build_dir} 2>&1"]
     ]
     project.steps.split("\n").each do |step|
+      step = step.strip
       all_steps << [self.build_dir, "#{step} 2>&1"]
     end
     output = []

@@ -1,10 +1,10 @@
 require "integration_test_helper"
 
-class BuildingTest < ActionController::IntegrationTest
+class ShowingBuildTest < ActionController::IntegrationTest
   def setup
     super
-    `cd test/files; mkdir repo; cd repo; git init; echo "my file" > file; git add file; git commit -m "my file added"`
-    @commit_hash = `cd test/files/repo; git log --format=%H --max-count=1`.strip
+    @output = `cd test/files; mkdir repo; cd repo; git init; echo "my file" > file; git add file; git commit -m "my file added"; git log --format=%H --max-count=1`
+    @commit_hash = @output.split[-1]
   end
 
   def teardown
