@@ -25,7 +25,7 @@ class ProjectTest < ActiveSupport::TestCase
     end
   end
 
-  test "removing project removes its buils" do
+  test "removing project removes its builds" do
     @project.build!
     @project.build!
     assert_difference("Build.count", -2) do
