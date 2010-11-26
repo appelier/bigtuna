@@ -11,6 +11,7 @@ class Runner
       end
       status = $?.exitstatus
       output = buffer.join("\n")
+      output = nil if output.strip.blank?
       Rails.logger.debug("[BigTuna] output: #{output}")
       Rails.logger.debug("[BigTuna] exit status: #{status}")
       raise Runner::Error.new(status, output) if status != 0

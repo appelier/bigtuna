@@ -37,4 +37,13 @@ class BuildTest < ActiveSupport::TestCase
     assert_equal Build::STATUS_OK, build.status
     assert build.stdout[-1][:output].include?(build.build_dir.split("/")[-1]) # build folder
   end
+
+  test "if step produces white output then it should be set to nil" do
+    project = Project.make(:steps => "cd %project_dir%", :name => "Koss", :vcs_source => "test/files/koss", :vcs_type => "git", :max_builds => 1)
+    job = project.build!
+    job.invoke_job
+    build = project.builds.order("created_at DESC").first
+    assert_equal Build::STATUS_OK, build.status
+    assert_nil build.stdout[-1][:output]
+  end
 end

@@ -18,7 +18,11 @@ class Build < ActiveRecord::Base
     self.status = status
     self.save!
     project.truncate_builds!
-  rescue Exception
+  rescue Exception => e
+    Rails.logger.warn("[BigTuna] Exception in build runner")
+    Rails.logger.warn("[BigTuna] #{e.message}")
+    Rails.logger.warn("[BigTuna] #{e.backtrace.join}")
+    self.stdout = [{:command => "Builder error", :output => "#{e.message}\n#{e.backtrace.join}", :exit_code => 1}]
     self.status = STATUS_BUILDER_ERROR
     self.save!
   end
