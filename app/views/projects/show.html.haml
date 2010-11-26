@@ -8,7 +8,7 @@
       %th{:colspan => 2}= @project.name
   %tbody
     - @builds.each do |build|
-      %tr{:class => build.status}
+      %tr{:class => build.status, :id => dom_id(build)}
         %td
           %tt= link_to(build.display_name, build_path(build))
         %td.info
@@ -17,3 +17,6 @@
           = "message: " + truncate(build.commit_message, :length => 35)
           %br
           = "scheduled at: " + build.scheduled_at.strftime("%Y-%m-%d %H:%M")
+        %td.info
+          = form_tag(build_path(build), :method => "DELETE") do
+            %button{:type => "submit"} Delete

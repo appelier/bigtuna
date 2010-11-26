@@ -3,7 +3,7 @@ a                              { color: #000; text-decoration: none; }
 a:hover                        { text-decoration: underline; }
 h1, h2, h3, h4                 { font-family: "Verdana", sans-serif; }
 ul, ol                         { margin: 0; padding: 0; }
-#listing                       { font-size: 1.5em; line-height: 1.5em; list-style-type: none; font-family: "Verdana", sans-serif; font-weight: bold; margin: 20px; }
+#listing                       { font-size: 1.5em; line-height: 1.5em; list-style-type: none; font-family: "Verdana", sans-serif; font-weight: bold; margin: 20px; border-spacing: 0 1px; }
 #listing td                    { padding: 10px; margin: 3px; }
 #listing td.name               { padding: 10px 30px; }
 #listing td.info               { font-size: 0.4em; color: #000; font-family: "Georgia", serif; line-height: 1.2em; }
