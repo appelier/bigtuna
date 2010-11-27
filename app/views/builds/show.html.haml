@@ -6,13 +6,15 @@
 
   #steps
     %h2 Steps
-    - (@build.stdout || []).each_with_index do |step, index|
+    - (@build.stdout || []).each_with_index do |output, index|
       %div{:id => "step_#{index + 1}"}
-        %p.step= step[:command]
-        %span.exit_code= step[:exit_code] || "Task was not executed"
-        - if step[:exit_code] and step[:output]
+        %p.step= output.command
+        %span.exit_code= output.exit_code || "Task was not executed"
+        - if !output.exit_code.nil? and output.to_s
           #output
-            %pre= step[:output]
+            %pre
+              - output.each do |type, text|
+                = "[#{type}] #{text}"
 %br
 = link_to("Back", project_path(@build.project), :class => "button")
 

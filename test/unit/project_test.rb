@@ -41,10 +41,10 @@ class ProjectTest < ActiveSupport::TestCase
     build = project.builds.order("created_at DESC").first
     steps = build.stdout
     assert_equal 3, steps.size # 2 + clone task
-    assert_equal "git diff file", steps[1][:command]
-    assert_equal 0, steps[1][:exit_code]
-    assert_equal "echo 'lol'", steps[2][:command]
-    assert_equal 0, steps[2][:exit_code]
+    assert_equal "git diff file", steps[1].command
+    assert_equal 0, steps[1].exit_code
+    assert_equal "echo 'lol'", steps[2].command
+    assert_equal 0, steps[2].exit_code
     assert_equal Build::STATUS_OK, build.status
   end
 
@@ -55,13 +55,13 @@ class ProjectTest < ActiveSupport::TestCase
     build = project.builds.order("created_at DESC").first
     steps = build.stdout
     assert_equal 4, steps.size # all steps, but not all were executed
-    assert_equal "ls -al file", steps[1][:command]
-    assert_equal 0, steps[1][:exit_code]
-    assert_equal "ls -al not_a_file", steps[2][:command]
-    assert steps[2][:exit_code] != 0
-    assert_nil steps[3][:exit_code]
-    assert_nil steps[3][:output]
-    assert_equal "echo 'not_here'", steps[3][:command]
+    assert_equal "ls -al file", steps[1].command
+    assert_equal 0, steps[1].exit_code
+    assert_equal "ls -al not_a_file", steps[2].command
+    assert steps[2].exit_code != 0
+    assert_nil steps[3].exit_code
+    assert_nil steps[3].stdout
+    assert_equal "echo 'not_here'", steps[3].command
     assert_equal Build::STATUS_FAILED, build.status
   end
 

@@ -5,6 +5,7 @@ gem "pg"
 gem "haml"
 gem "delayed_job"
 gem "stringex"
+gem "open4"
 
 group :development, :test do
   gem "capybara"

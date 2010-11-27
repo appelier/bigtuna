@@ -14,7 +14,7 @@ module VCS
       rescue Runner::Error => e
         raise VCS::Error.new("Couldn't access repository log")
       end
-      commit_info = output.split("\n")
+      commit_info = output.stdout.split("\n")
       info[:commit] = commit_info.shift
       info[:author] = commit_info.shift
       info[:email] = commit_info.shift
@@ -25,8 +25,7 @@ module VCS
 
     def clone(where_to)
       command = "git clone --branch #{self.branch} #{self.dir} #{where_to}"
-      out = Runner.execute(Dir.pwd, command)
-      [out, command]
+      Runner.execute(Dir.pwd, command)
     end
   end
 end

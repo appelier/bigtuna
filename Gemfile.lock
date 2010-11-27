@@ -72,6 +72,7 @@ GEM
     mocha (0.9.9)
       rake
     nokogiri (1.4.4)
+    open4 (1.0.1)
     pg (0.9.0)
     polyglot (0.3.1)
     rack (1.2.1)
@@ -125,6 +126,7 @@ DEPENDENCIES
   machinist
   mocha
   nokogiri
+  open4
   pg
   rails (= 3.0.3)
   ruby-debug
