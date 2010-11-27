@@ -4,7 +4,6 @@ class ProjectTest < ActiveSupport::TestCase
   def setup
     super
     `cd test/files; mkdir repo; cd repo; git init; echo "my file" > file; git add file; git commit -m "my file added"`
-    @project = Project.make(:steps => "ls -al file", :name => "Project", :vcs_source => "test/files/repo", :vcs_type => "git", :max_builds => 1)
   end
 
   def teardown
@@ -14,22 +13,24 @@ class ProjectTest < ActiveSupport::TestCase
   end
 
   test "only recent builds are kept on disk" do
-    assert_difference("Dir[File.join(@project.build_dir, '*')].size", +1) do
-      job = @project.build!
+    project = Project.make(:steps => "ls -al file", :name => "Project", :vcs_source => "test/files/repo", :vcs_type => "git", :max_builds => 1)
+    assert_difference("Dir[File.join(project.build_dir, '*')].size", +1) do
+      job = project.build!
       job.invoke_job
     end
 
-    assert_difference("Dir[File.join(@project.build_dir, '*')].size", 0) do
-      job = @project.build!
+    assert_difference("Dir[File.join(project.build_dir, '*')].size", 0) do
+      job = project.build!
       job.invoke_job
     end
   end
 
   test "removing project removes its builds" do
-    @project.build!
-    @project.build!
+    project = Project.make(:steps => "ls -al file", :name => "Project", :vcs_source => "test/files/repo", :vcs_type => "git", :max_builds => 1)
+    project.build!
+    project.build!
     assert_difference("Build.count", -2) do
-      @project.destroy
+      project.destroy
     end
   end
 
@@ -65,13 +66,14 @@ class ProjectTest < ActiveSupport::TestCase
   end
 
   test "removing project removes its build folder" do
-    job = @project.build!
+    project = Project.make(:steps => "ls -al file", :name => "Project", :vcs_source => "test/files/repo", :vcs_type => "git", :max_builds => 1)
+    job = project.build!
     job.invoke_job
-    assert File.exist?(@project.build_dir)
+    assert File.exist?(project.build_dir)
     assert_difference("Dir[File.join('builds', '*')].size", -1) do
-      @project.destroy
+      project.destroy
     end
-    assert ! File.exist?(@project.build_dir)
+    assert ! File.exist?(project.build_dir)
   end
 
   test "hook_name should be unique" do
@@ -83,5 +85,15 @@ class ProjectTest < ActiveSupport::TestCase
   test "if hook_name is empty it can be not-unique" do
     Project.make(:hook_name => "")
     Project.make(:hook_name => "")
+  end
+
+  test "project name should be unique" do
+    name = "unique project name"
+    Project.make(:name => name)
+    assert_invalid(Project, :name) { |p| p.name = name }
+  end
+
+  test "project name should be present" do
+    assert_invalid(Project, :name) { |p| p.name = "" }
   end
 end

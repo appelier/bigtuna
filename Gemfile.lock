@@ -104,6 +104,7 @@ GEM
       ffi (~> 0.6.3)
       json_pure
       rubyzip
+    stringex (1.2.0)
     thor (0.14.6)
     treetop (1.4.9)
       polyglot (>= 0.3.1)
@@ -127,3 +128,4 @@ DEPENDENCIES
   pg
   rails (= 3.0.3)
   ruby-debug
+  stringex

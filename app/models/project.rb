@@ -5,6 +5,7 @@ class Project < ActiveRecord::Base
   before_destroy :remove_build_folder
 
   validates :hook_name, :uniqueness => {:allow_blank => true}
+  validates :name, :presence => true, :uniqueness => true
 
   acts_as_list
 
@@ -42,6 +43,10 @@ class Project < ActiveRecord::Base
     klass = BigTuna::VCS_BACKENDS.assoc(vcs_type)[1]
     raise ArgumentError.new("VCS not supported: %p" % [vcs_type]) if klass.nil?
     @vcs = klass.new(self.vcs_source)
+  end
+
+  def to_param
+    [self.id, self.name.to_url].join("-")
   end
 
   private
