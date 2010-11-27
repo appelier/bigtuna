@@ -4,6 +4,8 @@ class Project < ActiveRecord::Base
   has_many :builds, :dependent => :destroy
   before_destroy :remove_build_folder
 
+  validates :hook_name, :uniqueness => {:allow_blank => true}
+
   acts_as_list
 
   def recent_build

@@ -73,4 +73,15 @@ class ProjectTest < ActiveSupport::TestCase
     end
     assert ! File.exist?(@project.build_dir)
   end
+
+  test "hook_name should be unique" do
+    hook_name = "my_unique_hook_name"
+    Project.make(:hook_name => hook_name)
+    assert_invalid(Project, :hook_name) { |p| p.hook_name = hook_name }
+  end
+
+  test "if hook_name is empty it can be not-unique" do
+    Project.make(:hook_name => "")
+    Project.make(:hook_name => "")
+  end
 end
