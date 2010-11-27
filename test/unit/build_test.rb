@@ -97,4 +97,14 @@ class BuildTest < ActiveSupport::TestCase
       end
     end
   end
+
+  test "build #to_param includes build display name and project name" do
+    project = Project.make(:steps => "ls .", :name => "Koss", :vcs_source => "test/files/koss", :vcs_type => "git", :max_builds => 2)
+    job = project.build!
+    job.invoke_job
+    build = project.recent_build
+    assert build.to_param =~ /^#{build.id}/
+    assert build.to_param.include?(project.name.to_url)
+    assert build.to_param.include?(build.display_name.to_url)
+  end
 end

@@ -33,6 +33,10 @@ class Build < ActiveRecord::Base
     commit[0, 7]
   end
 
+  def to_param
+    [self.id, self.project.name.to_url, self.display_name.to_url].join("-")
+  end
+
   private
   def remove_build_dir
     if File.directory?(self.build_dir)
