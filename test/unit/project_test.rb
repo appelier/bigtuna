@@ -96,4 +96,34 @@ class ProjectTest < ActiveSupport::TestCase
   test "project name should be present" do
     assert_invalid(Project, :name) { |p| p.name = "" }
   end
+
+  test "project dir should be renamed if project name changes" do
+    begin
+      project = Project.make(:name => "my name", :steps => "ls -al")
+      dir = project.send(:build_dir_from_name, project.name)
+      job = project.build!
+      job.invoke_job
+      assert File.directory?(dir)
+      project.name = "my other name"
+      project.save!
+      assert ! File.directory?(dir)
+      job = project.build!
+      job.invoke_job
+      new_dir = project.send(:build_dir_from_name, project.name)
+      assert File.directory?(new_dir)
+    ensure
+      FileUtils.rm_rf("builds/my_name")
+      FileUtils.rm_rf("builds/my_other_name")
+    end
+  end
+
+  test "vcs_type should be one of vcs types available" do
+    invalid_backend = "lol"
+    assert ! BigTuna::VCS_BACKENDS.include?(invalid_backend)
+    assert_invalid(Project, :vcs_type) { |p| p.vcs_type = invalid_backend }
+  end
+
+  test "vcs_source should be present" do
+    assert_invalid(Project, :vcs_source) { |p| p.vcs_source = "" }
+  end
 end
