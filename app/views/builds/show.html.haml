@@ -1,25 +1,38 @@
 #build
   %h2= @build.project.name
-  
-  %p.step
-    %span.item Build:
-    = "#{@build.commit}"
-    %br
-    %span.item Directory:
-    = "#{@build.build_dir}"
+
+  %div.value_list
+    %span.title Commit
+    %span.value= @build.commit
+    %span.title Directory
+    %span.value= strip_rails_root(@build.build_dir)
+    %span.title Author
+    %span.value= mail_to(@build.email, @build.author + " <" + @build.email + ">")
+    %span.title Message
+    %span.value= @build.commit_message
+    %span.title Committed at
+    %span.value= l(@build.committed_at, :format => :full)
+    %span.title Scheduled at
+    %span.value= l(@build.scheduled_at, :format => :full)
+    - if @build.started?
+      %span.title Started at
+      %span.value= l(@build.started_at, :format => :full)
+    - if @build.finished?
+      %span.title Duration
+      %span.value= build_duration(@build)
+  %br.clear
 
   #steps
-    %h2 Steps
-    - (@build.stdout || []).each_with_index do |output, index|
-      %div{:id => "step_#{index + 1}"}
-        %p.step= output.command
-        %span.exit_code= output.exit_code || "Task was not executed"
-        - if !output.exit_code.nil? and output.to_s
-          #output
-            %pre
-              - output.each do |type, text|
-                = "[#{type}] #{text}"
+    %h3 Steps
+    %ol
+      - (@build.stdout || []).each_with_index do |output, index|
+        %li{:id => "step_#{index + 1}"}
+          = render :partial => "step", :locals => {:step => output, :step_no => index + 1}
 
 - content_for :sidebar do
-  = link_to("Back to project", project_path(@build.project), :class => "black_button")
-
+  - if params[:stderr].nil?
+    %li= link_to("Show stderr", build_path(@build, :stderr => 1), :class => "black_button")
+  - else
+    %li= link_to("Hide stderr", build_path(@build), :class => "black_button")
+  %li= link_to("All builds", project_path(@build.project), :class => "black_button")
+  %li= link_to("Build now", build_project_path(@build.project), :class => "black_button")

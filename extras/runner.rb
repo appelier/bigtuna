@@ -7,8 +7,8 @@ class Runner
       buffer = []
       status = Open4.popen4(end_command) do |_, _, stdout, stderr|
         while !stdout.eof? or !stderr.eof?
-          output.append_stdout(stdout.gets)
           output.append_stderr(stderr.gets)
+          output.append_stdout(stdout.gets)
         end
       end
       output.exit_code = status.exitstatus

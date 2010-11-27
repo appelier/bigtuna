@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101127172325) do
+ActiveRecord::Schema.define(:version => 20101127225635) do
 
   create_table "builds", :force => true do |t|
     t.integer  "project_id"
@@ -26,6 +26,7 @@ ActiveRecord::Schema.define(:version => 20101127172325) do
     t.string   "email"
     t.datetime "committed_at"
     t.text     "commit_message"
+    t.datetime "finished_at"
   end
 
   create_table "delayed_jobs", :force => true do |t|

@@ -10,16 +10,13 @@
     %meta{:name => "description", :content => "description"}
   %body
     #main
-      #ad.ad
-        %p 
-          checked with
-          = link_to "BigTuna", "#"
+      %div#ad
+        checked with
+        = link_to "BigTuna", "#"
       #content
         = flash[:error]
         = flash[:notice]
         = yield
-      #sidebar
-        = link_to("home", root_path, :class => "black_button")
-        %br
+      %ol#sidebar
+        %li= link_to("home", root_path, :class => "black_button")
         = yield :sidebar
-

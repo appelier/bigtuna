@@ -1,22 +1,22 @@
 #listing
   %h2 Projects
-  
-  - @projects.each do |project|
-    %div{:class => "#{project.status} project", :id => dom_id(project)}
-      .name
-        %p= link_to(project.name, project_path(project))
-      .info
-        - if project.recent_build
-          = "last commit: " + project.recent_build.commit[0, 7]
-          %br
-          = ("author: " + link_to(project.recent_build.author, "mailto:#{project.recent_build.email}")).html_safe
-          %br
-          = "message: " + truncate(project.recent_build.commit_message, :length => 55)
-      .info
-        - if ! project.first?
-          = link_to("Up", arrange_project_path(project, :up => true))
-        - if ! project.last?
-          = link_to("Down", arrange_project_path(project, :down => true))
-          
+  %ol
+    - @projects.each do |project|
+      %li{:class => "#{project.status} project", :id => dom_id(project)}
+        .name
+          %p= link_to(project.name, project_path(project))
+        .info
+          - if project.recent_build
+            = "last commit: " + project.recent_build.commit[0, 7]
+            %br
+            = ("author: " + link_to(project.recent_build.author, "mailto:#{project.recent_build.email}")).html_safe
+            %br
+            = "message: " + truncate(project.recent_build.commit_message, :length => 55)
+        .info
+          - if ! project.first?
+            = link_to("Up", arrange_project_path(project, :up => true))
+          - if ! project.last?
+            = link_to("Down", arrange_project_path(project, :down => true))
+
 - content_for :sidebar do
   =link_to("new project", new_project_path, :class => 'black_button')

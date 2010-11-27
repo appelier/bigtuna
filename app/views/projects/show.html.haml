@@ -4,7 +4,7 @@
     - @builds.each do |build|
       %div{:class => "#{build.status} project", :id => dom_id(build)}
         .name
-          %p= link_to(build.display_name, build_path(build))
+          %p= link_to(build.display_name, build_path(build, :stderr => build.status == Build::STATUS_OK ? nil : 1))
         .info
           = ("author: " + link_to(build.author, "mailto:#{build.email}")).html_safe
           %br
@@ -16,8 +16,6 @@
             %button{:type => "submit"} Delete
 
 - content_for :sidebar do
-  = link_to("Edit", edit_project_path(@project), :class => "black_button")
-  %br
-  = link_to("Remove project", remove_project_path(@project), :class => "black_button")
-  %br
-  = link_to("Build now", build_project_path(@project), :class => "black_button")
+  %li= link_to("Edit", edit_project_path(@project), :class => "black_button")
+  %li= link_to("Remove project", remove_project_path(@project), :class => "black_button")
+  %li= link_to("Build now", build_project_path(@project), :class => "black_button")

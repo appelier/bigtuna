@@ -18,6 +18,7 @@ class Build < ActiveRecord::Base
     self.status = status
     project = self.project
     send_email_info() unless project.recipients.blank?
+    self.finished_at = Time.now
     self.save!
     project.truncate_builds!
   rescue Exception => e
@@ -39,6 +40,14 @@ class Build < ActiveRecord::Base
 
   def to_param
     [self.id, self.project.name.to_url, self.display_name.to_url].join("-")
+  end
+
+  def started?
+    ! started_at.nil?
+  end
+
+  def finished?
+    ! finished_at.nil?
   end
 
   private
