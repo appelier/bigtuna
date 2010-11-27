@@ -1,19 +1,27 @@
 #build
-  %h2 Build
-  %p.step= "#{@build.commit}"
-  %h2 Dir
-  %p.step= "#{@build.build_dir}"
+  %h2= @build.project.name
+  
+  %p.step
+    %span.item Build:
+    = "#{@build.commit}"
+    %br
+    %span.item Directory:
+    = "#{@build.build_dir}"
 
   #steps
-    %h2 Steps
+    %p.step
     - (@build.stdout || []).each_with_index do |step, index|
       %div{:id => "step_#{index + 1}"}
-        %p.step= step[:command]
-        %span.exit_code= step[:exit_code] || "Task was not executed"
+        %p.step
+          = "#{index}. #{step[:command]}"
+          %br
+          exit code: 
+          %span.item= step[:exit_code] || "Task was not executed"
         - if step[:exit_code] and step[:output]
           #output
             %pre= step[:output]
-%br
-= link_to("Back", project_path(@build.project), :class => "button")
+
+- content_for :sidebar do
+  = link_to("Back to project", project_path(@build.project), :class => "black_button")
 
 

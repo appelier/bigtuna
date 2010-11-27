@@ -1,11 +1,8 @@
 #listing
   %h2= @project.name
-  = link_to("Edit", edit_project_path(@project), :class => "button")
-  = link_to("Remove project", remove_project_path(@project), :class => "button")
-  = link_to("Build now", build_project_path(@project), :class => "button")
   %tbody
     - @builds.each do |build|
-      %div{:class => build.status, :id => dom_id(build)}
+      %div{:class => "#{build.status} project", :id => dom_id(build)}
         .name
           %p= link_to(build.display_name, build_path(build))
         .info
@@ -17,3 +14,10 @@
         .info
           = form_tag(build_path(build), :method => "DELETE") do
             %button{:type => "submit"} Delete
+
+- content_for :sidebar do
+  = link_to("Edit", edit_project_path(@project), :class => "black_button")
+  %br
+  = link_to("Remove project", remove_project_path(@project), :class => "black_button")
+  %br
+  = link_to("Build now", build_project_path(@project), :class => "black_button")

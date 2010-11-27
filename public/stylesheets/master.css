@@ -1,26 +1,44 @@
 body                           { background: #fff url('../images/bg.png') repeat-x; font-family: "Myriad Pro", serif; font-size: 1.3em; line-height: 1.3em; margin: 0 auto; }
-#content                       { width: 650px; background-color: #eaeaea; margin: 0 auto 50px auto; border-bottom-left-radius: 4px 4px; border-bottom-right-radius: 4px 4px; border-top-left-radius: 4px 4px; border-top-right-radius: 4px 4px; -webkit-box-shadow: #999 0px 1px 3px; margin-top: 30px; padding: 14px }
 a                              { color: #000; text-decoration: none; }
 h2                             { font-size: 24px; }
 h3                             { font-size: 18px; }
-#header                        { border: solid 2px #191919; padding: 15px; display: block; background-color: #282828; width: 800px; height: 88px; margin: 0 auto; margin-top: 40px; border-bottom-left-radius: 4px 4px; border-bottom-right-radius: 4px 4px; border-top-left-radius: 4px 4px; border-top-right-radius: 4px 4px; -webkit-box-shadow: #191919 1px 1px 5px; }
-#header h1, #header h2         { text-align: right; margin-right: 88px; color: #eaeaea; text-shadow: #000 1px 1px 1px; }
-#header h1                     { font-size: 36px; margin-top: 15px; }
-#header h2                     { font-size: 18px; }
-#header h1 a                   { color: #eaeaea; }
-#listing                       { font-size: 1.5em; font-weight: 300; line-height: 1.5em; list-style-type: none; }
-#listing h2                    { color: #282828; text-transform: uppercase; font-weight: bold; text-shadow: #999 1px 1px 4px;}
-#listing div                   { margin-top: 10px; width: 400px; border-bottom-left-radius: 5px 5px; border-bottom-right-radius: 5px 5px; border-top-left-radius: 5px 5px; border-top-right-radius: 5px 5px; margin: 0 auto 10px auto; }
+
+#main                          { margin: 0 auto; position:relative; width: 1000px; margin-top: 20px; }
+
+
+
+#header                        { padding: 15px; width: 800px; margin: 0 auto; margin-top: 10px; margin-bottom: -60px; text-align: center; }
+#header h1                     { text-transform: uppercase; font-size: 14px; font-weight: bold; color: #777; }
+#header h1 a                   { color: #777; }
+
+.ad                            { background-color: #f5f5f5; height: 22px; text-align: center; }
+.ad p                          { text-transform: uppercase; font-size: 12px; font-weight: bold; color: #777;}
+.ad p a                        { color: #444;}
+
+
+#ad                            { margin-right: 200px; float:right; width: 170px; border-top-right-radius: 4px 4px; border-top-left-radius: 4px 4px; border-top: solid 1px #ccc; border-left: solid 1px #ccc; border-right: solid 1px #ccc; }
+
+#content                       { float:left; width: 800px; background-color: #f5f5f5; padding: 14px; border: solid 1px #ccc;}
+
+#sidebar                       { float: left; margin-top: 4px; width: 120px; background-color: #e1e1e1; border-top-right-radius: 4px 4px; border-bottom-right-radius: 4px 4px; padding: 10px; }
+.black_button                  { background-color: #282828; color: #eaeaea; font-size: 12px; text-transform: uppercase; font-weight: bold; padding: 4px; padding-top: 6px; }
+.black_button:hover            { background-color: #555; color: #eaeaea; font-size: 12px; text-transform: uppercase; font-weight: bold; padding: 4px; padding-top: 6px; }
+
+#listing                       { font-size: 1.5em; line-height: 1.5em; list-style-type: none; }
+#listing h2                    { color: #191919; margin-left: 5px; }
+#listing .project              { text-align: center; border-bottom-left-radius: 5px 5px; border-bottom-right-radius: 5px 5px; border-top-left-radius: 5px 5px; border-top-right-radius: 5px 5px; margin: 0 8px 10px 8px; }
 #listing .name                 { font-weight: bold; text-decoration: none; text-align: center; }
 #listing .name p               { margin-top: 10px; }
 #listing .name a               { color: #282828; }
 #listing .info                 { font-size: 0.4em; color: #191919; line-height: 1.2em; margin-left: 8px; }
 #listing .info a               { font-weight: bold; color: #191919; }
 #listing a:hover               { color: #eaeaea; text-shadow: #191919 1px 1px 1px; }
-#build p.step                  { font-size: 16px; font-style:italic; margin-bottom: 10px; margin-top: 10px;}
-#build pre                     { font-family:"Monaco", "Courier New", monospace; border-bottom-left-radius: 4px 4px; border-bottom-right-radius: 4px 4px; border-top-left-radius: 4px 4px; border-top-right-radius: 4px 4px; }
+
+#build p.step                  { margin-bottom: 10px; margin-top: 10px; font-size: 14px; font-weight: bold; color: #444; }
+#build span.item               { text-transform: uppercase; }
+#build pre                     { font-family:"Monaco", "Courier New", monospace; }
 #build pre                     { white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap; word-wrap: break-word; line-height: 1.1em; }
-#build pre                     { -moz-box-shadow:1px 2px 3px #444; -webkit-box-shadow:1px 2px 3px #444; background-color:#282828; color:#fff; font-size: 12px; padding: 10px; text-shadow:0 1px 0 #000; width: 700px; border: solid 1px #191919; margin-top: 20px; margin-bottom: 20px; position: relative; left: -35px; }
+#build pre                     { background-color:#444; color:#fff; text-shadow: #000 0 1px 1px; font-size: 10px; padding: 10px; border: solid 1px #282828; margin-top: 20px; margin-bottom: 20px; }
 
 .status_build_in_progress      { background-color: #efde7d; border: solid 1px #b49f2e; -webkit-box-shadow: #999 0px 1px 3px; } 
 .status_build_in_progress a    { color: #000; }
