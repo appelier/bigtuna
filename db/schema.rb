@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101127144456) do
+ActiveRecord::Schema.define(:version => 20101127172325) do
 
   create_table "builds", :force => true do |t|
     t.integer  "project_id"
@@ -54,6 +54,7 @@ ActiveRecord::Schema.define(:version => 20101127144456) do
     t.text     "steps"
     t.integer  "position"
     t.string   "recipients"
+    t.string   "vcs_branch"
   end
 
 end

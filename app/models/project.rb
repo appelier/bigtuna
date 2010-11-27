@@ -9,6 +9,7 @@ class Project < ActiveRecord::Base
   validates :name, :presence => true, :uniqueness => true
   validates :vcs_type, :inclusion => BigTuna::VCS_BACKENDS.map { |e| e[0] }
   validates :vcs_source, :presence => true
+  validates :vcs_branch, :presence => true
 
   acts_as_list
 
@@ -45,7 +46,7 @@ class Project < ActiveRecord::Base
     return @vcs if @vcs
     klass = BigTuna::VCS_BACKENDS.assoc(vcs_type)[1]
     raise ArgumentError.new("VCS not supported: %p" % [vcs_type]) if klass.nil?
-    @vcs = klass.new(self.vcs_source)
+    @vcs = klass.new(self.vcs_source, self.vcs_branch)
   end
 
   def to_param

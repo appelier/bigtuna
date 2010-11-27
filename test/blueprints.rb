@@ -11,4 +11,5 @@ Project.blueprint do
   recipients { Sham.email }
   vcs_type { "git" }
   vcs_source { "test/files/repo" }
+  vcs_branch { "master" }
 end

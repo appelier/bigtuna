@@ -1,9 +1,10 @@
 module VCS
   class Base
-    attr_reader :dir
-    def initialize(dir)
+    attr_reader :dir, :branch
+
+    def initialize(dir, branch)
       @dir = dir
-      raise Error.new("Repository not found under '%s'" % [dir]) unless self.valid?
+      @branch = branch
     end
   end
 end

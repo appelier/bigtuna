@@ -1,12 +1,12 @@
 class Runner
   def self.execute(dir, command)
-    end_command = "cd #{dir}; #{command} 2>&1"
+    end_command = "cd #{dir} 2>&1 && #{command} 2>&1"
     Rails.logger.debug("[BigTuna] executing: #{end_command}")
     with_clean_env(dir) do
       buffer = []
       IO.popen(end_command) do |io|
         io.each_line do |line|
-          buffer << line
+          buffer << line.strip
         end
       end
       status = $?.exitstatus
@@ -14,7 +14,7 @@ class Runner
       output = nil if output.strip.blank?
       Rails.logger.debug("[BigTuna] output: #{output}")
       Rails.logger.debug("[BigTuna] exit status: #{status}")
-      raise Runner::Error.new(status, output) if status != 0
+      raise Runner::Error.new(dir, command, status, output) if status != 0
       output
     end
   end
@@ -36,8 +36,12 @@ class Runner
   class Error < Exception
     attr_reader :exit_code, :output
 
-    def initialize(exit_code, output)
-      @exit_code, @output = exit_code, output
+    def initialize(dir, command, exit_code, output)
+      @dir, @command, @exit_code, @output = dir, command, exit_code, output
+    end
+
+    def message
+      "Error (#{@exit_code}) executing '#{@command}' in '#{@dir}' #{@output}"
     end
   end
 end

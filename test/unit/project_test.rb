@@ -126,4 +126,8 @@ class ProjectTest < ActiveSupport::TestCase
   test "vcs_source should be present" do
     assert_invalid(Project, :vcs_source) { |p| p.vcs_source = "" }
   end
+
+  test "vcs_branch should be present" do
+    assert_invalid(Project, :vcs_branch) { |p| p.vcs_branch = "" }
+  end
 end
