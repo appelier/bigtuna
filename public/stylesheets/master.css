@@ -19,7 +19,7 @@ h3                             { font-size: 18px; }
 #listing a:hover               { color: #eaeaea; text-shadow: #191919 1px 1px 1px; }
 #build p.step                  { font-size: 16px; font-style:italic; margin-bottom: 10px; margin-top: 10px;}
 #build pre                     { font-family:"Monaco", "Courier New", monospace; border-bottom-left-radius: 4px 4px; border-bottom-right-radius: 4px 4px; border-top-left-radius: 4px 4px; border-top-right-radius: 4px 4px; }
-#build pre                     { white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap; word-wrap: break-word; line-height: 1.1em; }
+#build pre                     { white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap; word-wrap: break-word; line-height: 1.4em; }
 #build pre                     { -moz-box-shadow:1px 2px 3px #444; -webkit-box-shadow:1px 2px 3px #444; background-color:#282828; color:#fff; font-size: 12px; padding: 10px; text-shadow:0 1px 0 #000; width: 700px; border: solid 1px #191919; margin-top: 20px; margin-bottom: 20px; position: relative; left: -35px; }
 
 .status_build_in_progress      { background-color: #efde7d; border: solid 1px #b49f2e; -webkit-box-shadow: #999 0px 1px 3px; } 
