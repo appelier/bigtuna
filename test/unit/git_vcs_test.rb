@@ -8,12 +8,19 @@ class GitVCSTest < ActiveSupport::TestCase
 
   def teardown
     FileUtils.rm_rf("test/files/repo")
+    FileUtils.rm_rf("test/files/repo_bare")
     FileUtils.rm_rf("test/files/repo_clone")
     super
   end
 
   test "valid? returns true if repo exists" do
     vcs = init_repo
+    assert vcs.valid?
+  end
+
+  test "valid? returns true if bare repo exists" do
+    `cd test/files; mkdir repo_bare; git --bare init`
+    vcs = init_repo("test/files/repo_bare")
     assert vcs.valid?
   end
 

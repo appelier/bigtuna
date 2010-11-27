@@ -25,7 +25,7 @@ module VCS
     end
 
     def valid?
-      out = `cd #{self.dir} 2>&1 && git status 2>&1; echo $?`
+      out = `cd #{self.dir} 2>&1 && git ls-files 2>&1; echo $?`
       out.split[-1].strip.to_i == 0
     end
   end
