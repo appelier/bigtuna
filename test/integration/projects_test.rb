@@ -72,4 +72,14 @@ class ProjectsTest < ActionController::IntegrationTest
       assert ! page.has_content?("Up")
     end
   end
+
+  test "cannot build project with invalid repo" do
+    project = Project.make(:steps => "echo 'ha'", :name => "Valid", :vcs_source => "no/such/repo", :vcs_type => "git")
+    visit "/"
+    click_link "Valid"
+    assert_difference("Build.count", 0) do
+      click_link "Build now"
+    end
+    assert page.has_content?("Repository not found under 'no/such/repo'")
+  end
 end

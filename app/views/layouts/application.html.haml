@@ -13,4 +13,6 @@
       %h1= link_to("BigTuna", root_path)
       %h2 Continuous Integration
     #content
+      = flash[:error]
+      = flash[:notice]
       = yield
