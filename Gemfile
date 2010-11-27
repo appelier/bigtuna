@@ -4,6 +4,7 @@ gem "rails", "3.0.3"
 gem "pg"
 gem "haml"
 gem "delayed_job"
+gem "stringex"
 
 group :development, :test do
   gem "capybara"

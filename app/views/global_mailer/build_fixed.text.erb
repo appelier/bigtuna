@@ -1,0 +1,9 @@
+The build for project <%= @project.name %> is now fixed!
+
+Commit that fixed the build:
+Hash: <%= @build.display_name %>
+Author: <%= @build.author %> <<%= @build.email %>>
+Message: <%= @build.commit_message %>
+
+Link to build:
+<%= build_url(@build) %>

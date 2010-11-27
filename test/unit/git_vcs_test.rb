@@ -8,26 +8,8 @@ class GitVCSTest < ActiveSupport::TestCase
 
   def teardown
     FileUtils.rm_rf("test/files/repo")
-    FileUtils.rm_rf("test/files/repo_bare")
     FileUtils.rm_rf("test/files/repo_clone")
     super
-  end
-
-  test "valid? returns true if repo exists" do
-    vcs = init_repo
-    assert vcs.valid?
-  end
-
-  test "valid? returns true if bare repo exists" do
-    `cd test/files; mkdir repo_bare; git --bare init`
-    vcs = init_repo("test/files/repo_bare")
-    assert vcs.valid?
-  end
-
-  test "cannot instantiate without valid repo" do
-    assert_raises(VCS::Error) do
-      init_repo("/not/a/repo")
-    end
   end
 
   test "head_info returns commit information" do
@@ -48,8 +30,24 @@ class GitVCSTest < ActiveSupport::TestCase
     assert_equal vcs.head_info[0], vcs_clone.head_info[0]
   end
 
+  test "git head_info with other branches than master" do
+    `cd test/files/repo; git checkout -b 'newbranch' 2>&1 > /dev/null; echo "new file" > new_file; git add new_file; git commit -m "new file in branch"; git checkout master 2>&1 > /dev/null`
+    vcs = init_repo("test/files/repo", "newbranch")
+    info, _ = vcs.head_info
+    assert_equal "new file in branch", info[:commit_message]
+  end
+
+  test "git clone with other branches than master" do
+    `cd test/files/repo; git checkout -b 'newbranch' 2>&1 > /dev/null; echo "new file" > new_file; git add new_file; git commit -m "new file in branch"; git checkout master 2>&1 > /dev/null`
+    vcs = init_repo("test/files/repo", "newbranch")
+    vcs.clone("test/files/repo_clone")
+    info, _ = vcs.head_info
+    assert_equal "new file in branch", info[:commit_message]
+    assert File.file?("test/files/repo_clone/new_file")
+  end
+
   private
-  def init_repo(dir = "test/files/repo")
-    VCS::Git.new(dir)
+  def init_repo(dir = "test/files/repo", branch = "master")
+    VCS::Git.new(dir, branch)
   end
 end

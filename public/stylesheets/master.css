@@ -40,6 +40,7 @@ h3                             { font-size: 18px; }
 #build pre                     { white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap; word-wrap: break-word; line-height: 1.1em; }
 #build pre                     { background-color:#444; color:#fff; text-shadow: #000 0 1px 1px; font-size: 10px; padding: 10px; border: solid 1px #282828; margin-top: 20px; margin-bottom: 20px; }
 
+
 .status_build_in_progress      { background-color: #efde7d; border: solid 1px #b49f2e; -webkit-box-shadow: #999 0px 1px 3px; } 
 .status_build_in_progress a    { color: #000; }
 .status_not_built              { background-color: #519fff; border: solid 1px #216dca; -webkit-box-shadow: #999 0px 1px 3px; }

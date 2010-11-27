@@ -80,6 +80,6 @@ class ProjectsTest < ActionController::IntegrationTest
     assert_difference("Build.count", 0) do
       click_link "Build now"
     end
-    assert page.has_content?("Repository not found under 'no/such/repo'")
+    assert page.has_content?("Couldn't access repository log")
   end
 end
