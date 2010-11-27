@@ -1,20 +1,19 @@
 class Runner
   def self.execute(dir, command)
-    end_command = "cd #{dir} 2>&1 && #{command} 2>&1"
+    end_command = "cd #{dir} && #{command}"
     Rails.logger.debug("[BigTuna] executing: #{end_command}")
     with_clean_env(dir) do
+      output = Runner::Output.new(dir, command)
       buffer = []
-      IO.popen(end_command) do |io|
-        io.each_line do |line|
-          buffer << line.strip
+      status = Open4.popen4(end_command) do |_, _, stdout, stderr|
+        while !stdout.eof? or !stderr.eof?
+          output.append_stdout(stdout.gets)
+          output.append_stderr(stderr.gets)
         end
       end
-      status = $?.exitstatus
-      output = buffer.join("\n")
-      output = nil if output.strip.blank?
-      Rails.logger.debug("[BigTuna] output: #{output}")
-      Rails.logger.debug("[BigTuna] exit status: #{status}")
-      raise Runner::Error.new(dir, command, status, output) if status != 0
+      output.exit_code = status.exitstatus
+      Rails.logger.debug("[BigTuna] exit code: #{output.exit_code}")
+      raise Runner::Error.new(output) if output.exit_code != 0
       output
     end
   end
@@ -34,14 +33,14 @@ class Runner
   end
 
   class Error < Exception
-    attr_reader :exit_code, :output
+    attr_reader :output
 
-    def initialize(dir, command, exit_code, output)
-      @dir, @command, @exit_code, @output = dir, command, exit_code, output
+    def initialize(output)
+      @output = output
     end
 
     def message
-      "Error (#{@exit_code}) executing '#{@command}' in '#{@dir}' #{@output}"
+      "Error (#{@output.exit_code}) executing '#{@output.command}' in '#{@output.dir}'"
     end
   end
 end

@@ -26,7 +26,7 @@ class BuildTest < ActiveSupport::TestCase
     job.invoke_job
     build = project.recent_build
     assert_equal Build::STATUS_OK, build.status
-    assert build.stdout[-1][:output].include?("file")
+    assert build.stdout[-1].stdout.include?("file")
   end
 
   test "special variable %project_dir% is available in steps" do
@@ -35,7 +35,7 @@ class BuildTest < ActiveSupport::TestCase
     job.invoke_job
     build = project.recent_build
     assert_equal Build::STATUS_OK, build.status
-    assert build.stdout[-1][:output].include?(build.build_dir.split("/")[-1]) # build folder
+    assert build.stdout[-1].stdout.include?(build.build_dir.split("/")[-1]) # build folder
   end
 
   test "if step produces white output then it should be set to nil" do
@@ -44,7 +44,7 @@ class BuildTest < ActiveSupport::TestCase
     job.invoke_job
     build = project.recent_build
     assert_equal Build::STATUS_OK, build.status
-    assert_nil build.stdout[-1][:output]
+    assert_nil build.stdout[-1].stdout
   end
 
   test "mail stating that build failed is sent when build failed" do
