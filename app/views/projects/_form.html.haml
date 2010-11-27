@@ -15,6 +15,10 @@
   %br
   = f.text_field(:vcs_source, :class => 'textfield')
 %div
+  = f.label(:recipients)
+  %br
+  = f.text_field(:recipients, :class => 'textfield')
+%div
   = f.label(:max_builds)
   %br
   = f.text_field(:max_builds, :class => 'textfield')
