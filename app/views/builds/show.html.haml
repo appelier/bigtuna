@@ -1,26 +1,33 @@
 #build
   %h2= @build.project.name
 
-  %div.value_list
-    %span.title Commit
-    %span.value= @build.commit
-    %span.title Directory
-    %span.value= strip_rails_root(@build.build_dir)
-    %span.title Author
-    %span.value= mail_to(@build.email, @build.author + " <" + @build.email + ">")
-    %span.title Message
-    %span.value= @build.commit_message
-    %span.title Committed at
-    %span.value= l(@build.committed_at, :format => :full)
-    %span.title Scheduled at
-    %span.value= l(@build.scheduled_at, :format => :full)
+  %table.value_list
+    %tr
+      %td.title Commit
+      %td.value= @build.commit
+    %tr
+      %td.title Directory
+      %td.value= strip_rails_root(@build.build_dir)
+    %tr
+      %td.title Author
+      %td.value= mail_to(@build.email, @build.author + " <" + @build.email + ">")
+    %tr
+      %td.title Message
+      %td.value= @build.commit_message
+    %tr
+      %td.title Committed at
+      %td.value= l(@build.committed_at, :format => :full)
+    %tr
+      %td.title Scheduled at
+      %td.value= l(@build.scheduled_at, :format => :full)
     - if @build.started?
-      %span.title Started at
-      %span.value= l(@build.started_at, :format => :full)
+      %tr
+        %td.title Started at
+        %td.value= l(@build.started_at, :format => :full)
     - if @build.finished?
-      %span.title Duration
-      %span.value= build_duration(@build)
-  %br.clear
+      %tr
+        %td.title Duration
+        %td.value= build_duration(@build)
 
   #steps
     %h3 Steps
