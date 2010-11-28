@@ -5,6 +5,7 @@ class Project < ActiveRecord::Base
   before_destroy :remove_build_folder
   before_update :rename_build_folder
   before_create :set_default_build_counts
+  after_save :update_hooks
 
   validates :hook_name, :uniqueness => {:allow_blank => true}
   validates :name, :presence => true, :uniqueness => true
@@ -26,6 +27,15 @@ class Project < ActiveRecord::Base
       self.update_attributes!(:total_builds => new_total_builds)
     end
     Delayed::Job.enqueue(build)
+  end
+
+  def hooks
+    hook_hash = {}
+    BigTuna::HOOKS.each do |hook|
+      hook_hash[hook::NAME] = hook
+    end
+    current_hooks = Hook.where(:project_id => self.id).map { |hook| hook.hook_name }
+    hook_hash.values_at(*current_hooks)
   end
 
   def build_dir
@@ -63,6 +73,10 @@ class Project < ActiveRecord::Base
     1.0 - (1.0 * failed_builds / total_builds)
   end
 
+  def hooks=(hooks)
+    @_hooks = hooks
+  end
+
   private
   def build_dir_from_name(name)
     File.join(Rails.root, "builds", name.downcase.gsub(/[^A-Za-z0-9]/, "_"))
@@ -87,5 +101,17 @@ class Project < ActiveRecord::Base
   def set_default_build_counts
     self.total_builds = 0
     self.failed_builds = 0
+  end
+
+  def update_hooks
+    return if @_hooks.nil?
+    new_hooks = @_hooks.keys
+    current_hooks = self.hooks.map { |e| e::NAME }
+    to_remove = current_hooks - new_hooks
+    to_add = new_hooks - current_hooks
+    Hook.where(:project_id => self.id, :hook_name => to_remove).delete_all
+    to_add.each do |name|
+      Hook.create!(:project => self, :hook_name => name)
+    end
   end
 end

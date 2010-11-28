@@ -37,6 +37,13 @@
   %br
   = f.text_field(:max_builds, :class => 'textfield')
 %div
+  Hooks
+  - BigTuna::HOOKS.each do |hook|
+    %div.hint
+      %label{:for => "project_hooks_#{hook::NAME}"}
+        = check_box_tag("project[hooks][#{hook::NAME}]", hook::NAME, f.object.hooks.include?(hook))
+        = hook::NAME
+%div
   = f.label(:hook_name)
   %br
   = f.text_field(:hook_name, :class => 'textfield')

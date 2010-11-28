@@ -6,6 +6,7 @@ class Build < ActiveRecord::Base
   STATUS_BUILDER_ERROR = "status_builder_error"
 
   belongs_to :project
+
   before_destroy :remove_build_dir
   before_create :set_build_values
   serialize :stdout, Array
@@ -17,12 +18,14 @@ class Build < ActiveRecord::Base
     status, output = execute_steps()
     self.stdout = output
     self.status = status
-    send_email_info() unless project.recipients.blank?
     self.finished_at = Time.now
     self.save!
     if status != STATUS_OK
       new_failed_builds = project.failed_builds + 1
       project.update_attributes!(:failed_builds => new_failed_builds)
+      after_failed()
+    else
+      after_passed()
     end
     project.truncate_builds!
   rescue Exception => e
@@ -36,6 +39,9 @@ class Build < ActiveRecord::Base
     self.stdout = [out]
     self.status = STATUS_BUILDER_ERROR
     self.save!
+    after_failed()
+  ensure
+    after_finished()
   end
 
   def display_name
@@ -128,16 +134,29 @@ class Build < ActiveRecord::Base
     self.update_attributes!(vcs.head_info[0])
   end
 
-  def send_email_info
+  def after_passed
     previous_build = self.project.builds.order("created_at DESC").offset(1).first
-    if status == STATUS_OK && previous_build && previous_build.status == STATUS_FAILED
-      GlobalMailer.delay.build_fixed(self)
-    elsif status == STATUS_FAILED
-      if previous_build.nil? or (previous_build && previous_build.status == STATUS_OK)
-        GlobalMailer.delay.build_failed(self)
-      else
-        GlobalMailer.delay.build_still_fails(self)
-      end
+    build_fixed = (status == STATUS_OK && previous_build && previous_build.status == STATUS_FAILED)
+    project.hooks.each do |hook|
+      hook.build_passed(self) if hook.respond_to?(:build_passed)
+      hook.build_fixed(self) if (build_fixed and hook.respond_to?(:build_fixed))
+    end
+  end
+
+  def after_failed
+    previous_build = self.project.builds.order("created_at DESC").offset(1).first
+    build_failed = (previous_build.nil? or (previous_build && previous_build.status == STATUS_OK))
+    build_still_fails = (previous_build and previous_build.status != STATUS_OK)
+    project.hooks.each do |hook|
+      hook.build_failed(self) if (build_failed and hook.respond_to?(:build_failed))
+      hook.build_still_fails(self) if (build_still_fails and hook.respond_to?(:build_still_fails))
+    end
+  end
+
+  def after_finished
+    previous_build = self.project.builds.order("created_at DESC").offset(1).first
+    project.hooks.each do |hook|
+      hook.build_finished(self) if hook.respond_to?(:build_finished)
     end
   end
 end
