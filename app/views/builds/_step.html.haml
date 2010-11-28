@@ -1,6 +1,6 @@
 %div{:id => "step_outer_#{step_no}", :class => step.exit_code == 0 ? "status_build_ok output_box" : "status_build_failed output_box"}
   .command_box
-    %tt.command= "# #{step.command}"
+    %tt.command= "#{step.command}"
   - if step.exit_code.nil?
     %br
     %tt.command= "Task was not executed"
