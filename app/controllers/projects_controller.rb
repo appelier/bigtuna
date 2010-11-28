@@ -11,7 +11,7 @@ class ProjectsController < ApplicationController
   def build
     @project.build!
     redirect_to(project_path(@project))
-  rescue VCS::Error => e
+  rescue BigTuna::VCS::Error => e
     flash[:error] = e.message
     redirect_to project_path(@project)
   end

@@ -51,4 +51,5 @@ a                              { color: #000; text-decoration: none; }
 
 .value_list                    { font-size: 0.7em; }
 .value_list .title             { width: 150px; text-align: right; padding-right: 20px; text-transform: uppercase; }
+.value_list .value             { text-align: left; }
 .clear                         { clear: both; }

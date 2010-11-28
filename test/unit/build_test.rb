@@ -12,12 +12,15 @@ class BuildTest < ActiveSupport::TestCase
     super
   end
 
-  test "invalid build is marked as invalid" do
+  test "invalid build is marked as invalid and failed count gets updated" do
     project = Project.make(:steps => "ls /not/existing", :name => "Koss", :vcs_source => "test/files/koss", :vcs_type => "git", :max_builds => 1)
+    assert_equal 0, project.failed_builds
     job = project.build!
     job.invoke_job
     build = project.recent_build
     assert_equal Build::STATUS_FAILED, build.status
+    project.reload
+    assert_equal 1, project.failed_builds
   end
 
   test "special variable %build_dir% is available in steps" do

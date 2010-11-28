@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101127225635) do
+ActiveRecord::Schema.define(:version => 20101128131425) do
 
   create_table "builds", :force => true do |t|
     t.integer  "project_id"
@@ -27,6 +27,7 @@ ActiveRecord::Schema.define(:version => 20101127225635) do
     t.datetime "committed_at"
     t.text     "commit_message"
     t.datetime "finished_at"
+    t.integer  "build_no"
   end
 
   create_table "delayed_jobs", :force => true do |t|
@@ -45,9 +46,9 @@ ActiveRecord::Schema.define(:version => 20101127225635) do
   add_index "delayed_jobs", ["priority", "run_at"], :name => "delayed_jobs_priority"
 
   create_table "projects", :force => true do |t|
-    t.string   "name",       :null => false
-    t.string   "vcs_type",   :null => false
-    t.string   "vcs_source", :null => false
+    t.string   "name",          :null => false
+    t.string   "vcs_type",      :null => false
+    t.string   "vcs_source",    :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "max_builds"
@@ -56,6 +57,8 @@ ActiveRecord::Schema.define(:version => 20101127225635) do
     t.integer  "position"
     t.string   "recipients"
     t.string   "vcs_branch"
+    t.integer  "total_builds"
+    t.integer  "failed_builds"
   end
 
 end

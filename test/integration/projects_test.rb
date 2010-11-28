@@ -83,7 +83,7 @@ class ProjectsTest < ActionController::IntegrationTest
     build = project.recent_build
     job = Delayed::Job.order("created_at DESC").first
     job.invoke_job
-    click_link "Build ##{build.id}"
+    click_link build.display_name
     assert page.has_content?("Could not switch to 'no/such'")
   end
 end

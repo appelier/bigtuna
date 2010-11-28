@@ -130,4 +130,14 @@ class ProjectTest < ActiveSupport::TestCase
   test "vcs_branch should be present" do
     assert_invalid(Project, :vcs_branch) { |p| p.vcs_branch = "" }
   end
+
+  test "total_builds gets increased" do
+    project = Project.make(:steps => "ls -al file", :name => "Project", :vcs_source => "test/files/repo", :vcs_type => "git", :max_builds => 1)
+    assert_equal 0, project.total_builds
+    project.build!
+    project.build!
+
+    project.reload
+    assert_equal 2, project.total_builds
+  end
 end

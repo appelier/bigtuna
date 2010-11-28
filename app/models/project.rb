@@ -4,6 +4,7 @@ class Project < ActiveRecord::Base
   has_many :builds, :dependent => :destroy
   before_destroy :remove_build_folder
   before_update :rename_build_folder
+  before_create :set_default_build_counts
 
   validates :hook_name, :uniqueness => {:allow_blank => true}
   validates :name, :presence => true, :uniqueness => true
@@ -18,7 +19,12 @@ class Project < ActiveRecord::Base
   end
 
   def build!
-    build = self.builds.create!({:scheduled_at => Time.now})
+    new_total_builds = self.total_builds + 1
+    build = nil
+    ActiveRecord::Base.transaction do
+      build = self.builds.create!({:scheduled_at => Time.now, :build_no => new_total_builds})
+      self.update_attributes!(:total_builds => new_total_builds)
+    end
     Delayed::Job.enqueue(build)
   end
 
@@ -71,5 +77,10 @@ class Project < ActiveRecord::Base
       new_dir = build_dir_from_name(self.name)
       FileUtils.mv(old_dir, new_dir)
     end
+  end
+
+  def set_default_build_counts
+    self.total_builds = 0
+    self.failed_builds = 0
   end
 end

@@ -6,12 +6,13 @@
         .name
           %p= link_to(build.display_name, build_path(build, :stderr => build.status == Build::STATUS_OK ? nil : 1))
         - if build.commit_data?
-          .info
-            = ("author: " + link_to(build.author, "mailto:#{build.email}")).html_safe
-            %br
-            = "message: " + truncate(build.commit_message, :length => 55)
-            %br
-            = "scheduled at: " + build.scheduled_at.strftime("%Y-%m-%d %H:%M")
+          %table.value_list
+            %tr
+              %td.title Author
+              %td.value= mail_to(build.author, build.email + " <" + build.author + ">")
+            %tr
+              %td.title Message
+              %td.value= truncate(build.commit_message, :length => 55)
         .info
           = form_tag(build_path(build), :method => "DELETE") do
             %button{:type => "submit"} Delete

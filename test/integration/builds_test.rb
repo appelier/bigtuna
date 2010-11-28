@@ -4,7 +4,6 @@ class BuildsTest < ActionController::IntegrationTest
   def setup
     super
     @output = `cd test/files; mkdir repo; cd repo; git init; echo "my file" > file; git add file; git commit -m "my file added"; git log --format=%H --max-count=1`
-    @commit_hash = @output.split[-1]
   end
 
   def teardown
@@ -37,7 +36,7 @@ class BuildsTest < ActionController::IntegrationTest
     job.invoke_job
     visit "/"
     click_link_or_button "myproject"
-    click_link_or_button @commit_hash[0, 7]
+    click_link_or_button "Build #1"
     assert page.has_css?("#steps #step_1")
     assert page.has_css?("#steps #step_2")
     assert page.has_css?("#steps #step_3")

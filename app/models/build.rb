@@ -13,13 +13,17 @@ class Build < ActiveRecord::Base
   def perform
     self.update_attributes!(:status => STATUS_PROGRESS)
     self.started_at = Time.now
+    project = self.project
     status, output = execute_steps()
     self.stdout = output
     self.status = status
-    project = self.project
     send_email_info() unless project.recipients.blank?
     self.finished_at = Time.now
     self.save!
+    if status != STATUS_OK
+      new_failed_builds = project.failed_builds + 1
+      project.update_attributes!(:failed_builds => new_failed_builds)
+    end
     project.truncate_builds!
   rescue Exception => e
     Rails.logger.warn("[BigTuna] Exception in build runner")
@@ -35,11 +39,7 @@ class Build < ActiveRecord::Base
   end
 
   def display_name
-    if commit
-      commit[0, 7]
-    else
-      "Build ##{self.id}"
-    end
+    "Build ##{self.build_no} @ #{I18n.l(self.scheduled_at, :format => :long)}"
   end
 
   def to_param
