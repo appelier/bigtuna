@@ -140,4 +140,10 @@ class ProjectTest < ActiveSupport::TestCase
     project.reload
     assert_equal 2, project.total_builds
   end
+
+  test "stability is computed properly" do
+    project = Project.make(:steps => "ls -al file", :name => "Project", :vcs_source => "test/files/repo", :vcs_type => "git")
+    project.update_attributes!(:total_builds => 3, :failed_builds => 1)
+    assert_in_delta 0.66, project.stability, 0.01
+  end
 end

@@ -60,7 +60,7 @@ class Project < ActiveRecord::Base
 
   def stability
     return nil if total_builds == 0
-    1.0 - (failed_builds / total_builds)
+    1.0 - (1.0 * failed_builds / total_builds)
   end
 
   private
