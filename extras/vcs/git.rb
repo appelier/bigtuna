@@ -10,8 +10,8 @@ module VCS
       info = {}
       command = "git log --max-count=1 --format=\"%H%n%an%n%ae%n%ad%n%s\" #{self.branch}"
       begin
-        output = Runner.execute(self.source, command)
-      rescue Runner::Error => e
+        output = BigTuna::Runner.execute(self.source, command)
+      rescue BigTuna::Runner::Error => e
         raise VCS::Error.new("Couldn't access repository log")
       end
       head_hash = output.stdout.split("\n")
@@ -25,7 +25,7 @@ module VCS
 
     def clone(where_to)
       command = "git clone --branch #{self.branch} --depth 1 #{self.source} #{where_to}"
-      Runner.execute(Dir.pwd, command)
+      BigTuna::Runner.execute(Dir.pwd, command)
     end
   end
 end

@@ -25,7 +25,7 @@ class Build < ActiveRecord::Base
     Rails.logger.warn("[BigTuna] Exception in build runner")
     Rails.logger.warn("[BigTuna] #{e.message}")
     Rails.logger.warn("[BigTuna] #{e.backtrace.join}")
-    out = Runner::Output.new(Dir.pwd, "builder error")
+    out = BigTuna::Runner::Output.new(Dir.pwd, "builder error")
     out.append_stdout(e.message)
     e.backtrace.each { |line| out.append_stdout(line) }
     out.exit_code = 1
@@ -100,17 +100,17 @@ class Build < ActiveRecord::Base
         if command.is_a?(Proc)
           out, command = command.call
         else
-          out = Runner.execute(dir, command)
+          out = BigTuna::Runner.execute(dir, command)
         end
         output << out
-      rescue Runner::Error => e
+      rescue BigTuna::Runner::Error => e
         output << e.output
         exit_code = e.output.exit_code
         break
       end
     end
     all_steps[output.size .. -1].each do |dir, command|
-      output << Runner::Output.new(dir, command)
+      output << BigTuna::Runner::Output.new(dir, command)
     end
     status = exit_code == 0 ? STATUS_OK : STATUS_FAILED
     [status, output]
