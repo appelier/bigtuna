@@ -14,15 +14,14 @@ a                              { color: #000; text-decoration: none; }
 .black_button                  { background-color: #ccc; color: #000; text-transform: uppercase; font-weight: bold; padding: 6px 10px 4px 10px; }
 .black_button:hover            { background-color: #555; color: #eaeaea }
 
-#listing                       { font-size: 1.5em; line-height: 1.5em; }
+#listing                       { line-height: 1.0em; }
 #listing h2                    { color: #191919; margin-left: 5px; }
-#listing .project              { margin: 0 8px 10px 8px; }
-#listing .name                 { font-weight: bold; text-decoration: none; padding: 20px 0 0 30px; }
-#listing .name a               { color: #282828; }
+#listing h3                    { font-weight: bold; padding-left: 30px; }
+#listing .project              { margin: 0 8px 10px 8px; border-radius: 4px; padding: 10px; }
 #listing .info                 { font-size: 0.4em; color: #191919; line-height: 1.2em; margin-left: 8px; }
 #listing .info a               { font-weight: bold; color: #191919; }
 #listing a:hover               { color: #eaeaea; text-shadow: #191919 1px 1px 1px; }
-#listing .value_list           { font-size: 0.5em; line-height: 1.3em; }
+#listing .updown               { float: right; font-size: 0.65em; line-height: 1.0em; padding: 10px; text-align: right; font-weight: bold; }
 
 #build pre                     { font-family: "Monaco", "Courier New", monospace; }
 #build pre                     { white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap; word-wrap: break-word; line-height: 1.1em; }
@@ -49,7 +48,7 @@ a                              { color: #000; text-decoration: none; }
 .textarea                      { height: 120px; padding-top: 5px; }
 .hint                          { font-size: 0.6em; }
 
-.value_list                    { font-size: 0.7em; }
-.value_list .title             { width: 150px; text-align: right; padding-right: 20px; text-transform: uppercase; }
-.value_list .value             { text-align: left; }
+.value_list                    { font-size: 0.7em; border-spacing: 20px; margin: 0 20px; }
+.value_list .title             { text-align: right; padding-right: 10px; text-transform: uppercase; font-weight: bold; word-wrap: none; vertical-align: top; }
+.value_list .value             { text-align: left; padding-right: 10px; }
 .clear                         { clear: both; }

@@ -3,7 +3,7 @@
   %tbody
     - @builds.each do |build|
       %div{:class => "#{build.status} project", :id => dom_id(build)}
-        .name= link_to(build.display_name, build_path(build, :stderr => build.status == Build::STATUS_OK ? nil : 1))
+        %h3= link_to(build.display_name, build_path(build, :stderr => build.status == Build::STATUS_OK ? nil : 1))
         %table.value_list
           = render :partial => "builds/build_data", :locals => {:build => build}
         .info

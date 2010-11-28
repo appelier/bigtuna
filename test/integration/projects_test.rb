@@ -54,22 +54,22 @@ class ProjectsTest < ActionController::IntegrationTest
     project1 = Project.make(:steps => "echo 'ha'", :name => "Valid", :vcs_source => "test/files/repo", :vcs_type => "git")
     project2 = Project.make(:steps => "echo 'sa'", :name => "Valid2", :vcs_source => "test/files/repo", :vcs_type => "git")
     visit "/"
-    within("#project_#{project2.id}") do
-      assert page.has_content?("Up")
-      assert ! page.has_content?("Down")
+    within("#project_#{project2.id} .updown") do
+      assert page.has_xpath?("a[contains(@href, 'up=')]")
+      assert ! page.has_xpath?("a[contains(@href, 'down=')]")
     end
-    within("#project_#{project1.id}") do
-      assert page.has_content?("Down")
-      assert ! page.has_content?("Up")
+    within("#project_#{project1.id} .updown") do
+      assert page.has_xpath?("a[contains(@href, 'down')]")
+      assert ! page.has_xpath?("a[contains(@href, 'up')]")
     end
-    click_link "Down"
-    within("#project_#{project1.id}") do
-      assert page.has_content?("Up")
-      assert ! page.has_content?("Down")
+    click_link "↓"
+    within("#project_#{project1.id} .updown") do
+      assert page.has_xpath?("a[contains(@href, 'up=')]")
+      assert ! page.has_xpath?("a[contains(@href, 'down=')]")
     end
-    within("#project_#{project2.id}") do
-      assert page.has_content?("Down")
-      assert ! page.has_content?("Up")
+    within("#project_#{project2.id} .updown") do
+      assert page.has_xpath?("a[contains(@href, 'down')]")
+      assert ! page.has_xpath?("a[contains(@href, 'up')]")
     end
   end
 

@@ -4,8 +4,12 @@
   - @projects.each do |project|
     %ol
       %li{:class => "#{project.status} project", :id => dom_id(project)}
-        .name
-          %p= link_to(project.name, project_path(project))
+        .updown
+          = link_to_if(!project.first?, "&uarr;".html_safe, arrange_project_path(project, :up => true))
+          %br
+          = link_to_if(!project.last?, "&darr;".html_safe, arrange_project_path(project, :down => true))
+          %br
+        %h3= link_to(project.name, project_path(project))
         - if project.recent_build
           %table.value_list
             = render :partial => "builds/build_data", :locals => {:build => project.recent_build}
@@ -13,11 +17,10 @@
               %tr
                 %td.title Stability
                 %td.value= format_stability(project.stability)
-        .info
-          - if ! project.first?
-            = link_to("Up", arrange_project_path(project, :up => true))
-          - if ! project.last?
-            = link_to("Down", arrange_project_path(project, :down => true))
+        - else
+          %table.value_list
+            %tr
+              %td.title Not built yet
 
 - content_for :sidebar do
   =link_to("new project", new_project_path, :class => 'black_button')
