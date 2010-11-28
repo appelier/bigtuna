@@ -1,0 +1,12 @@
+%tr
+  %td.title Commit
+  %td.value= build.commit_data? ? build.commit : "Commit hash not yet available"
+%tr
+  %td.title Committed at
+  %td.value= build.commit_data? ? l(build.committed_at, :format => :long) : "Commit date not yet available"
+%tr
+  %td.title Author
+  %td.value= build.commit_data? ? mail_to(build.author, build.email + " <" + build.author + ">") : "Author not yet available"
+%tr
+  %td.title Message
+  %td.value= build.commit_data? ? truncate(build.commit_message, :length => 55) : "Message not yet available"

@@ -2,23 +2,10 @@
   %h2= @build.project.name
 
   %table.value_list
-    - if @build.commit_data?
-      %tr
-        %td.title Commit
-        %td.value= @build.commit
+    = render :partial => "builds/build_data", :locals => {:build => @build}
     %tr
       %td.title Directory
       %td.value= strip_rails_root(@build.build_dir)
-    - if @build.commit_data?
-      %tr
-        %td.title Author
-        %td.value= mail_to(@build.email, @build.author + " <" + @build.email + ">")
-      %tr
-        %td.title Message
-        %td.value= @build.commit_message
-      %tr
-        %td.title Committed at
-        %td.value= l(@build.committed_at, :format => :full)
     %tr
       %td.title Scheduled at
       %td.value= l(@build.scheduled_at, :format => :full)

@@ -16,7 +16,7 @@ a                              { color: #000; text-decoration: none; }
 
 #listing                       { font-size: 1.5em; line-height: 1.5em; }
 #listing h2                    { color: #191919; margin-left: 5px; }
-#listing .project              { border-radius: 4px; margin: 0 8px 10px 8px; }
+#listing .project              { margin: 0 8px 10px 8px; }
 #listing .name                 { font-weight: bold; text-decoration: none; padding: 20px 0 0 30px; }
 #listing .name a               { color: #282828; }
 #listing .info                 { font-size: 0.4em; color: #191919; line-height: 1.2em; margin-left: 8px; }

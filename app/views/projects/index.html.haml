@@ -6,20 +6,9 @@
       %li{:class => "#{project.status} project", :id => dom_id(project)}
         .name
           %p= link_to(project.name, project_path(project))
-        %table.value_list
-          - if project.recent_build && project.recent_build.commit_data?
-            %tr
-              %td.title Commit
-              %td.value= project.recent_build.commit
-            %tr
-              %td.title Committed at
-              %td.value= l(project.recent_build.committed_at, :format => :long)
-            %tr
-              %td.title Author
-              %td.value= mail_to(project.recent_build.author, project.recent_build.email + " <" + project.recent_build.author + ">")
-            %tr
-              %td.title Message
-              %td.value= truncate(project.recent_build.commit_message, :length => 55)
+        - if project.recent_build
+          %table.value_list
+            = render :partial => "builds/build_data", :locals => {:build => project.recent_build}
             - if project.stability
               %tr
                 %td.title Stability
