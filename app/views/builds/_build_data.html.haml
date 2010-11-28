@@ -9,4 +9,4 @@
   %td.value= build.commit_data? ? mail_to(build.author, build.email + " <" + build.author + ">") : "Author not yet available"
 %tr
   %td.title Message
-  %td.value= build.commit_data? ? truncate(build.commit_message, :length => 55) : "Message not yet available"
+  %td.value= build.commit_data? ? build.commit_message : "Message not yet available"
