@@ -35,7 +35,11 @@ class Build < ActiveRecord::Base
   end
 
   def display_name
-    commit[0, 7]
+    if commit
+      commit[0, 7]
+    else
+      "Build ##{self.id}"
+    end
   end
 
   def to_param
@@ -46,8 +50,21 @@ class Build < ActiveRecord::Base
     ! started_at.nil?
   end
 
+  def commit_data?
+    self.author && self.email && self.commit_message && self.committed_at && self.commit
+  end
+
   def finished?
     ! finished_at.nil?
+  end
+
+  def vcs
+    return @vcs if @vcs
+    vcs_type = self.project.vcs_type
+    vcs_branch = self.project.vcs_branch
+    klass = BigTuna::VCS_BACKENDS.assoc(vcs_type)[1]
+    raise ArgumentError.new("VCS not supported: %p" % [vcs_type]) if klass.nil?
+    @vcs = klass.new(self.build_dir, vcs_branch)
   end
 
   private
@@ -61,7 +78,7 @@ class Build < ActiveRecord::Base
 
   def set_build_values
     project_dir = project.build_dir
-    self.build_dir = File.join(project_dir, self.scheduled_at.strftime("%Y%m%d%H%M%S") + "_" + commit[0, 7] + "_" + rand(32**8).to_s(36))
+    self.build_dir = File.join(project_dir, self.scheduled_at.strftime("%Y%m%d%H%M%S") + "_" + rand(32**8).to_s(36))
     self.status = STATUS_IN_QUEUE
     self.scheduled_at = Time.now
   end
@@ -76,7 +93,9 @@ class Build < ActiveRecord::Base
     end
     output = []
     exit_code = 0
-    all_steps.each do |dir, command|
+    all_steps.each_with_index do |step, index|
+      dir, command = step
+      update_commit_data() if index == 1
       begin
         if command.is_a?(Proc)
           out, command = command.call
@@ -102,6 +121,10 @@ class Build < ActiveRecord::Base
     cmd.gsub!("%project_dir%", self.project.build_dir)
     cmd.strip!
     cmd
+  end
+
+  def update_commit_data
+    self.update_attributes!(vcs.head_info[0])
   end
 
   def send_email_info

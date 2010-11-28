@@ -41,4 +41,8 @@ class Runner::Output
   def each
     @output.each { |type, out| yield type, out }
   end
+
+  def ok?
+    exit_code == 0
+  end
 end

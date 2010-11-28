@@ -7,7 +7,7 @@
         .name
           %p= link_to(project.name, project_path(project))
         .info
-          - if project.recent_build
+          - if project.recent_build && project.recent_build.commit_data?
             = "last commit: " + project.recent_build.commit[0, 7]
             %br
             = ("author: " + link_to(project.recent_build.author, "mailto:#{project.recent_build.email}")).html_safe

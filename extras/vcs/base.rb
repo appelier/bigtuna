@@ -1,9 +1,9 @@
 module VCS
   class Base
-    attr_reader :dir, :branch
+    attr_reader :source, :branch
 
-    def initialize(dir, branch)
-      @dir = dir
+    def initialize(source, branch)
+      @source = source
       @branch = branch
     end
   end

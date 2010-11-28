@@ -18,8 +18,7 @@ class Project < ActiveRecord::Base
   end
 
   def build!
-    head_info, head_command = vcs.head_info
-    build = self.builds.create!(head_info.merge(:scheduled_at => Time.now))
+    build = self.builds.create!({:scheduled_at => Time.now})
     Delayed::Job.enqueue(build)
   end
 

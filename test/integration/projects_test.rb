@@ -73,13 +73,17 @@ class ProjectsTest < ActionController::IntegrationTest
     end
   end
 
-  test "cannot build project with invalid repo" do
+  test "project with invalid repo shows appropriate errors" do
     project = Project.make(:steps => "echo 'ha'", :name => "Valid", :vcs_source => "no/such/repo", :vcs_type => "git")
     visit "/"
     click_link "Valid"
-    assert_difference("Build.count", 0) do
+    assert_difference("Build.count", +1) do
       click_link "Build now"
     end
-    assert page.has_content?("Couldn't access repository log")
+    build = project.recent_build
+    job = Delayed::Job.order("created_at DESC").first
+    job.invoke_job
+    click_link "Build ##{build.id}"
+    assert page.has_content?("Could not switch to 'no/such'")
   end
 end

@@ -10,9 +10,9 @@ module ApplicationHelper
     minutes = seconds / 60
     seconds = seconds - minutes * 60
     if minutes == 0
-      "%2ds" % [seconds]
+      "%ds" % [seconds]
     else
-      "%dm %2ds" % [minutes, seconds]
+      "%dm %ds" % [minutes, seconds]
     end
   end
 end
