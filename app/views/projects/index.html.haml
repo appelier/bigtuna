@@ -1,7 +1,8 @@
 #listing
   %h2 Projects
-  %ol
-    - @projects.each do |project|
+  = "No projects yet." unless !@projects.empty?
+  - @projects.each do |project|
+    %ol
       %li{:class => "#{project.status} project", :id => dom_id(project)}
         .name
           %p= link_to(project.name, project_path(project))
