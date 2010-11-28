@@ -60,7 +60,7 @@ class ProjectTest < ActiveSupport::TestCase
     assert_equal "ls -al not_a_file", steps[2].command
     assert steps[2].exit_code != 0
     assert_nil steps[3].exit_code
-    assert_nil steps[3].stdout
+    assert_equal [], steps[3].stdout
     assert_equal "echo 'not_here'", steps[3].command
     assert_equal Build::STATUS_FAILED, build.status
   end

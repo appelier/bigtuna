@@ -15,7 +15,7 @@ module BigTuna::VCS
       rescue BigTuna::Runner::Error => e
         raise VCS::Error.new("Couldn't access repository log")
       end
-      head_hash = output.stdout.split("\n")
+      head_hash = output.stdout
       info[:commit] = head_hash.shift
       info[:author] = head_hash.shift
       info[:email] = head_hash.shift

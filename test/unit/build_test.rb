@@ -47,7 +47,7 @@ class BuildTest < ActiveSupport::TestCase
     job.invoke_job
     build = project.recent_build
     assert_equal Build::STATUS_OK, build.status
-    assert_nil build.stdout[-1].stdout
+    assert_equal [], build.stdout[-1].stdout
   end
 
   test "mail stating that build failed is sent when build failed" do

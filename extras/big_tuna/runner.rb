@@ -8,11 +8,11 @@ module BigTuna
         buffer = []
         status = Open4.popen4(end_command) do |_, _, stdout, stderr|
           while !stdout.eof? or !stderr.eof?
-            output.append_stderr(stderr.gets)
-            output.append_stdout(stdout.gets)
+            output.append_stdout(stdout.read_nonblock(2 ** 14)) rescue Errno::EAGAIN
+            output.append_stderr(stderr.read_nonblock(2 ** 14)) rescue Errno::EAGAIN
           end
         end
-        output.exit_code = status.exitstatus
+        output.finish(status.exitstatus)
         Rails.logger.debug("[BigTuna] exit code: #{output.exit_code}")
         raise Error.new(output) if output.exit_code != 0
         output

@@ -32,7 +32,7 @@ class Build < ActiveRecord::Base
     out = BigTuna::Runner::Output.new(Dir.pwd, "builder error")
     out.append_stdout(e.message)
     e.backtrace.each { |line| out.append_stdout(line) }
-    out.exit_code = 1
+    out.finish(1)
     self.stdout = [out]
     self.status = STATUS_BUILDER_ERROR
     self.save!
