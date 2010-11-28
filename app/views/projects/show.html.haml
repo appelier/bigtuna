@@ -10,6 +10,9 @@
               %td.title Commit
               %td.value= build.commit
             %tr
+              %td.title Committed at
+              %td.value= l(build.committed_at, :format => :long)
+            %tr
               %td.title Author
               %td.value= mail_to(build.author, build.email + " <" + build.author + ">")
             %tr

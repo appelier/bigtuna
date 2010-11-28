@@ -78,7 +78,7 @@ class Build < ActiveRecord::Base
 
   def set_build_values
     project_dir = project.build_dir
-    self.build_dir = File.join(project_dir, self.scheduled_at.strftime("%Y%m%d%H%M%S") + "_" + rand(32**8).to_s(36))
+    self.build_dir = File.join(project_dir, "build_#{self.build_no}_#{self.scheduled_at.strftime("%Y%m%d%H%M%S")}")
     self.status = STATUS_IN_QUEUE
     self.scheduled_at = Time.now
     self.stdout = []
