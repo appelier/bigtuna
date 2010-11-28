@@ -20,7 +20,7 @@ a                              { color: #000; text-decoration: none; }
 #listing .project              { margin: 0 8px 10px 8px; border-radius: 4px; padding: 10px; }
 #listing .info                 { font-size: 0.4em; color: #191919; line-height: 1.2em; margin-left: 8px; }
 #listing .info a               { font-weight: bold; color: #191919; }
-#listing a:hover               { color: #eaeaea; text-shadow: #191919 1px 1px 1px; }
+#listing a:hover               { color: #000; }
 #listing .updown               { float: right; font-size: 0.65em; line-height: 1.0em; text-align: right; font-weight: bold; }
 #listing .updown a             { display: block; padding: 5px 10px; }
 
