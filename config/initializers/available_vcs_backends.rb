@@ -1,5 +1,5 @@
 module BigTuna
   VCS_BACKENDS = [
-    ["git", VCS::Git]
+    VCS::Git,
   ]
 end

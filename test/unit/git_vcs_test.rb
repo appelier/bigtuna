@@ -48,6 +48,6 @@ class GitVCSTest < ActiveSupport::TestCase
 
   private
   def init_repo(dir = "test/files/repo", branch = "master")
-    VCS::Git.new(dir, branch)
+    BigTuna::VCS::Git.new(dir, branch)
   end
 end

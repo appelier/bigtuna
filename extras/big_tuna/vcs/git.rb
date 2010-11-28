@@ -1,6 +1,7 @@
-module VCS
+module BigTuna::VCS
   class Git < Base
     NAME = "Git"
+    VALUE = "git"
 
     def initialize(source, branch)
       super(source, branch)

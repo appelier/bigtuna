@@ -1,4 +1,4 @@
-module VCS
+module BigTuna::VCS
   class Base
     attr_reader :source, :branch
 
