@@ -15,4 +15,9 @@ module ApplicationHelper
       "%dm %ds" % [minutes, seconds]
     end
   end
+
+  def format_stability(stability)
+    return "not yet built" if stability.nil?
+    "%.2f%%" % [100.0 * stability]
+  end
 end

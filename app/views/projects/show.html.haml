@@ -3,10 +3,12 @@
   %tbody
     - @builds.each do |build|
       %div{:class => "#{build.status} project", :id => dom_id(build)}
-        .name
-          %p= link_to(build.display_name, build_path(build, :stderr => build.status == Build::STATUS_OK ? nil : 1))
+        .name= link_to(build.display_name, build_path(build, :stderr => build.status == Build::STATUS_OK ? nil : 1))
         - if build.commit_data?
           %table.value_list
+            %tr
+              %td.title Commit
+              %td.value= build.commit
             %tr
               %td.title Author
               %td.value= mail_to(build.author, build.email + " <" + build.author + ">")

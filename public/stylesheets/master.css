@@ -16,15 +16,15 @@ a                              { color: #000; text-decoration: none; }
 
 #listing                       { font-size: 1.5em; line-height: 1.5em; }
 #listing h2                    { color: #191919; margin-left: 5px; }
-#listing .project              { text-align: center; border-radius: 4px; margin: 0 8px 10px 8px; }
-#listing .name                 { font-weight: bold; text-decoration: none; text-align: center; }
-#listing .name p               { margin-top: 10px; }
+#listing .project              { border-radius: 4px; margin: 0 8px 10px 8px; }
+#listing .name                 { font-weight: bold; text-decoration: none; padding: 20px 0 0 30px; }
 #listing .name a               { color: #282828; }
 #listing .info                 { font-size: 0.4em; color: #191919; line-height: 1.2em; margin-left: 8px; }
 #listing .info a               { font-weight: bold; color: #191919; }
 #listing a:hover               { color: #eaeaea; text-shadow: #191919 1px 1px 1px; }
+#listing .value_list           { font-size: 0.5em; line-height: 1.3em; }
 
-#build pre                     { font-family:"Monaco", "Courier New", monospace; }
+#build pre                     { font-family: "Monaco", "Courier New", monospace; }
 #build pre                     { white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap; word-wrap: break-word; line-height: 1.1em; }
 #build pre                     { background-color:#444; color:#fff; text-shadow: #000 0 1px 1px; font-size: 10px; padding: 10px; border: solid 1px #282828; margin: 20px auto 20px auto; }
 #build pre .stderr             { color: #888; }
@@ -33,13 +33,13 @@ a                              { color: #000; text-decoration: none; }
 #steps .command                { font-size: 0.8em; }
 #steps .command_box            { overflow:auto; }
 
-.status_build_in_progress      { background-color: #efde7d; border: solid 1px #b49f2e; }/*-webkit-box-shadow: #999 0px 1px 3px; }*/
+.status_build_in_progress      { background-color: #efde7d; border: solid 1px #b49f2e; }
 .status_build_in_progress a    { color: #000; }
-.status_not_built              { background-color: #519fff; border: solid 1px #216dca; }/*-webkit-box-shadow: #999 0px 1px 3px; }*/
-.status_build_in_queue         { background-color: #519fff; border: solid 1px #216dca; }/*-webkit-box-shadow: #999 0px 1px 3px; }*/
-.status_build_ok               { background-color: #C0EBBC; border: solid 1px #56a134; }/*-webkit-box-shadow: #999 0px 1px 3px; }*/
+.status_not_built              { background-color: #519fff; border: solid 1px #216dca; }
+.status_build_in_queue         { background-color: #519fff; border: solid 1px #216dca; }
+.status_build_ok               { background-color: #C0EBBC; border: solid 1px #56a134; }
 .status_build_ok a             { color: #365E36; }
-.status_build_failed           { background-color: #EDC2C2; border: solid 1px #d32f2f; }/*-webkit-box-shadow: #999 0px 1px 3px; }*/
+.status_build_failed           { background-color: #EDC2C2; border: solid 1px #d32f2f; }
 .status_build_failed a         { color: #994848; }
 .button                        { margin-right: 10px; font-weight: bold; font-size: 16px; color: #282828; text-shadow: #191919 0px 0px 1px; text-transform: uppercase; }
 .button:hover                  { color: #fff; text-shadow: #191919 1px 1px 1px; }

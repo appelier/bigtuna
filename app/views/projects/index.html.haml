@@ -6,13 +6,20 @@
       %li{:class => "#{project.status} project", :id => dom_id(project)}
         .name
           %p= link_to(project.name, project_path(project))
-        .info
+        %table.value_list
           - if project.recent_build && project.recent_build.commit_data?
-            = "last commit: " + project.recent_build.commit[0, 7]
-            %br
-            = ("author: " + link_to(project.recent_build.author, "mailto:#{project.recent_build.email}")).html_safe
-            %br
-            = "message: " + truncate(project.recent_build.commit_message, :length => 55)
+            %tr
+              %td.title Commit
+              %td.value= project.recent_build.commit
+            %tr
+              %td.title Author
+              %td.value= mail_to(project.recent_build.author, project.recent_build.email + " <" + project.recent_build.author + ">")
+            %tr
+              %td.title Message
+              %td.value= truncate(project.recent_build.commit_message, :length => 55)
+          %tr
+            %td.title Stability
+            %td.value= format_stability(project.stability)
         .info
           - if ! project.first?
             = link_to("Up", arrange_project_path(project, :up => true))

@@ -58,6 +58,11 @@ class Project < ActiveRecord::Base
     [self.id, self.name.to_url].join("-")
   end
 
+  def stability
+    return nil if total_builds == 0
+    1.0 - (failed_builds / total_builds)
+  end
+
   private
   def build_dir_from_name(name)
     File.join(Rails.root, "builds", name.downcase.gsub(/[^A-Za-z0-9]/, "_"))
