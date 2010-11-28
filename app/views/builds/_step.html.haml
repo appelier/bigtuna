@@ -1,9 +1,9 @@
-%div{:id => "step_#{step_no}", :class => step.exit_code == 0 ? "status_build_ok" : "status_build_failed"}
+%div{:id => "step_outer_#{step_no}", :class => step.exit_code == 0 ? "status_build_ok" : "status_build_failed"}
   %tt.command= "#{step_no}. #{step.command}"
   %br
   %div.value_list
     %span.title exit code
-    %span.value= step.exit_code
+    %span.value= step.exit_code || "Task was not executed"
   - if !step.exit_code.nil? and step.to_s
     %br
     %pre
