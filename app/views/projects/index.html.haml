@@ -5,10 +5,8 @@
     %ol
       %li{:class => "#{project.status} project", :id => dom_id(project)}
         .updown
-          = link_to_if(!project.first?, "&uarr;".html_safe, arrange_project_path(project, :up => true))
-          %br
-          = link_to_if(!project.last?, "&darr;".html_safe, arrange_project_path(project, :down => true))
-          %br
+          = link_to("&uarr;".html_safe, arrange_project_path(project, :up => true)) unless project.first?
+          = link_to("&darr;".html_safe, arrange_project_path(project, :down => true)) unless project.last?
         %h3= link_to(project.name, project_path(project))
         - if project.recent_build
           %table.value_list
@@ -20,7 +18,7 @@
         - else
           %table.value_list
             %tr
-              %td.title Not built yet
+              %td.value Not built yet
 
 - content_for :sidebar do
   =link_to("new project", new_project_path, :class => 'black_button')
