@@ -53,4 +53,4 @@
 %div
   %button.black_button{:type => "submit"}
     = f.object.new_record? ? "Create" : "Update"
-  = link_to("Back to project", project_path(f.object), :class => "black_button")
+  = link_to("Back to project", project_path(f.object), :class => "black_button") unless f.object.new_record?
