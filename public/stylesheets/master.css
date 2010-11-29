@@ -13,6 +13,8 @@ a                              { color: #000; text-decoration: none; }
 #sidebar                       { float: left; margin-top: 4px; width: 120px; background-color: #e1e1e1; border-top-right-radius: 4px; border-bottom-right-radius: 4px; padding: 10px 10px 7px 0; font-size: 0.6em; }
 .black_button                  { background-color: #ccc; color: #000; text-transform: uppercase; font-weight: bold; padding: 6px 10px 4px 10px; font-size: 12px; }
 .black_button:hover            { background-color: #555; color: #eaeaea }
+.crit_button                   { background-color: #ccc; color: #000; text-transform: uppercase; font-weight: bold; padding: 6px 10px 4px 10px; font-size: 12px;cursor: pointer; }
+.crit_button:hover             { background-color: #ff0000; color: #fff }
 .rss                           { text-indent: -9999px;display: block; width:30px; height:20px; background: url(../images/rss-icon.png) no-repeat; font-size: 40px; }
 .rss:hover                     { background-position: 0px -20px; }
 

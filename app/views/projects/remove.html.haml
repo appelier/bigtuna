@@ -1,5 +1,5 @@
-%h2= @project.name
+%h2= "Removing #{@project.name}"
 %p Are you sure?
 = form_for(@project, project_path(@project), :html => {:method => "DELETE"}) do
-  %button.black_button{:type => "submit"} Yes, I'm sure
+  %button.crit_button{:type => "submit"} Yes, I'm sure
   = link_to("No, thanks", project_path(@project), :class => "black_button")
