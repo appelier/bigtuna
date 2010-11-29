@@ -14,6 +14,21 @@ class ProjectsTest < ActionController::IntegrationTest
     super
   end
 
+  test "user can add a project" do
+    visit "/"
+    click_link "New project"
+    fill_in "Name", :with => "My shiny project"
+    fill_in "Steps", :with => "ls -al ."
+    select "Git", :from => "Vcs type"
+    fill_in "Vcs source", :with => "test/files/repo"
+    fill_in "Vcs branch", :with => "master"
+    fill_in "Max builds", :with => "3"
+    fill_in "Hook name", :with => "myshinyproject"
+    assert_difference("Project.count", +1) do
+      click_button "Create"
+    end
+  end
+
   test "one can successfully build a project" do
     project = Project.make(:steps => "ls -al file", :name => "Valid", :vcs_source => "test/files/repo", :vcs_type => "git")
     visit "/"
@@ -86,13 +101,13 @@ class ProjectsTest < ActionController::IntegrationTest
     click_link build.display_name
     assert page.has_content?("Could not switch to 'no/such'")
   end
-  
+
   test "project should have a link to the atom feed" do
     project = Project.make(:steps => "echo 'ha'", :name => "Atom project", :vcs_source => "no/such/repo", :vcs_type => "git")
     visit "/projects/#{[project.id, project.name.to_url].join("-")}"
     assert page.has_link?("Feed")
   end
-  
+
   test "project should have an atom feed" do
     project = Project.make(:steps => "echo 'ha'", :name => "Atom project 2", :vcs_source => "no/such/repo", :vcs_type => "git")
     build_1 = Build.make(:project => project, :created_at => 2.weeks.ago)
