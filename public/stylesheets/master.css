@@ -15,7 +15,7 @@ a                              { color: #000; text-decoration: none; }
 .black_button:hover            { background-color: #555; color: #eaeaea }
 .crit_button                   { background-color: #ccc; color: #000; text-transform: uppercase; font-weight: bold; padding: 6px 10px 4px 10px; font-size: 12px;cursor: pointer; }
 .crit_button:hover             { background-color: #ff0000; color: #fff }
-.rss                           { text-indent: -9999px;display: block; width:30px; height:20px; background: url(../images/rss-icon.png) no-repeat; font-size: 40px; }
+.rss                           { text-indent: -9999px; display: block; width: 40px; height: 20px; background: url(../images/rss-icon.png) no-repeat; }
 .rss:hover                     { background-position: 0px -20px; }
 
 #listing                       { line-height: 1.0em; }
