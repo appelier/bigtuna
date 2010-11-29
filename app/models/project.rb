@@ -1,5 +1,6 @@
 class Project < ActiveRecord::Base
   STATUS_NOT_BUILT = "status_not_built"
+  attr_accessor :hook_update
 
   has_many :builds, :dependent => :destroy
   before_destroy :remove_build_folder
@@ -103,8 +104,8 @@ class Project < ActiveRecord::Base
   end
 
   def update_hooks
-    return if @_hooks.nil?
-    new_hooks = @_hooks.keys
+    return unless self.hook_update
+    new_hooks = (@_hooks || {}).keys
     current_hooks = self.hooks.map { |e| e.hook_name }
     to_remove = current_hooks - new_hooks
     to_add = new_hooks - current_hooks

@@ -67,7 +67,7 @@ class MailerHookTest < ActiveSupport::TestCase
   end
 
   def mailing_project_with_steps(steps)
-    project = Project.make(:steps => steps, :name => "Koss", :vcs_source => "test/files/koss", :vcs_type => "git", :max_builds => 2, :hooks => {"mailer" => "mailer"})
+    project = Project.make(:steps => steps, :name => "Koss", :vcs_source => "test/files/koss", :vcs_type => "git", :max_builds => 2, :hooks => {"mailer" => "mailer"}, :hook_update => true)
     hook = project.hooks.first
     hook.configuration = {"recipients" => "michal.bugno@gmail.com"}
     hook.save!
