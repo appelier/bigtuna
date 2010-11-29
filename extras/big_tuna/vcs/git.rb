@@ -3,10 +3,6 @@ module BigTuna::VCS
     NAME = "Git"
     VALUE = "git"
 
-    def initialize(source, branch)
-      super(source, branch)
-    end
-
     def head_info
       info = {}
       command = "git log --max-count=1 --format=\"%H%n%an%n%ae%n%ad%n%s\" #{self.branch}"

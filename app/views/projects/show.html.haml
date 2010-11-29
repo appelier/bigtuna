@@ -1,14 +1,23 @@
 #listing
   %h2= @project.name
-  %tbody
-    - @builds.each do |build|
-      %div{:class => "#{build.status} project", :id => dom_id(build)}
-        .info
-          = form_tag(build_path(build), :method => "DELETE") do
-            %button.crit_button{:type => "submit"} Delete
-        %h3= link_to(build.display_name, build_path(build, :stderr => build.status == Build::STATUS_OK ? nil : 1))
-        %table.value_list
-          = render :partial => "builds/build_data", :locals => {:build => build}
+
+  %table.value_list
+    %tr
+      %td.title Repository
+      %td.value= @project.vcs_source
+    %tr
+      %td.title Branch
+      %td.value= @project.vcs_branch
+  %br
+
+  - @builds.each do |build|
+    %div{:class => "#{build.status} project", :id => dom_id(build)}
+      .info
+        = form_tag(build_path(build), :method => "DELETE") do
+          %button.crit_button{:type => "submit"} Delete
+      %h3= link_to(build.display_name, build_path(build, :stderr => build.status == Build::STATUS_OK ? nil : 1))
+      %table.value_list
+        = render :partial => "builds/build_data", :locals => {:build => build}
 
 - content_for :sidebar do
   %li= link_to("Edit", edit_project_path(@project), :class => "black_button")
