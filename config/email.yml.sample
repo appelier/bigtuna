@@ -1,0 +1,16 @@
+# gmail config
+# production:
+# :address: "smtp.gmail.com"
+# :port: 587
+# :domain: 'your.domain'
+# :user_name: 'username@your.domain'
+# :password: 'password'
+# :authentication: 'plain'
+# :enable_starttls_auto: true
+
+production:
+  :address: "smpt.your.domain"
+  :port: <port>
+  :domain: 'your.domain'
+  :user_name: 'user@your.domain'
+  :password: 'password'
