@@ -11,7 +11,7 @@ a                              { color: #000; text-decoration: none; }
 #content                       { float:left; width: 800px; background-color: #f5f5f5; padding: 14px; border: solid 1px #ccc; min-height: 200px; }
 
 #sidebar                       { float: left; margin-top: 4px; width: 120px; background-color: #e1e1e1; border-top-right-radius: 4px; border-bottom-right-radius: 4px; padding: 10px 10px 7px 0; font-size: 0.6em; }
-.black_button                  { background-color: #ccc; color: #000; text-transform: uppercase; font-weight: bold; padding: 6px 10px 4px 10px; }
+.black_button                  { background-color: #ccc; color: #000; text-transform: uppercase; font-weight: bold; padding: 6px 10px 4px 10px; font-size: 12px; }
 .black_button:hover            { background-color: #555; color: #eaeaea }
 .rss                           { text-indent: -9999px;display: block; width:30px; height:20px; background: url(../images/rss-icon.png) no-repeat; font-size: 40px; }
 .rss:hover                     { background-position: 0px -20px; }
@@ -20,7 +20,7 @@ a                              { color: #000; text-decoration: none; }
 #listing h2                    { color: #191919; margin-left: 5px; }
 #listing h3                    { font-weight: bold; padding-left: 30px; }
 #listing .project              { margin: 0 8px 10px 8px; border-radius: 4px; padding: 10px; }
-#listing .info                 { font-size: 0.4em; color: #191919; line-height: 1.2em; margin-left: 8px; }
+#listing .info                 { font-size: 0.4em; color: #191919; line-height: 1.2em; margin-left: 8px; float: right; }
 #listing .info a               { font-weight: bold; color: #191919; }
 #listing a:hover               { color: #000; }
 #listing .updown               { float: right; font-size: 0.65em; line-height: 1.0em; text-align: right; font-weight: bold; }
@@ -36,12 +36,12 @@ a                              { color: #000; text-decoration: none; }
 #steps .command_box            { overflow:auto; }
 
 .status_build_in_progress      { background-color: #efde7d; border: solid 1px #b49f2e; }
-.status_build_in_progress a    { color: #000; }
+.status_build_in_progress a    { color: #5f663e; }
 .status_not_built              { background-color: #519fff; border: solid 1px #216dca; }
 .status_build_in_queue         { background-color: #519fff; border: solid 1px #216dca; }
-.status_build_ok               { background-color: #C0EBBC; border: solid 1px #56a134; }
+.status_build_ok               { background-color: #c0ebbc; border: solid 1px #56a134; }
 .status_build_ok a             { color: #365E36; }
-.status_build_failed           { background-color: #EDC2C2; border: solid 1px #d32f2f; }
+.status_build_failed           { background-color: #edc2c2; border: solid 1px #d32f2f; }
 .status_build_failed a         { color: #994848; }
 .button                        { margin-right: 10px; font-weight: bold; font-size: 16px; color: #282828; text-shadow: #191919 0px 0px 1px; text-transform: uppercase; }
 .button:hover                  { color: #fff; text-shadow: #191919 1px 1px 1px; }
@@ -55,3 +55,5 @@ a                              { color: #000; text-decoration: none; }
 .value_list .title             { text-align: right; padding-right: 10px; text-transform: uppercase; font-weight: bold; word-wrap: none; vertical-align: top; }
 .value_list .value             { text-align: left; padding-right: 10px; }
 .clear                         { clear: both; }
+
+form button                    { border: 0; }

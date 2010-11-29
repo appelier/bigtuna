@@ -51,4 +51,6 @@
     to build automatically
   = f.hidden_field(:hook_update, {:value => true})
 %div
-  = f.submit(f.object.new_record? ? "Create" : "Update")
+  %button.black_button{:type => "submit"}
+    = f.object.new_record? ? "Create" : "Update"
+  = link_to("Back to project", project_path(f.object), :class => "black_button")
