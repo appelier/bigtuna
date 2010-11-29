@@ -10,6 +10,7 @@ test/fixtures
 test/functional
 test/performance
 capybara*.html
+config/deploy.rb
 
 config/*.yml
 
