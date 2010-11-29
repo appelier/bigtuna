@@ -44,6 +44,7 @@ GEM
       ffi (~> 0.6.3)
     columnize (0.3.2)
     configuration (1.2.0)
+    crack (0.1.8)
     culerity (0.2.12)
     daemons (1.1.0)
     database_cleaner (0.6.0)
@@ -118,6 +119,7 @@ PLATFORMS
 
 DEPENDENCIES
   capybara
+  crack
   database_cleaner
   delayed_job
   faker

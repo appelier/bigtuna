@@ -32,3 +32,4 @@
     %li= link_to("Hide stderr", build_path(@build), :class => "black_button")
   %li= link_to("All builds", project_path(@build.project), :class => "black_button")
   %li= link_to("Build now", build_project_path(@build.project), :class => "black_button")
+  %li= link_to("Feed", feed_project_path(@build.project)+".atom", :class => "rss")

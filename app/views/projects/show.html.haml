@@ -14,3 +14,4 @@
   %li= link_to("Edit", edit_project_path(@project), :class => "black_button")
   %li= link_to("Remove project", remove_project_path(@project), :class => "black_button")
   %li= link_to("Build now", build_project_path(@project), :class => "black_button")
+  %li= link_to("Feed", feed_project_path(@project)+".atom", :class => "rss")

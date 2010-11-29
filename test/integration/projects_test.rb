@@ -86,4 +86,22 @@ class ProjectsTest < ActionController::IntegrationTest
     click_link build.display_name
     assert page.has_content?("Could not switch to 'no/such'")
   end
+  
+  test "project should have a link to the atom feed" do
+    project = Project.make(:steps => "echo 'ha'", :name => "Atom project", :vcs_source => "no/such/repo", :vcs_type => "git")
+    visit "/projects/#{[project.id, project.name.to_url].join("-")}"
+    assert page.has_link?("Feed")
+  end
+  
+  test "project should have an atom feed" do
+    project = Project.make(:steps => "echo 'ha'", :name => "Atom project 2", :vcs_source => "no/such/repo", :vcs_type => "git")
+    build_1 = Build.make(:project => project, :created_at => 2.weeks.ago)
+    build_2 = Build.make(:project => project, :created_at => 1.week.ago)
+    visit "/projects/#{[project.id, project.name.to_url].join("-")}/feed.atom"
+    parsed = Crack::XML.parse(page.body)
+    assert_equal "Atom project 2 CI", parsed["feed"]["title"]
+    assert_equal 2, parsed["feed"]["entry"].size
+    assert_equal "#{build_1.display_name} - #{build_1.status == Build::STATUS_OK ? "SUCCESS" : "FAILED"}", parsed["feed"]["entry"][0]["title"]
+    assert_equal "#{build_2.display_name} - #{build_2.status == Build::STATUS_OK ? "SUCCESS" : "FAILED"}", parsed["feed"]["entry"][1]["title"]
+  end
 end

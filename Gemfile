@@ -16,4 +16,5 @@ group :development, :test do
   gem "nokogiri"
   gem "mocha"
   gem "database_cleaner"
+  gem "crack"
 end
