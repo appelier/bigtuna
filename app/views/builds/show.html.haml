@@ -21,7 +21,7 @@
   #steps
     %h3 Steps
     %ol
-      - (@build.stdout || []).each_with_index do |output, index|
+      - @build.output.each_with_index do |output, index|
         %li{:id => "step_#{index + 1}"}
           = render :partial => "step", :locals => {:step => output, :step_no => index + 1}
 

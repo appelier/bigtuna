@@ -9,18 +9,14 @@ class Build < ActiveRecord::Base
 
   before_destroy :remove_build_dir
   before_create :set_build_values
-  serialize :stdout, Array
+  serialize :output, Array
 
   def perform
     self.update_attributes!(:status => STATUS_PROGRESS)
     self.started_at = Time.now
     project = self.project
-    status, output = execute_steps()
-    self.stdout = output
-    self.status = status
-    self.finished_at = Time.now
-    self.save!
-    if status != STATUS_OK
+    execute_steps()
+    if self.status != STATUS_OK
       new_failed_builds = project.failed_builds + 1
       project.update_attributes!(:failed_builds => new_failed_builds)
       after_failed()
@@ -36,7 +32,7 @@ class Build < ActiveRecord::Base
     out.append_stdout(e.message)
     e.backtrace.each { |line| out.append_stdout(line) }
     out.finish(1)
-    self.stdout = [out]
+    self.output = [out]
     self.status = STATUS_BUILDER_ERROR
     self.save!
     after_failed()
@@ -87,7 +83,7 @@ class Build < ActiveRecord::Base
     self.build_dir = File.join(project_dir, "build_#{self.build_no}_#{self.scheduled_at.strftime("%Y%m%d%H%M%S")}")
     self.status = STATUS_IN_QUEUE
     self.scheduled_at = Time.now
-    self.stdout = []
+    self.output = []
   end
 
   def execute_steps
@@ -98,7 +94,6 @@ class Build < ActiveRecord::Base
       step = process_step_command(step)
       all_steps << [self.build_dir, step]
     end
-    output = []
     exit_code = 0
     all_steps.each_with_index do |step, index|
       dir, command = step
@@ -109,25 +104,27 @@ class Build < ActiveRecord::Base
         else
           out = BigTuna::Runner.execute(dir, command)
         end
-        output << out
+        self.output << out
+        self.save!
       rescue BigTuna::Runner::Error => e
         output << e.output
         exit_code = e.output.exit_code
         break
       end
     end
+    self.status = exit_code == 0 ? STATUS_OK : STATUS_FAILED
     all_steps[output.size .. -1].each do |dir, command|
-      output << BigTuna::Runner::Output.new(dir, command)
+      self.output << BigTuna::Runner::Output.new(dir, command)
     end
-    status = exit_code == 0 ? STATUS_OK : STATUS_FAILED
-    [status, output]
+    self.finished_at = Time.now
+    self.save!
   end
 
   def process_step_command(cmd)
-    cmd.gsub!("%build_dir%", self.build_dir)
-    cmd.gsub!("%project_dir%", self.project.build_dir)
-    cmd.strip!
-    cmd
+    new_cmd = cmd.gsub("%build_dir%", self.build_dir)
+    new_cmd.gsub!("%project_dir%", self.project.build_dir)
+    new_cmd.strip!
+    new_cmd
   end
 
   def update_commit_data

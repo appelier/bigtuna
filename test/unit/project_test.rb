@@ -39,7 +39,7 @@ class ProjectTest < ActiveSupport::TestCase
     job = project.build!
     job.invoke_job
     build = project.builds.order("created_at DESC").first
-    steps = build.stdout
+    steps = build.output
     assert_equal 3, steps.size # 2 + clone task
     assert_equal "git diff file", steps[1].command
     assert_equal 0, steps[1].exit_code
@@ -53,7 +53,7 @@ class ProjectTest < ActiveSupport::TestCase
     job = project.build!
     job.invoke_job
     build = project.builds.order("created_at DESC").first
-    steps = build.stdout
+    steps = build.output
     assert_equal 4, steps.size # all steps, but not all were executed
     assert_equal "ls -al file", steps[1].command
     assert_equal 0, steps[1].exit_code
