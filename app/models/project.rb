@@ -69,8 +69,12 @@ class Project < ActiveRecord::Base
   end
 
   def stability
-    return nil if total_builds == 0
-    1.0 - (1.0 * failed_builds / total_builds)
+    last_builds = builds.order("created_at DESC").
+      where(:status => [Build::STATUS_OK, Build::STATUS_FAILED, Build::STATUS_BUILDER_ERROR]).
+      limit(5)
+    statuses = last_builds.map { |e| e.status }
+    return -1 if statuses.size < 5
+    statuses.count { |e| e == Build::STATUS_OK }
   end
 
   def hooks=(hooks)

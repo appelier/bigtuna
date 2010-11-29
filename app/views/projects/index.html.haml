@@ -11,14 +11,9 @@
         - if project.recent_build
           %table.value_list
             = render :partial => "builds/build_data", :locals => {:build => project.recent_build}
-            - if project.stability
-              %tr
-                %td.title Stability
-                %td.value= format_stability(project.stability)
-        - else
-          %table.value_list
             %tr
-              %td.value Not built yet
+              %td.title Stability
+              %td.value= format_stability(project.stability)
 
 - content_for :sidebar do
   %li= link_to("New project", new_project_path, :class => 'black_button')

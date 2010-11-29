@@ -141,9 +141,31 @@ class ProjectTest < ActiveSupport::TestCase
     assert_equal 2, project.total_builds
   end
 
-  test "stability is computed properly" do
+  test "stability is computed from recent 5 builds" do
     project = Project.make(:steps => "ls -al file", :name => "Project", :vcs_source => "test/files/repo", :vcs_type => "git")
-    project.update_attributes!(:total_builds => 3, :failed_builds => 1)
-    assert_in_delta 0.66, project.stability, 0.01
+    create_project_builds(project, Build::STATUS_OK, Build::STATUS_OK, Build::STATUS_OK, Build::STATUS_OK, Build::STATUS_FAILED, Build::STATUS_FAILED)
+    assert_equal 4, project.stability
+  end
+
+  test "stability returns -1 not enough data if less than 5 builds" do
+    project = Project.make(:steps => "ls -al file", :name => "Project", :vcs_source => "test/files/repo", :vcs_type => "git")
+    create_project_builds(project, Build::STATUS_OK, Build::STATUS_FAILED, Build::STATUS_OK, Build::STATUS_OK)
+    assert_equal -1, project.stability
+  end
+
+  test "stability doesn't include currently building or scheduled builds" do
+    project = Project.make(:steps => "ls -al file", :name => "Project", :vcs_source => "test/files/repo", :vcs_type => "git")
+    create_project_builds(project, Build::STATUS_FAILED, Build::STATUS_PROGRESS, Build::STATUS_IN_QUEUE, Build::STATUS_FAILED, Build::STATUS_OK, Build::STATUS_OK, Build::STATUS_FAILED)
+    assert_equal 2, project.stability
+  end
+
+  private
+  def create_project_builds(project, *statuses)
+    statuses.reverse.each do |status|
+      project.build!
+      project.reload
+      build = project.recent_build
+      build.update_attributes!(:status => status)
+    end
   end
 end
