@@ -13,7 +13,7 @@ class MailerHookTest < ActiveSupport::TestCase
   end
 
   test "mail stating that build failed is sent when build failed" do
-    project = Project.make(:steps => "ls invalid_file_here", :name => "Koss", :vcs_source => "test/files/koss", :vcs_type => "git", :max_builds => 2, :hooks => {"mailer" => "mailer"})
+    project = mailing_project_with_steps("ls invalid_file_here")
     assert_difference("Delayed::Job.count", +2) do # 1 job, 1 email
       job = project.build!
       job.invoke_job
@@ -26,7 +26,7 @@ class MailerHookTest < ActiveSupport::TestCase
   end
 
   test "mail stating that build is back to normal is sent when build fixed" do
-    project = Project.make(:steps => "ls invalid_file_here", :name => "Koss", :vcs_source => "test/files/koss", :vcs_type => "git", :max_builds => 2, :hooks => {"mailer" => "mailer"})
+    project = mailing_project_with_steps("ls invalid_file_here")
     job = project.build!
     job.invoke_job
     project.update_attributes!(:steps => "ls .")
@@ -42,7 +42,7 @@ class MailerHookTest < ActiveSupport::TestCase
   end
 
   test "mail stating that build is still failing is sent when build still fails" do
-    project = Project.make(:steps => "ls invalid_file_here", :name => "Koss", :vcs_source => "test/files/koss", :vcs_type => "git", :max_builds => 2, :hooks => {"mailer" => "mailer"})
+    project = mailing_project_with_steps("ls invalid_file_here")
     job = project.build!
     job.invoke_job
     assert_difference("Delayed::Job.count", +2) do # 1 job, 1 email
@@ -57,12 +57,20 @@ class MailerHookTest < ActiveSupport::TestCase
   end
 
   test "mail is not sent when build is ok but was ok before" do
-    project = Project.make(:steps => "ls .", :name => "Koss", :vcs_source => "test/files/koss", :vcs_type => "git", :max_builds => 2, :hooks => {"mailer" => "mailer"})
+    project = mailing_project_with_steps("ls .")
     assert_difference("Delayed::Job.count", +2) do # 2 jobs, no mails
       2.times do
         job = project.build!
         job.invoke_job
       end
     end
+  end
+
+  def mailing_project_with_steps(steps)
+    project = Project.make(:steps => steps, :name => "Koss", :vcs_source => "test/files/koss", :vcs_type => "git", :max_builds => 2, :hooks => {"mailer" => "mailer"})
+    hook = project.hooks.first
+    hook.configuration = {"recipients" => "michal.bugno@gmail.com"}
+    hook.save!
+    project
   end
 end

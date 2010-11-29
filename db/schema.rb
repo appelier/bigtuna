@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101128213709) do
+ActiveRecord::Schema.define(:version => 20101129093534) do
 
   create_table "builds", :force => true do |t|
     t.integer  "project_id"
@@ -46,10 +46,11 @@ ActiveRecord::Schema.define(:version => 20101128213709) do
   add_index "delayed_jobs", ["priority", "run_at"], :name => "delayed_jobs_priority"
 
   create_table "hooks", :force => true do |t|
-    t.integer  "project_id", :null => false
-    t.string   "hook_name",  :null => false
+    t.integer  "project_id",    :null => false
+    t.string   "hook_name",     :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.text     "configuration"
   end
 
   create_table "projects", :force => true do |t|
@@ -62,7 +63,6 @@ ActiveRecord::Schema.define(:version => 20101128213709) do
     t.string   "hook_name"
     t.text     "steps"
     t.integer  "position"
-    t.string   "recipients"
     t.string   "vcs_branch"
     t.integer  "total_builds"
     t.integer  "failed_builds"

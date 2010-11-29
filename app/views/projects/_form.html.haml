@@ -29,10 +29,6 @@
   %br
   = f.text_field(:vcs_branch, :class => 'textfield')
 %div
-  = f.label(:recipients)
-  %br
-  = f.text_field(:recipients, :class => 'textfield')
-%div
   = f.label(:max_builds)
   %br
   = f.text_field(:max_builds, :class => 'textfield')
@@ -43,6 +39,7 @@
       %label{:for => "project_hooks_#{hook::NAME}"}
         = check_box_tag("project[hooks][#{hook::NAME}]", hook::NAME, f.object.hooks.include?(hook))
         = hook::NAME
+      = link_to("Configure", project_config_hook_path(f.object, hook::NAME)) if f.object.hooks.include?(hook)
 %div
   = f.label(:hook_name)
   %br
@@ -50,7 +47,7 @@
   %br
   %span.hint
     POST to
-    %tt http://big.tuna.host/hooks/:hook_name:
+    %tt http://big.tuna.host/hooks/build/:hook_name:
     to build automatically
 %div
   = f.submit(f.object.new_record? ? "Create" : "Update")

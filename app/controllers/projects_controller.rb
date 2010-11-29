@@ -34,7 +34,7 @@ class ProjectsController < ApplicationController
 
   def update
     @project.update_attributes!(params[:project])
-    redirect_to project_path(@project)
+    redirect_to edit_project_path(@project)
   end
 
   def remove

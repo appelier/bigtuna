@@ -34,8 +34,7 @@ class Project < ActiveRecord::Base
     BigTuna::HOOKS.each do |hook|
       hook_hash[hook::NAME] = hook
     end
-    current_hooks = Hook.where(:project_id => self.id).map { |hook| hook.hook_name }
-    hook_hash.values_at(*current_hooks)
+    Hook.where(:project_id => self.id)
   end
 
   def build_dir
@@ -106,7 +105,7 @@ class Project < ActiveRecord::Base
   def update_hooks
     return if @_hooks.nil?
     new_hooks = @_hooks.keys
-    current_hooks = self.hooks.map { |e| e::NAME }
+    current_hooks = self.hooks.map { |e| e.hook_name }
     to_remove = current_hooks - new_hooks
     to_add = new_hooks - current_hooks
     Hook.where(:project_id => self.id, :hook_name => to_remove).delete_all

@@ -1,0 +1,9 @@
+%h2= "#{@hook.backend::NAME} hook for #{@project.name}"
+
+= form_for(@hook, :url => project_config_hook_path(@project, @hook.backend::NAME), :html => {:method => "PUT"}) do |f|
+  - @hook.backend::CONFIG_FIELDS.each do |field|
+    %div
+      = label_tag(field.to_sym)
+      = text_area_tag("configuration[#{field}]", @hook.configuration[field])
+  = submit_tag("Edit")
+  = link_to("Back to project edit", edit_project_path(@project))
