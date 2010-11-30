@@ -7,7 +7,7 @@ class ProjectsController < ApplicationController
   def show
     @builds = @project.builds.order("created_at DESC").limit(@project.max_builds)
   end
-  
+
   def feed
     @builds = @project.builds.order("created_at DESC").limit(@project.max_builds)
     respond_to do |format|

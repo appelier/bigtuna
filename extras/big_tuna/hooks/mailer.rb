@@ -1,7 +1,6 @@
 module BigTuna
   class Hooks::Mailer
     NAME = "mailer"
-    CONFIG_FIELDS = ["recipients"]
 
     # def self.build_passed(build, config)
     # end
@@ -25,14 +24,14 @@ module BigTuna
     end
 
     class Sender < ActionMailer::Base
-      self.append_view_path("extras/big_tuna/hooks/mailer")
+      self.append_view_path("extras/big_tuna/hooks")
       default :from => "info@ci.appelier.com"
 
       def build_failed(build, recipients)
         @build = build
         @project = @build.project
         mail(:to => recipients, :subject => "Build '#{@build.display_name}' in '#{@project.name}' failed") do |format|
-          format.text { render "/build_failed" }
+          format.text { render "mailer/build_failed" }
         end
       end
 
@@ -40,7 +39,7 @@ module BigTuna
         @build = build
         @project = @build.project
         mail(:to => recipients, :subject => "Build '#{@build.display_name}' in '#{@project.name}' still fails") do |format|
-          format.text { render "/build_still_fails" }
+          format.text { render "mailer/build_still_fails" }
         end
       end
 
@@ -48,7 +47,7 @@ module BigTuna
         @build = build
         @project = @build.project
         mail(:to => recipients, :subject => "Build '#{@build.display_name}' in '#{@project.name}' fixed") do |format|
-          format.text { render "/build_fixed" }
+          format.text { render "mailer/build_fixed" }
         end
       end
     end

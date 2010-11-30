@@ -37,7 +37,7 @@
 %div
   Hooks
   - BigTuna::HOOKS.each do |hook|
-    %div.hint
+    %div{:id => "hook_#{hook::NAME}", :class => "hint"}
       %label{:for => "project_hooks_#{hook::NAME}"}
         = check_box_tag("project[hooks][#{hook::NAME}]", hook::NAME, f.object.hooks.map { |e| e.hook_name }.include?(hook::NAME))
         = hook::NAME
