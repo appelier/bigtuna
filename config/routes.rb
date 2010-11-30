@@ -1,9 +1,21 @@
 BigTuna::Application.routes.draw do
-  resources :projects do
-    member { get "build"; get "remove"; get "arrange"; get "feed" }
-    match "/hooks/:name/configure", :to => "hooks#configure", :as => "config_hook"
+  if BigTuna.read_only?
+
+    resources :projects, :only => [:index, :show] do
+      member { get "feed" }
+    end
+    resources :builds, :only => [:show]
+
+  else
+
+    resources :projects do
+      member { get "build"; get "remove"; get "arrange"; get "feed" }
+      match "/hooks/:name/configure", :to => "hooks#configure", :as => "config_hook"
+    end
+    resources :builds
+
   end
-  resources :builds
+
   match "/hooks/build/:hook_name", :to => "hooks#autobuild"
   root :to => "projects#index"
 end

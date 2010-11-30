@@ -16,4 +16,5 @@
               %td.value= format_stability(project.stability)
 
 - content_for :sidebar do
-  %li= link_to("New project", new_project_path, :class => 'black_button')
+  - unless BigTuna.read_only?
+    %li= link_to("New project", new_project_path, :class => 'black_button')

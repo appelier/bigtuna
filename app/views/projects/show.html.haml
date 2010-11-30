@@ -12,15 +12,17 @@
 
   - @builds.each do |build|
     %div{:class => "#{build.status} project", :id => dom_id(build)}
-      .info
-        = form_tag(build_path(build), :method => "DELETE") do
-          %button.crit_button{:type => "submit"} Delete
+      - unless BigTuna.read_only?
+        .info
+          = form_tag(build_path(build), :method => "DELETE") do
+            %button.crit_button{:type => "submit"} Delete
       %h3= link_to(build.display_name, build_path(build, :stderr => build.status == Build::STATUS_OK ? nil : 1))
       %table.value_list
         = render :partial => "builds/build_data", :locals => {:build => build}
 
 - content_for :sidebar do
-  %li= link_to("Edit", edit_project_path(@project), :class => "black_button")
-  %li= link_to("Remove project", remove_project_path(@project), :class => "black_button")
-  %li= link_to("Build now", build_project_path(@project), :class => "black_button")
+  - unless BigTuna.read_only?
+    %li= link_to("Edit", edit_project_path(@project), :class => "black_button")
+    %li= link_to("Remove project", remove_project_path(@project), :class => "black_button")
+    %li= link_to("Build now", build_project_path(@project), :class => "black_button")
   %li= link_to("Feed", feed_project_path(@project, :format => "atom"), :class => "rss")
