@@ -158,7 +158,24 @@ class ProjectTest < ActiveSupport::TestCase
     create_project_builds(project, Build::STATUS_FAILED, Build::STATUS_PROGRESS, Build::STATUS_IN_QUEUE, Build::STATUS_FAILED, Build::STATUS_OK, Build::STATUS_OK, Build::STATUS_FAILED)
     assert_equal 2, project.stability
   end
-
+  
+  test "build doesn't include empty or commented steps" do
+    project = Project.make(:steps => "command1\ncommand2 #not3\n#not4\n     #not5\n", :name => "Project", :vcs_source => "test/files/repo", :vcs_type => "git", :max_builds => 1)
+    job = project.build!
+    job.invoke_job
+    build = project.builds.order("created_at DESC").first
+    steps = []
+    build.output.each do |output|
+      steps << output.command
+    end
+    assert_equal 3, steps.count # This assumes the extra git repo step.
+    assert steps.include?('command1')
+    assert steps.include?('command2')
+    assert !steps.include?('command2 #not3')
+    assert !steps.include?('#not4')
+    assert !steps.include?('#not5')
+  end
+  
   private
   def create_project_builds(project, *statuses)
     statuses.reverse.each do |status|

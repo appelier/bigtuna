@@ -91,8 +91,8 @@ class Build < ActiveRecord::Base
       [Dir.pwd, lambda { project.vcs.clone(self.build_dir) }]
     ]
     project.steps.split("\n").each do |step|
-      step = process_step_command(step)
-      all_steps << [self.build_dir, step]
+      step = format_step_command(step)
+      all_steps << [self.build_dir, step] unless step.empty?
     end
     exit_code = 0
     all_steps.each_with_index do |step, index|
@@ -120,9 +120,11 @@ class Build < ActiveRecord::Base
     self.save!
   end
 
-  def process_step_command(cmd)
+  def format_step_command(cmd)
     new_cmd = cmd.gsub("%build_dir%", self.build_dir)
     new_cmd.gsub!("%project_dir%", self.project.build_dir)
+    comment_at = new_cmd.index("#")
+    new_cmd = new_cmd[0...comment_at] unless comment_at.nil?
     new_cmd.strip!
     new_cmd
   end
