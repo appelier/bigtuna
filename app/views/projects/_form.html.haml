@@ -3,6 +3,18 @@
   %br
   = f.text_field(:name, :class => 'textfield')
 %div
+  = f.label(:vcs_type)
+  %br
+  = f.select(:vcs_type, BigTuna::VCS_BACKENDS.map { |klass| [klass::NAME, klass::VALUE] }, :class => 'textfield')
+%div
+  = f.label(:vcs_source)
+  %br
+  = f.text_field(:vcs_source, :class => 'textfield')
+%div
+  = f.label(:vcs_branch)
+  %br
+  = f.text_field(:vcs_branch, :class => 'textfield')
+%div
   = f.label(:steps)
   %br
   = f.text_area(:steps, :class => 'textarea')
@@ -16,18 +28,6 @@
       %dt
         %tt %project_dir%
       %dd directory shared by all builds in project
-%div
-  = f.label(:vcs_type)
-  %br
-  = f.select(:vcs_type, BigTuna::VCS_BACKENDS.map { |klass| [klass::NAME, klass::VALUE] }, :class => 'textfield')
-%div
-  = f.label(:vcs_source)
-  %br
-  = f.text_field(:vcs_source, :class => 'textfield')
-%div
-  = f.label(:vcs_branch)
-  %br
-  = f.text_field(:vcs_branch, :class => 'textfield')
 %div
   = f.label(:max_builds)
   %br
