@@ -8,9 +8,7 @@ class ProjectsTest < ActionController::IntegrationTest
 
   def teardown
     FileUtils.rm_rf("test/files/repo")
-    FileUtils.rm_rf("builds/valid")
-    FileUtils.rm_rf("builds/valid2")
-    FileUtils.rm_rf("builds/invalid")
+    FileUtils.rm_rf("builds/*")
     super
   end
 
