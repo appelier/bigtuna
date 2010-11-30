@@ -4,9 +4,10 @@
   - @projects.each do |project|
     %ol
       %li{:class => "#{project.status} project", :id => dom_id(project)}
-        .updown
-          = link_to("&uarr;".html_safe, arrange_project_path(project, :up => true)) unless project.first?
-          = link_to("&darr;".html_safe, arrange_project_path(project, :down => true)) unless project.last?
+        - unless BigTuna.read_only?
+          .updown
+            = link_to("&uarr;".html_safe, arrange_project_path(project, :up => true)) unless project.first?
+            = link_to("&darr;".html_safe, arrange_project_path(project, :down => true)) unless project.last?
         %h3= link_to(project.name, project_path(project))
         - if project.recent_build
           %table.value_list
