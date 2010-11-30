@@ -14,5 +14,7 @@ config/deploy.rb
 
 config/*.yml
 
+db/*.sqlite
+
 builds/*
 test/files/*

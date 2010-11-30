@@ -1,26 +1,13 @@
 development:
-  adapter: postgresql
-  encoding: utf8
-  database: big_tuna_development
+  adapter: sqlite3
+  database: db/development.sqlite
   pool: 5
-  username: msq
-  password:
-  template: template0
 
 test:
-  adapter: postgresql
-  encoding: utf8
-  database: big_tuna_test
+  adapter: sqlite3
+  database: db/test.sqlite
   pool: 5
-  username: msq
-  password:
-  template: template0
 
 production:
-  adapter: postgresql
-  encoding: utf8
-  database: big_tuna_production
-  pool: 5
-  username: msq
-  password:
-  template: template0
+  adapter: sqlite3
+  database: << your production path here >>
