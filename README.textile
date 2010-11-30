@@ -1,6 +1,6 @@
 h1. About
 
-BigTuna is a continuous integration software built ontop of Rails 3 framework. It aims to be project--agnostic and extendible.
+BigTuna is a continuous integration software built on top of the Rails 3 framework. It aims to be project--agnostic and extendible.
 
 Find out more on "bigtuna.appelier.com":http://bigtuna.appelier.com
 
