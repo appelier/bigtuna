@@ -44,4 +44,17 @@ class AutobuildTest < ActionController::IntegrationTest
       assert response.body.include?("invalid secure token")
     end
   end
+
+  test "github token has to be set up" do
+    old_token = BigTuna.config["github_secure"]
+    begin
+      BigTuna.config["github_secure"] = nil
+      assert_equal nil, BigTuna.github_secure
+      post "/hooks/build/github/4ff", :payload => "{\"ref\":\"refs/heads/master\",\"repository\":{\"url\":\"https://github.com/appelier/githubhook\"}}"
+      assert_status_code(403)
+      assert response.body.include?("github secure token is not set up")
+    ensure
+      BigTuna.config["github_secure"] = old_token
+    end
+  end
 end

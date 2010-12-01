@@ -1,0 +1,3 @@
+# production:
+#   read_only: true # default: false
+#   github_secure: "think_of_secure_token" # default: nil

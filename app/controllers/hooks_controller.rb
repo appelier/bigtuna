@@ -14,7 +14,9 @@ class HooksController < ApplicationController
     payload = JSON.parse(params[:payload])
     branch = payload["ref"].split("/").last
     project = Project.where(:vcs_source => payload["repository"]["url"], :vcs_branch => branch).first
-    if project and params[:secure] == BigTuna.github_secure
+    if BigTuna.github_secure.nil?
+      render :text => "github secure token is not set up", :status => 403
+    elsif project and params[:secure] == BigTuna.github_secure
       trigger_and_respond(project)
     else
       render :text => "invalid secure token", :status => 404
