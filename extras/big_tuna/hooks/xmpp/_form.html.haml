@@ -12,3 +12,5 @@
   = label_tag("Send to these recipients (separated by comma)")
   %br
   = text_area_tag("configuration[recipients]", @hook.configuration["recipients"], :cols => 50)
+  
+%p.hint= "Tip: You can enter your <a href='http://partychapp.appspot.com/' target='_blank'>partychat</a> room there".html_safe

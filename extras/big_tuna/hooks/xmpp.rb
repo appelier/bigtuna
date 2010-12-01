@@ -30,7 +30,7 @@ module BigTuna
         recipients = config["recipients"].split(",")
         if recipients.size > 0          
           im = Jabber::Simple.new(config["sender_full_jid"], config["sender_password"])           
-          recipients.each {|r| im.deliver(r, msg)}
+          recipients.each {|r| im.deliver(r.strip, msg)}
         end
       end
          
