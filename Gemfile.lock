@@ -58,6 +58,7 @@ GEM
       rake (>= 0.8.7)
     haml (3.0.24)
     i18n (0.4.2)
+    json (1.4.6)
     json_pure (1.4.6)
     launchy (0.3.7)
       configuration (>= 0.0.5)
@@ -124,6 +125,7 @@ DEPENDENCIES
   delayed_job
   faker
   haml
+  json
   launchy
   machinist
   mocha

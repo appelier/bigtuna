@@ -17,5 +17,6 @@ BigTuna::Application.routes.draw do
   end
 
   match "/hooks/build/:hook_name", :to => "hooks#autobuild"
+  match "/hooks/build/github/:secure", :to => "hooks#github"
   root :to => "projects#index"
 end
