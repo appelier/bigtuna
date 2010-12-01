@@ -8,6 +8,9 @@ gem "stringex"
 gem "open4"
 gem "json"
 
+#xmpp notifications
+gem "xmpp4r-simple"
+
 group :development, :test do
   gem "capybara"
   gem "launchy"
