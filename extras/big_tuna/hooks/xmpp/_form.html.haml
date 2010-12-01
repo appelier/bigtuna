@@ -1,0 +1,21 @@
+%div  
+  %h4 Send using the following XMPP / GoogleTalk account
+  
+  %p
+    = label_tag("Full JID (e.g. sender@domain.com)")
+    %br
+    = text_field_tag("configuration[sender_full_jid]", @hook.configuration["sender_full_jid"])
+
+  %p    
+    = label_tag("Password")
+    %br    
+    = password_field_tag("configuration[sender_password]", @hook.configuration["sender_password"])
+  
+  %h4 Send to these recipients
+  
+  
+  %p
+    = label_tag("Recipients")
+    %br    
+    = text_area_tag("configuration[recipients]", @hook.configuration["recipients"])
+  
