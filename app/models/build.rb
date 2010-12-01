@@ -30,7 +30,7 @@ class Build < ActiveRecord::Base
     Rails.logger.warn("[BigTuna] #{e.backtrace.join}")
     out = BigTuna::Runner::Output.new(Dir.pwd, "builder error")
     out.append_stdout(e.message)
-    e.backtrace.each { |line| out.append_stdout(line) }
+    out.append_stdout(e.backtrace.join("\n"))
     out.finish(1)
     self.output = [out]
     self.status = STATUS_BUILDER_ERROR

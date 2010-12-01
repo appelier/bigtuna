@@ -1,77 +1,35 @@
-#XMPP notifications
-#We subclass ActionMailer
 module BigTuna
-  class Hooks::Xmpp
+  class Hooks::Xmpp < Hooks::Base
     NAME = "xmpp"
-    
-    # def self.build_passed(build, config)
-    # end
 
-    
-    def self.build_fixed(build, config)
-      Sender.delay.build_fixed(build,config) unless config["recipients"].split(",").empty?
+    def build_fixed(build, config)
+      project = build.project
+      Delayed::Job.enqueue(Job.new(config, "Build '#{build.display_name}' in '#{project.name}' fixed (#{build_url(build)})"))
     end
 
-    def self.build_still_fails(build, config)
-      Sender.delay.build_still_fails(build,config) unless config["recipients"].split(",").empty?
+    def build_still_fails(build, config)
+      project = build.project
+      Delayed::Job.enqueue(Job.new(config, "Build '#{build.display_name}' in '#{project.name}' still fails (#{build_url(build)})"))
     end
 
-    # def self.build_finished(build, config)
-    # end
-
-    def self.build_failed(build, config)
-      Sender.delay.build_failed(build,config) unless config["recipients"].split(",").empty?
+    def build_failed(build, config)
+      project = build.project
+      Delayed::Job.enqueue(Job.new(config, "Build '#{build.display_name}' in '#{project.name}' failed (#{build_url(build)})"))
     end
-    
-    class Sender < ActionMailer::Base
-      self.append_view_path("extras/big_tuna/hooks")
-      
-      def send_im(config,msg)
-        recipients = config["recipients"].split(",")
-        if recipients.size > 0          
-          im = Jabber::Simple.new(config["sender_full_jid"], config["sender_password"])           
-          recipients.each {|r| im.deliver(r.strip, msg)}
+
+    class Job
+      def initialize(config, message)
+        @config = config
+        @message = message
+      end
+
+      def perform
+        recipients = @config["recipients"].to_s.split(",")
+        if recipients.size > 0
+          im = Jabber::Simple.new(@config["sender_full_jid"], @config["sender_password"])
+          recipients.each { |r| im.deliver(r.strip, @message) }
         end
       end
-         
-      def build_failed(build, config)
-        @build = build
-        @project = @build.project
-  
-        send_im(
-          config,           
-          mail.body = render_to_string(
-            "xmpp/build_failed", 
-            :locals => {:build => @build, :project => @project}
-          )
-        )      
-      end
-
-      def build_still_fails(build, config)
-        @build = build
-        @project = @build.project
-          
-        send_im(
-          config,           
-          mail.body = render_to_string(
-            "xmpp/build_still_fails", 
-            :locals => {:build => @build, :project => @project}
-          )
-        )     
-      end
-
-      def build_fixed(build, config)
-        @build = build
-        @project = @build.project
-          
-        send_im(
-          config,           
-          mail.body = render_to_string(
-            "xmpp/build_fixed", 
-            :locals => {:build => @build, :project => @project}
-          )
-        )     
-      end
-    end    
+    end
   end
 end

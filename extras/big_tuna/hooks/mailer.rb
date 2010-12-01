@@ -1,24 +1,18 @@
 module BigTuna
-  class Hooks::Mailer
+  class Hooks::Mailer < Hooks::Base
     NAME = "mailer"
 
-    # def self.build_passed(build, config)
-    # end
-
-    def self.build_fixed(build, config)
+    def build_fixed(build, config)
       recipients = config["recipients"]
       Sender.delay.build_fixed(build, recipients) unless recipients.blank?
     end
 
-    def self.build_still_fails(build, config)
+    def build_still_fails(build, config)
       recipients = config["recipients"]
       Sender.delay.build_still_fails(build, recipients) unless recipients.blank?
     end
 
-    # def self.build_finished(build, config)
-    # end
-
-    def self.build_failed(build, config)
+    def build_failed(build, config)
       recipients = config["recipients"]
       Sender.delay.build_failed(build, recipients) unless recipients.blank?
     end

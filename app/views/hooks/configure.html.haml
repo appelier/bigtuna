@@ -1,8 +1,8 @@
-%h2= "#{@hook.backend::NAME} hook for #{@project.name}"
+%h2= "#{@hook.backend.class::NAME} hook for #{@project.name}"
 
-= form_for(@hook, :url => project_config_hook_path(@project, @hook.backend::NAME), :html => {:method => "PUT"}) do |f|
+= form_for(@hook, :url => project_config_hook_path(@project, @hook.backend.class::NAME), :html => {:method => "PUT"}) do |f|
   - begin
-    = render(:partial => "#{@hook.backend::NAME}/form", :locals => {:f => f})
+    = render(:partial => "#{@hook.backend.class::NAME}/form", :locals => {:f => f})
     %button{:type => "submit"} Edit
   - rescue ActionView::MissingTemplate
     %p This hook doesn't have any configuration.
