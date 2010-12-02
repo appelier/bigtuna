@@ -1,6 +1,6 @@
 module ApplicationHelper
   def strip_rails_root(dir)
-    ret = dir.gsub(Rails.root, "")
+    ret = dir.gsub(Rails.root.to_s, "")
     ret = ret[1 .. -1] if ret =~ Regexp.new("^/")
     ret
   end
