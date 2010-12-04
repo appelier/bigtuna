@@ -1,6 +1,7 @@
 module BigTuna
   VCS_BACKENDS = [
     VCS::Git,
+    VCS::Mercurial
   ]
 
   HOOKS = [
