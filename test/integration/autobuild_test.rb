@@ -22,8 +22,8 @@ class AutobuildTest < ActionController::IntegrationTest
     project1 = github_project(:name => "obywatelgc", :vcs_branch => "master")
     project2 = github_project(:name => "obywatelgc2", :vcs_branch => "development")
     old_token = BigTuna.config["github_secure"]
-    begin 
-      BigTuna.config["github_secure"] = "mytoken" 
+    begin
+      BigTuna.config["github_secure"] = "mytoken"
       token = BigTuna.github_secure
       assert_difference("project1.builds.count", +1) do
         assert_difference("project2.builds.count", 0) do
@@ -32,7 +32,7 @@ class AutobuildTest < ActionController::IntegrationTest
           assert response.body.include?("build for \"#{project1.name}\" triggered")
         end
       end
-    rescue
+    ensure
       BigTuna.config["github_secure"] = old_token
     end
   end
@@ -41,8 +41,8 @@ class AutobuildTest < ActionController::IntegrationTest
     project1 = github_project(:name => "obywatelgc", :vcs_branch => "master")
     project2 = github_project(:name => "obywatelgc2", :vcs_branch => "development")
     old_token = BigTuna.config["github_secure"]
-    begin 
-      BigTuna.config["github_secure"] = "mytoken" 
+    begin
+      BigTuna.config["github_secure"] = "mytoken"
       token = BigTuna.github_secure
       invalid_token = token + "a"
       assert_difference("Build.count", 0) do
