@@ -3,6 +3,10 @@ module BigTuna::VCS
     NAME = "Mercurial"
     VALUE = "hg"
 
+    def self.supported?
+      @_supported ||= BigTuna::Runner.execute(Dir.pwd, "hg --version").ok?
+    end
+
     def head_info
       info = {}
       command = "hg log --limit 1 --rev #{self.branch} --template='{node}\n{author|person}\n{author|email}\n{date|date}\n{desc}'"

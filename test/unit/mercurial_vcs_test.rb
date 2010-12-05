@@ -1,5 +1,7 @@
 require 'test_helper'
 
+if BigTuna::VCS::Mercurial.supported?
+
 class MercurialVCSTest < ActiveSupport::TestCase
   def setup
     super
@@ -50,4 +52,6 @@ class MercurialVCSTest < ActiveSupport::TestCase
   def init_repo(dir = "test/files/repo", branch = "default")
     BigTuna::VCS::Mercurial.new(dir, branch)
   end
+end
+
 end

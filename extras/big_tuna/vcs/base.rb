@@ -6,5 +6,9 @@ module BigTuna::VCS
       @source = source
       @branch = branch
     end
+
+    def self.supported?
+      raise ArgumentError.new("Implement ::supported? method")
+    end
   end
 end

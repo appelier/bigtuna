@@ -1,5 +1,7 @@
 require 'test_helper'
 
+if BigTuna::VCS::Git.supported?
+
 class GitVCSTest < ActiveSupport::TestCase
   def setup
     super
@@ -50,4 +52,6 @@ class GitVCSTest < ActiveSupport::TestCase
   def init_repo(dir = "test/files/repo", branch = "master")
     BigTuna::VCS::Git.new(dir, branch)
   end
+end
+
 end
