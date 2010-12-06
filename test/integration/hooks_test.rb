@@ -56,5 +56,7 @@ class HooksTest < ActionController::IntegrationTest
     assert page.has_field?("configuration_sender_full_jid")
     assert page.has_field?("configuration_sender_password")
     assert page.has_field?("configuration_recipients")
+    click_button "Edit"
+    assert_status_code 200
   end
 end
