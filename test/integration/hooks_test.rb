@@ -26,7 +26,7 @@ class HooksTest < ActionController::IntegrationTest
     end
     assert page.has_content?("Recipients")
   end
-  
+
   test "hooks with no config print out this info to user" do
     with_hook_enabled(BigTuna::Hooks::NoConfig) do
       project = Project.make(:steps => "ls", :name => "Koss", :vcs_source => "test/files/repo", :vcs_type => "git", :max_builds => 2, :hooks => {"no_config" => "no_config"}, :hook_update => true)
@@ -39,36 +39,22 @@ class HooksTest < ActionController::IntegrationTest
   end
 
   test "xmpp hook has a valid configuration form" do
-    project = Project.make(
-      :steps => "ls", 
-      :name => "Koss", 
-      :vcs_source => "test/files/repo", 
-      :vcs_type => "git", 
-      :max_builds => 2, 
-      :hooks => {"xmpp" => "xmpp"}, 
-      :hook_update => true
-    )
-    
+    project = Project.make({
+      :steps => "ls",
+      :name => "Koss",
+      :vcs_source => "test/files/repo",
+      :vcs_type => "git",
+      :max_builds => 2,
+      :hooks => {"xmpp" => "xmpp"},
+      :hook_update => true,
+    })
+
     visit edit_project_path(project)
     within("#hook_xmpp") do
       click_link "Configure"
     end
     assert page.has_field?("configuration_sender_full_jid")
-    assert page.has_field?("configuration_sender_password")    
-    assert page.has_field?("configuration_recipients")    
-  end
-
-
-  private
-  def with_hook_enabled(hook, &blk)
-    old_hooks = BigTuna::HOOKS.clone
-    Kernel.silence_stream(STDERR) do
-      BigTuna.const_set("HOOKS", old_hooks + [hook])
-    end
-    blk.call
-  ensure
-    Kernel.silence_stream(STDERR) do
-      BigTuna.const_set("HOOKS", old_hooks)
-    end
+    assert page.has_field?("configuration_sender_password")
+    assert page.has_field?("configuration_recipients")
   end
 end

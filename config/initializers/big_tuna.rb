@@ -1,12 +1,12 @@
 module BigTuna
   VCS_BACKENDS = [
     VCS::Git,
-    VCS::Mercurial
+    VCS::Mercurial,
   ]
 
   HOOKS = [
     Hooks::Mailer,
-    Hooks::Xmpp
+    Hooks::Xmpp,
   ]
 
   DEFAULT_CONFIG = {

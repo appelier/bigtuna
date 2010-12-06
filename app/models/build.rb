@@ -4,6 +4,7 @@ class Build < ActiveRecord::Base
   STATUS_OK = "status_build_ok"
   STATUS_FAILED = "status_build_failed"
   STATUS_BUILDER_ERROR = "status_builder_error"
+  STATUS_HOOK_ERROR = "status_hook_error"
 
   belongs_to :project
 

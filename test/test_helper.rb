@@ -21,4 +21,16 @@ class ActiveSupport::TestCase
     assert ! object.save, "Object is valid, but it's not supposed to be"
     assert ! object.errors[field].empty?, "No errors on field %p" % [field]
   end
+
+  def with_hook_enabled(hook, &blk)
+    old_hooks = BigTuna::HOOKS.clone
+    Kernel.silence_stream(STDERR) do
+      BigTuna.const_set("HOOKS", old_hooks + [hook])
+    end
+    blk.call
+  ensure
+    Kernel.silence_stream(STDERR) do
+      BigTuna.const_set("HOOKS", old_hooks)
+    end
+  end
 end
