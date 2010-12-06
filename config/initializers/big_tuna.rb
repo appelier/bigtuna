@@ -31,4 +31,8 @@ module BigTuna
     return true if env_force
     config["read_only"]
   end
+
+  def self.logger
+    @_logger = Logger.new("log/bigtuna_#{Rails.env}.log")
+  end
 end

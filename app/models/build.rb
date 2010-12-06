@@ -25,9 +25,9 @@ class Build < ActiveRecord::Base
     end
     project.truncate_builds!
   rescue Exception => e
-    Rails.logger.warn("[BigTuna] Exception in build runner")
-    Rails.logger.warn("[BigTuna] #{e.message}")
-    Rails.logger.warn("[BigTuna] #{e.backtrace.join}")
+    BigTuna.logger.warn("Exception in build runner")
+    BigTuna.logger.warn(e.message)
+    BigTuna.logger.warn(e.backtrace.join("\n"))
     out = BigTuna::Runner::Output.new(Dir.pwd, "builder error")
     out.append_stdout(e.message)
     out.append_stdout(e.backtrace.join("\n"))
@@ -74,7 +74,7 @@ class Build < ActiveRecord::Base
     if File.directory?(self.build_dir)
       FileUtils.rm_rf(self.build_dir)
     else
-      Rails.logger.debug("[BigTuna] Couldn't find build dir: %p" % [self.build_dir])
+      BigTuna.logger.info("Couldn't find build dir to remove: %p" % [self.build_dir])
     end
   end
 
