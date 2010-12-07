@@ -19,10 +19,10 @@
       %h3= link_to(build.display_name, build_path(build, :stderr => build.status == Build::STATUS_OK ? nil : 1))
       %table.value_list
         = render :partial => "builds/build_data", :locals => {:build => build}
-        - build.parts.each do |part|
+        - build.parts.each_with_index do |part, index|
           %tr
             %td.title= part.name
-            %td.value= part.status
+            %td.value= link_to(formatted_status(part.status), build_path(build, :stderr => build.status == Build::STATUS_OK ? nil : 1, :anchor => "part_#{index}"))
 
 - content_for :sidebar do
   - unless BigTuna.read_only?
