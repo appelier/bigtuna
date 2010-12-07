@@ -18,10 +18,10 @@
         %td.title Duration
         %td.value= build_duration(@build)
 
-  #steps
-    %h3 Steps
+  - @build.parts.each do |part|
+    %h3= part.name
     %ol
-      - @build.output.each_with_index do |output, index|
+      - part.output.each_with_index do |output, index|
         %li{:id => "step_#{index + 1}"}
           = render :partial => "step", :locals => {:step => output, :step_no => index + 1}
 

@@ -19,6 +19,10 @@
       %h3= link_to(build.display_name, build_path(build, :stderr => build.status == Build::STATUS_OK ? nil : 1))
       %table.value_list
         = render :partial => "builds/build_data", :locals => {:build => build}
+        - build.parts.each do |part|
+          %tr
+            %td.title= part.name
+            %td.value= part.status
 
 - content_for :sidebar do
   - unless BigTuna.read_only?

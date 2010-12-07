@@ -13,6 +13,7 @@ BigTuna::Application.routes.draw do
       match "/hooks/:name/configure", :to => "hooks#configure", :as => "config_hook"
     end
     resources :builds
+    resources :step_lists
 
   end
 

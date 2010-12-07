@@ -1,0 +1,11 @@
+%div
+  = f.label(:name)
+  %br
+  = f.text_field(:name, :class => 'textfield')
+%div
+  = f.label(:steps)
+  %br
+  = f.text_area(:steps, :class => 'textarea')
+%div
+  %button.black_button{:type => "submit"}
+    = f.object.new_record? ? "Create" : "Update"
