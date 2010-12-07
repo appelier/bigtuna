@@ -12,6 +12,7 @@ class ActiveSupport::TestCase
 
   def teardown
     DatabaseCleaner.clean
+    FileUtils.rm_rf(File.join(Rails.root.to_s, "builds"))
   end
 
   def assert_invalid(klass, field, &block)
@@ -32,5 +33,25 @@ class ActiveSupport::TestCase
     Kernel.silence_stream(STDERR) do
       BigTuna.const_set("HOOKS", old_hooks)
     end
+  end
+
+  def project_with_steps(project_attrs, *steps)
+    project = Project.make(project_attrs)
+    steps.each do |step_list|
+      StepList.make(:project => project, :steps => step_list)
+    end
+    project
+  end
+
+  def run_delayed_jobs
+    ran_jobs = []
+    while Delayed::Job.count != 0
+      Delayed::Job.all.each do |job|
+        job.invoke_job
+        job.destroy
+        ran_jobs << job
+      end
+    end
+    ran_jobs
   end
 end

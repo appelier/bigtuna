@@ -14,12 +14,16 @@ class HooksTest < ActionController::IntegrationTest
 
   def teardown
     FileUtils.rm_rf("test/files/repo")
-    FileUtils.rm_rf("builds/*")
     super
   end
 
   test "hooks config renders hook config partial if it's present" do
-    project = Project.make(:steps => "ls", :name => "Koss", :vcs_source => "test/files/repo", :vcs_type => "git", :max_builds => 2, :hooks => {"mailer" => "mailer"}, :hook_update => true)
+    project = project_with_steps({
+      :name => "Koss",
+      :vcs_source => "test/files/repo",
+      :max_builds => 2,
+      :hooks => {"mailer" => "mailer"},
+    }, "ls")
     visit edit_project_path(project)
     within("#hook_mailer") do
       click_link "Configure"
@@ -29,7 +33,12 @@ class HooksTest < ActionController::IntegrationTest
 
   test "hooks with no config print out this info to user" do
     with_hook_enabled(BigTuna::Hooks::NoConfig) do
-      project = Project.make(:steps => "ls", :name => "Koss", :vcs_source => "test/files/repo", :vcs_type => "git", :max_builds => 2, :hooks => {"no_config" => "no_config"}, :hook_update => true)
+      project = project_with_steps({
+        :name => "Koss",
+        :vcs_source => "test/files/repo",
+        :max_builds => 2,
+        :hooks => {"no_config" => "no_config"},
+      }, "ls")
       visit edit_project_path(project)
       within("#hook_no_config") do
         click_link "Configure"
@@ -39,15 +48,12 @@ class HooksTest < ActionController::IntegrationTest
   end
 
   test "xmpp hook has a valid configuration form" do
-    project = Project.make({
-      :steps => "ls",
+    project = project_with_steps({
       :name => "Koss",
       :vcs_source => "test/files/repo",
-      :vcs_type => "git",
       :max_builds => 2,
       :hooks => {"xmpp" => "xmpp"},
-      :hook_update => true,
-    })
+    }, "ls")
 
     visit edit_project_path(project)
     within("#hook_xmpp") do

@@ -17,24 +17,20 @@ class HooksUnitTest < ActiveSupport::TestCase
 
   def teardown
     FileUtils.rm_rf("test/files/koss")
-    FileUtils.rm_rf("builds/*")
     super
   end
 
   test "if hook produces error it is handled and marks build as hook failed" do
     with_hook_enabled(BigTuna::Hooks::RaisingHook) do
-      project = Project.make({
-        :steps => "nosuchstep",
+      project = project_with_steps({
         :name => "Koss",
-        :vcs_source => "test/files/repo",
-        :vcs_type => "git",
+        :vcs_source => "test/files/koss",
         :max_builds => 2,
         :hooks => {"raising_hook" => "raising_hook"},
-        :hook_update => true,
-      })
+      }, "true")
 
-      job = project.build!
-      job.invoke_job
+      project.build!
+      run_delayed_jobs()
       build = project.recent_build
       assert_equal Build::STATUS_HOOK_ERROR, build.status
     end

@@ -12,6 +12,11 @@ Project.blueprint do
   vcs_type { "git" }
   vcs_source { "test/files/repo" }
   vcs_branch { "master" }
+  hook_update { true }
+end
+
+StepList.blueprint do
+  name { Sham.name }
 end
 
 Build.blueprint do

@@ -18,6 +18,8 @@
         %td.title Duration
         %td.value= build_duration(@build)
 
+  %h3 VCS
+  = render :partial => "step", :locals => {:step => @build.output[0], :step_no => 0}
   - @build.parts.each do |part|
     %h3= part.name
     %ol

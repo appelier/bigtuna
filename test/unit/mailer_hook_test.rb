@@ -8,18 +8,16 @@ class MailerHookTest < ActiveSupport::TestCase
 
   def teardown
     FileUtils.rm_rf("test/files/koss")
-    FileUtils.rm_rf("builds/koss")
     super
   end
 
   test "mail stating that build failed is sent when build failed" do
     project = mailing_project_with_steps("ls invalid_file_here")
-    assert_difference("Delayed::Job.count", +2) do # 1 job, 1 email
-      job = project.build!
-      job.invoke_job
-    end
+    project.build!
+    jobs = run_delayed_jobs()
+    assert_equal 3, jobs.size # 1 project, 1 part, 1 mail
     build = project.recent_build
-    job = Delayed::Job.order("created_at DESC").first
+    job = jobs.last
     mail = YAML.load(job.handler).perform
     assert_equal "Build '#{build.display_name}' in '#{project.name}' failed", mail.subject
     assert ! mail.body.to_s.blank?
@@ -27,15 +25,14 @@ class MailerHookTest < ActiveSupport::TestCase
 
   test "mail stating that build is back to normal is sent when build fixed" do
     project = mailing_project_with_steps("ls invalid_file_here")
-    job = project.build!
-    job.invoke_job
-    project.update_attributes!(:steps => "ls .")
-    assert_difference("Delayed::Job.count", +2) do # 1 job, 1 email
-      job = project.build!
-      job.invoke_job
-    end
+    project.build!
+    run_delayed_jobs()
+    project.step_lists.first.update_attributes!(:steps => "ls .")
+    project.build!
+    jobs = run_delayed_jobs()
+    assert_equal 3, jobs.size # 1 project, 1 part, 1 mail
     build = project.recent_build
-    job = Delayed::Job.order("created_at DESC").first
+    job = jobs.last
     mail = YAML.load(job.handler).perform
     assert_equal "Build '#{build.display_name}' in '#{project.name}' fixed", mail.subject
     assert ! mail.body.to_s.blank?
@@ -43,14 +40,13 @@ class MailerHookTest < ActiveSupport::TestCase
 
   test "mail stating that build is still failing is sent when build still fails" do
     project = mailing_project_with_steps("ls invalid_file_here")
-    job = project.build!
-    job.invoke_job
-    assert_difference("Delayed::Job.count", +2) do # 1 job, 1 email
-      job = project.build!
-      job.invoke_job
-    end
+    project.build!
+    run_delayed_jobs()
+    project.build!
+    jobs = run_delayed_jobs()
+    assert_equal 3, jobs.size # 1 project, 1 part, 1 mail
     build = project.recent_build
-    job = Delayed::Job.order("created_at DESC").first
+    job = jobs[-1]
     mail = YAML.load(job.handler).perform
     assert_equal "Build '#{build.display_name}' in '#{project.name}' still fails", mail.subject
     assert ! mail.body.to_s.blank?
@@ -58,16 +54,20 @@ class MailerHookTest < ActiveSupport::TestCase
 
   test "mail is not sent when build is ok but was ok before" do
     project = mailing_project_with_steps("ls .")
-    assert_difference("Delayed::Job.count", +2) do # 2 jobs, no mails
-      2.times do
-        job = project.build!
-        job.invoke_job
-      end
-    end
+    project.build!
+    run_delayed_jobs()
+    project.build!
+    ran_jobs = run_delayed_jobs()
+    assert_equal 2, ran_jobs.size
   end
 
   def mailing_project_with_steps(steps)
-    project = Project.make(:steps => steps, :name => "Koss", :vcs_source => "test/files/koss", :vcs_type => "git", :max_builds => 2, :hooks => {"mailer" => "mailer"}, :hook_update => true)
+    project = project_with_steps({
+       :name => "Koss",
+       :vcs_source => "test/files/koss",
+       :max_builds => 2,
+       :hooks => {"mailer" => "mailer"},
+    }, steps)
     hook = project.hooks.first
     hook.configuration = {"recipients" => "michal.bugno@gmail.com"}
     hook.save!

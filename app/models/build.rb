@@ -17,9 +17,17 @@ class Build < ActiveRecord::Base
     self.update_attributes!(:status => STATUS_PROGRESS)
     self.started_at = Time.now
     project = self.project
-    out = project.vcs.clone(self.build_dir)
-    self.update_attributes!(vcs.head_info[0].merge(:output => [out]))
-    run_build_parts()
+    begin
+      out = project.vcs.clone(self.build_dir)
+      self.update_attributes!(vcs.head_info[0].merge(:output => [out]))
+      vcs_ok = true
+    rescue BigTuna::Runner::Error => e
+      self.status = STATUS_FAILED
+      self.output = [e.output]
+      self.save!
+      vcs_ok = false
+    end
+    run_build_parts() if vcs_ok
   end
 
   def display_name
@@ -57,12 +65,15 @@ class Build < ActiveRecord::Base
       status = statuses.all? { |e| e == BuildPart::STATUS_OK } ? STATUS_OK : STATUS_FAILED
       self.update_attributes!(:finished_at => Time.now, :status => status)
       if status != STATUS_OK
+        new_failed_builds = project.failed_builds + 1
+        project.update_attributes!(:failed_builds => new_failed_builds)
         after_failed()
       else
         after_passed()
       end
       after_finished()
     end
+    project.truncate_builds!
   end
 
   private
