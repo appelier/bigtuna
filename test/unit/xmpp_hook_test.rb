@@ -8,7 +8,6 @@ class XmppHookTest < ActiveSupport::TestCase
 
   def teardown
     FileUtils.rm_rf("test/files/koss")
-    FileUtils.rm_rf("builds/koss")
     super
   end
 
@@ -29,41 +28,44 @@ class XmppHookTest < ActiveSupport::TestCase
 
     project = xmpp_project_with_steps("ls invalid_file_here")
     hook = project.hooks.first
-    job = project.build!
-    job.invoke_job
+    project.build!
+    run_delayed_jobs()
     stub_xmpp(hook, "Build '#{project.recent_build.display_name}' in '#{project.name}' fixed")
-    project.update_attributes!(:steps => "ls .")
-    assert_difference("Delayed::Job.count", +2) do # 1 job + 1 for sending the xmpp message
-      job = project.build!
-      job.invoke_job
-    end
+    project.step_lists.first.update_attributes!(:steps => "ls .")
+    project.build!
+    jobs = run_delayed_jobs()
+    assert_equal 3, jobs.size # 1 project, 1 part, 1 xmpp message
   end
 
   test "xmpp message stating that build is still failing is sent when build still fails" do
     project = xmpp_project_with_steps("ls invalid_file_here")
     hook = project.hooks.first
-    job = project.build!
+    project.build!
+    run_delayed_jobs()
     stub_xmpp(hook, "Build '#{project.recent_build.display_name}' in '#{project.name}' still fails")
-    job.invoke_job
-    assert_difference("Delayed::Job.count", +2) do # 1 job + 1 for sending the xmpp message
-      job = project.build!
-      job.invoke_job
-    end
+    project.build!
+    jobs = run_delayed_jobs()
+    assert_equal 3, jobs.size # 1 project, 1 part, 1 xmpp message
   end
 
   test "no xmpp message sent when build is ok but was ok before" do
     project = xmpp_project_with_steps("ls .")
-    assert_difference("Delayed::Job.count", +2) do # 2 jobs, nothing sent via xmpp
-      2.times do
-        job = project.build!
-        job.invoke_job
-      end
-    end
+    project.build!
+    run_delayed_jobs()
+    project.build!
+    jobs = run_delayed_jobs()
+    assert_equal 2, jobs.size
   end
 
   private
   def xmpp_project_with_steps(steps)
-    project = Project.make(:steps => steps, :name => "Koss", :vcs_source => "test/files/koss", :vcs_type => "git", :max_builds => 2, :hooks => {"xmpp" => "xmpp"}, :hook_update => true)
+    project = project_with_steps({
+      :name => "Koss",
+      :vcs_source => "test/files/koss",
+      :vcs_type => "git",
+      :max_builds => 2,
+      :hooks => {"xmpp" => "xmpp"},
+    }, steps)
     hook = project.hooks.first
     hook.configuration = {
       "recipients" => "user1@example.com,user2@example.com,user3@example.com",

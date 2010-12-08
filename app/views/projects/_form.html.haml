@@ -15,22 +15,6 @@
   %br
   = f.text_field(:vcs_branch, :class => 'textfield')
 %div
-  = f.label(:steps)
-  %br
-  = f.text_area(:steps, :class => 'textarea')
-  %br
-  %span.hint
-    Special variables are available
-    %dl
-      %dt
-        %tt %build_dir%
-      %dd directory where build is checked out
-      %dt
-        %tt %project_dir%
-      %dd directory shared by all builds in project
-      You can comment a step with
-      %tt #
-%div
   = f.label(:max_builds)
   %br
   = f.text_field(:max_builds, :class => 'textfield')

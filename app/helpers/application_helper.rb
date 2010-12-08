@@ -35,4 +35,17 @@ module ApplicationHelper
       "great"
     end
   end
+
+  def formatted_status(status)
+    case status
+    when BuildPart::STATUS_OK
+      "works"
+    when BuildPart::STATUS_FAILED
+      "failed"
+    when BuildPart::STATUS_IN_QUEUE
+      "in queue"
+    when BuildPart::STATUS_PROGRESS
+      "in progress"
+    end
+  end
 end

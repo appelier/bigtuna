@@ -11,22 +11,45 @@ class Hook < ActiveRecord::Base
   end
 
   def build_passed(build)
-    self.backend.build_passed(build, self.configuration)
+    invoke_with_log(build) do
+      self.backend.build_passed(build, self.configuration)
+    end
   end
 
   def build_fixed(build)
-    self.backend.build_fixed(build, self.configuration)
+    invoke_with_log(build) do
+      self.backend.build_fixed(build, self.configuration)
+    end
   end
 
   def build_still_fails(build)
-    self.backend.build_still_fails(build, self.configuration)
+    invoke_with_log(build) do
+      self.backend.build_still_fails(build, self.configuration)
+    end
   end
 
   def build_finished(build)
-    self.backend.build_finished(build, self.configuration)
+    invoke_with_log(build) do
+      self.backend.build_finished(build, self.configuration)
+    end
   end
 
   def build_failed(build)
-    self.backend.build_failed(build, self.configuration)
+    invoke_with_log(build) do
+      self.backend.build_failed(build, self.configuration)
+    end
+  end
+
+  private
+  def invoke_with_log(build, &blk)
+    begin
+      blk.call
+    rescue Exception => e
+      BigTuna.logger.error("Exception while running #{hook_name} hook")
+      BigTuna.logger.error(e.message)
+      BigTuna.logger.error(e.backtrace.join("\n"))
+      build.status = Build::STATUS_HOOK_ERROR
+      build.save!
+    end
   end
 end

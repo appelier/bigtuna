@@ -2,7 +2,7 @@ module BigTuna
   class Runner
     def self.execute(dir, command)
       end_command = "cd #{dir} && #{command}"
-      Rails.logger.debug("[BigTuna] executing: #{end_command}")
+      BigTuna.logger.debug("Executing: #{end_command}")
       with_clean_env(dir) do
         output = Output.new(dir, command)
         buffer = []
@@ -13,7 +13,6 @@ module BigTuna
           end
         end
         output.finish(status.exitstatus)
-        Rails.logger.debug("[BigTuna] exit code: #{output.exit_code}")
         raise Error.new(output) if output.exit_code != 0
         output
       end

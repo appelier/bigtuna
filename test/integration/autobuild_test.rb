@@ -8,7 +8,6 @@ class AutobuildTest < ActionController::IntegrationTest
 
   def teardown
     FileUtils.rm_rf("test/files/repo")
-    FileUtils.rm_rf("builds/*")
     super
   end
 
@@ -71,7 +70,9 @@ class AutobuildTest < ActionController::IntegrationTest
 
   private
   def github_project(opts = {})
-    Project.make({:steps => "ls", :name => "obywatelgc", :vcs_source => "git://github.com/appelier/bigtuna.git", :vcs_branch => "master", :vcs_type => "git", :max_builds => 2}.merge(opts))
+    project = Project.make({:vcs_source => "git://github.com/appelier/bigtuna.git", :vcs_branch => "master", :vcs_type => "git", :max_builds => 2}.merge(opts))
+    step_list = StepList.make(:project => project, :steps => "ls")
+    project
   end
 
   def github_payload(project)

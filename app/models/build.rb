@@ -4,8 +4,10 @@ class Build < ActiveRecord::Base
   STATUS_OK = "status_build_ok"
   STATUS_FAILED = "status_build_failed"
   STATUS_BUILDER_ERROR = "status_builder_error"
+  STATUS_HOOK_ERROR = "status_hook_error"
 
   belongs_to :project
+  has_many :parts, :class_name => "BuildPart"
 
   before_destroy :remove_build_dir
   before_create :set_build_values
@@ -15,29 +17,17 @@ class Build < ActiveRecord::Base
     self.update_attributes!(:status => STATUS_PROGRESS)
     self.started_at = Time.now
     project = self.project
-    execute_steps()
-    if self.status != STATUS_OK
-      new_failed_builds = project.failed_builds + 1
-      project.update_attributes!(:failed_builds => new_failed_builds)
-      after_failed()
-    else
-      after_passed()
+    begin
+      out = project.vcs.clone(self.build_dir)
+      self.update_attributes!(vcs.head_info[0].merge(:output => [out]))
+      vcs_ok = true
+    rescue BigTuna::Runner::Error => e
+      self.status = STATUS_FAILED
+      self.output = [e.output]
+      self.save!
+      vcs_ok = false
     end
-    project.truncate_builds!
-  rescue Exception => e
-    Rails.logger.warn("[BigTuna] Exception in build runner")
-    Rails.logger.warn("[BigTuna] #{e.message}")
-    Rails.logger.warn("[BigTuna] #{e.backtrace.join}")
-    out = BigTuna::Runner::Output.new(Dir.pwd, "builder error")
-    out.append_stdout(e.message)
-    out.append_stdout(e.backtrace.join("\n"))
-    out.finish(1)
-    self.output = [out]
-    self.status = STATUS_BUILDER_ERROR
-    self.save!
-    after_failed()
-  ensure
-    after_finished()
+    run_build_parts() if vcs_ok
   end
 
   def display_name
@@ -69,12 +59,29 @@ class Build < ActiveRecord::Base
     @vcs = klass.new(self.build_dir, vcs_branch)
   end
 
+  def update_part(part)
+    if parts.where(:finished_at => nil).count == 0 # build finished
+      statuses = parts.map { |p| p.status }
+      status = statuses.all? { |e| e == BuildPart::STATUS_OK } ? STATUS_OK : STATUS_FAILED
+      self.update_attributes!(:finished_at => Time.now, :status => status)
+      if status != STATUS_OK
+        new_failed_builds = project.failed_builds + 1
+        project.update_attributes!(:failed_builds => new_failed_builds)
+        after_failed()
+      else
+        after_passed()
+      end
+      after_finished()
+    end
+    project.truncate_builds!
+  end
+
   private
   def remove_build_dir
     if File.directory?(self.build_dir)
       FileUtils.rm_rf(self.build_dir)
     else
-      Rails.logger.debug("[BigTuna] Couldn't find build dir: %p" % [self.build_dir])
+      BigTuna.logger.info("Couldn't find build dir to remove: %p" % [self.build_dir])
     end
   end
 
@@ -86,51 +93,17 @@ class Build < ActiveRecord::Base
     self.output = []
   end
 
-  def execute_steps
-    all_steps = [
-      [Dir.pwd, lambda { project.vcs.clone(self.build_dir) }]
-    ]
-    project.steps.split("\n").each do |step|
-      step = format_step_command(step)
-      all_steps << [self.build_dir, step] unless step.empty?
+  def run_build_parts
+    statuses = []
+    self.project.step_lists.each do |step_list|
+      attrs = {
+        :name => step_list.name,
+        :steps => step_list.steps,
+      }
+      part = self.parts.build(attrs)
+      part.save!
+      part.build!
     end
-    exit_code = 0
-    all_steps.each_with_index do |step, index|
-      dir, command = step
-      update_commit_data() if index == 1
-      begin
-        if command.is_a?(Proc)
-          out, command = command.call
-        else
-          out = BigTuna::Runner.execute(dir, command)
-        end
-        self.output << out
-        self.save!
-      rescue BigTuna::Runner::Error => e
-        output << e.output
-        exit_code = e.output.exit_code
-        break
-      end
-    end
-    self.status = exit_code == 0 ? STATUS_OK : STATUS_FAILED
-    all_steps[output.size .. -1].each do |dir, command|
-      self.output << BigTuna::Runner::Output.new(dir, command)
-    end
-    self.finished_at = Time.now
-    self.save!
-  end
-
-  def format_step_command(cmd)
-    new_cmd = cmd.gsub("%build_dir%", self.build_dir)
-    new_cmd.gsub!("%project_dir%", self.project.build_dir)
-    comment_at = new_cmd.index("#")
-    new_cmd = new_cmd[0...comment_at] unless comment_at.nil?
-    new_cmd.strip!
-    new_cmd
-  end
-
-  def update_commit_data
-    self.update_attributes!(vcs.head_info[0])
   end
 
   def after_passed

@@ -3,6 +3,7 @@ class Project < ActiveRecord::Base
   attr_accessor :hook_update
 
   has_many :builds, :dependent => :destroy
+  has_many :step_lists, :dependent => :destroy
   before_destroy :remove_build_folder
   before_update :rename_build_folder
   before_create :set_default_build_counts

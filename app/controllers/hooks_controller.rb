@@ -31,7 +31,7 @@ class HooksController < ApplicationController
     return render if request.get?
     @hook.configuration = params["configuration"]
     @hook.save!
-    redirect_to(project_config_hook_path(@project, @hook.backend::NAME))
+    redirect_to(project_config_hook_path(@project, @hook.backend.class::NAME))
   end
 
   private

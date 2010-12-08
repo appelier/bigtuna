@@ -8,25 +8,32 @@ class ProjectTest < ActiveSupport::TestCase
 
   def teardown
     FileUtils.rm_rf("test/files/repo")
-    FileUtils.rm_rf("builds/project")
     super
   end
 
   test "only recent builds are kept on disk" do
-    project = Project.make(:steps => "ls -al file", :name => "Project", :vcs_source => "test/files/repo", :vcs_type => "git", :max_builds => 1)
+    project = project_with_steps({
+      :name => "Project",
+      :vcs_source => "test/files/repo",
+      :max_builds => 1,
+    }, "ls -al file")
     assert_difference("Dir[File.join(project.build_dir, '*')].size", +1) do
-      job = project.build!
-      job.invoke_job
+      project.build!
+      run_delayed_jobs()
     end
 
     assert_difference("Dir[File.join(project.build_dir, '*')].size", 0) do
-      job = project.build!
-      job.invoke_job
+      project.build!
+      run_delayed_jobs()
     end
   end
 
   test "removing project removes its builds" do
-    project = Project.make(:steps => "ls -al file", :name => "Project", :vcs_source => "test/files/repo", :vcs_type => "git", :max_builds => 1)
+    project = project_with_steps({
+      :name => "Project",
+      :vcs_source => "test/files/repo",
+      :max_builds => 1,
+    }, "ls -al file")
     project.build!
     project.build!
     assert_difference("Build.count", -2) do
@@ -35,40 +42,53 @@ class ProjectTest < ActiveSupport::TestCase
   end
 
   test "stdout is grouped by command" do
-    project = Project.make(:steps => "git diff file\necho 'lol'", :name => "Project", :vcs_source => "test/files/repo", :vcs_type => "git", :max_builds => 1)
-    job = project.build!
-    job.invoke_job
-    build = project.builds.order("created_at DESC").first
-    steps = build.output
-    assert_equal 3, steps.size # 2 + clone task
-    assert_equal "git diff file", steps[1].command
+    project = project_with_steps({
+      :name => "Project",
+      :vcs_source => "test/files/repo",
+      :max_builds => 1,
+    }, "git diff file\necho 'lol'")
+    project.build!
+    run_delayed_jobs()
+    build = project.recent_build
+    steps = build.parts[0].output
+    assert_equal 2, steps.size
+    assert_equal "git diff file", steps[0].command
+    assert_equal 0, steps[0].exit_code
+    assert_equal "echo 'lol'", steps[1].command
     assert_equal 0, steps[1].exit_code
-    assert_equal "echo 'lol'", steps[2].command
-    assert_equal 0, steps[2].exit_code
     assert_equal Build::STATUS_OK, build.status
   end
 
   test "build is stopped when task returns with non-zero exit code" do
-    project = Project.make(:steps => "ls -al file\nls -al not_a_file\necho 'not_here'", :name => "Project", :vcs_source => "test/files/repo", :vcs_type => "git", :max_builds => 1)
-    job = project.build!
-    job.invoke_job
-    build = project.builds.order("created_at DESC").first
-    steps = build.output
-    assert_equal 4, steps.size # all steps, but not all were executed
-    assert_equal "ls -al file", steps[1].command
-    assert_equal 0, steps[1].exit_code
-    assert_equal "ls -al not_a_file", steps[2].command
-    assert steps[2].exit_code != 0
-    assert_nil steps[3].exit_code
-    assert_equal [], steps[3].stdout
-    assert_equal "echo 'not_here'", steps[3].command
+    project = project_with_steps({
+      :name => "Project",
+      :vcs_source => "test/files/repo",
+      :vcs_type => "git",
+      :max_builds => 1,
+    }, "ls -al file\nls -al not_a_file\necho 'not_here'")
+    project.build!
+    run_delayed_jobs()
+    build = project.recent_build
+    steps = build.parts[0].output
+    assert_equal 3, steps.size # all steps, but not all were executed
+    assert_equal "ls -al file", steps[0].command
+    assert_equal 0, steps[0].exit_code
+    assert_equal "ls -al not_a_file", steps[1].command
+    assert steps[1].exit_code != 0
+    assert_nil steps[2].exit_code
+    assert_equal [], steps[2].stdout
+    assert_equal "echo 'not_here'", steps[2].command
     assert_equal Build::STATUS_FAILED, build.status
   end
 
   test "removing project removes its build folder" do
-    project = Project.make(:steps => "ls -al file", :name => "Project", :vcs_source => "test/files/repo", :vcs_type => "git", :max_builds => 1)
-    job = project.build!
-    job.invoke_job
+    project = project_with_steps({
+      :name => "Project",
+      :vcs_source => "test/files/repo",
+      :max_builds => 1,
+    }, "ls -al file")
+    project.build!
+    run_delayed_jobs()
     assert File.exist?(project.build_dir)
     assert_difference("Dir[File.join('builds', '*')].size", -1) do
       project.destroy
@@ -98,23 +118,18 @@ class ProjectTest < ActiveSupport::TestCase
   end
 
   test "project dir should be renamed if project name changes" do
-    begin
-      project = Project.make(:name => "my name", :steps => "ls -al")
-      dir = project.send(:build_dir_from_name, project.name)
-      job = project.build!
-      job.invoke_job
-      assert File.directory?(dir)
-      project.name = "my other name"
-      project.save!
-      assert ! File.directory?(dir)
-      job = project.build!
-      job.invoke_job
-      new_dir = project.send(:build_dir_from_name, project.name)
-      assert File.directory?(new_dir)
-    ensure
-      FileUtils.rm_rf("builds/my_name")
-      FileUtils.rm_rf("builds/my_other_name")
-    end
+    project = project_with_steps({:name => "my name"}, "ls -al")
+    dir = project.send(:build_dir_from_name, project.name)
+    project.build!
+    run_delayed_jobs()
+    assert File.directory?(dir)
+    project.name = "my other name"
+    project.save!
+    assert ! File.directory?(dir)
+    project.build!
+    run_delayed_jobs()
+    new_dir = project.send(:build_dir_from_name, project.name)
+    assert File.directory?(new_dir)
   end
 
   test "vcs_type should be one of vcs types available" do
@@ -132,7 +147,11 @@ class ProjectTest < ActiveSupport::TestCase
   end
 
   test "total_builds gets increased" do
-    project = Project.make(:steps => "ls -al file", :name => "Project", :vcs_source => "test/files/repo", :vcs_type => "git", :max_builds => 1)
+    project = project_with_steps({
+      :name => "Project",
+      :vcs_source => "test/files/repo",
+      :max_builds => 1,
+    }, "ls -al file")
     assert_equal 0, project.total_builds
     project.build!
     project.build!
@@ -142,40 +161,49 @@ class ProjectTest < ActiveSupport::TestCase
   end
 
   test "stability is computed from recent 5 builds" do
-    project = Project.make(:steps => "ls -al file", :name => "Project", :vcs_source => "test/files/repo", :vcs_type => "git")
+    project = project_with_steps({
+      :name => "Project",
+      :vcs_source => "test/files/repo",
+    }, "ls -al file")
     create_project_builds(project, Build::STATUS_OK, Build::STATUS_OK, Build::STATUS_OK, Build::STATUS_OK, Build::STATUS_FAILED, Build::STATUS_FAILED)
     assert_equal 4, project.stability
   end
 
   test "stability returns -1 not enough data if less than 5 builds" do
-    project = Project.make(:steps => "ls -al file", :name => "Project", :vcs_source => "test/files/repo", :vcs_type => "git")
+    project = project_with_steps({
+      :name => "Project",
+      :vcs_source => "test/files/repo",
+    }, "ls -al file")
     create_project_builds(project, Build::STATUS_OK, Build::STATUS_FAILED, Build::STATUS_OK, Build::STATUS_OK)
     assert_equal -1, project.stability
   end
 
   test "stability doesn't include currently building or scheduled builds" do
-    project = Project.make(:steps => "ls -al file", :name => "Project", :vcs_source => "test/files/repo", :vcs_type => "git")
+    project = project_with_steps({
+      :name => "Project",
+      :vcs_source => "test/files/repo",
+    }, "ls -al file")
     create_project_builds(project, Build::STATUS_FAILED, Build::STATUS_PROGRESS, Build::STATUS_IN_QUEUE, Build::STATUS_FAILED, Build::STATUS_OK, Build::STATUS_OK, Build::STATUS_FAILED)
     assert_equal 2, project.stability
   end
-  
+
   test "build doesn't include empty or commented steps" do
-    project = Project.make(:steps => "command1\ncommand2 #not3\n#not4\n     #not5\n", :name => "Project", :vcs_source => "test/files/repo", :vcs_type => "git", :max_builds => 1)
-    job = project.build!
-    job.invoke_job
-    build = project.builds.order("created_at DESC").first
-    steps = []
-    build.output.each do |output|
-      steps << output.command
-    end
-    assert_equal 3, steps.count # This assumes the extra git repo step.
-    assert steps.include?('command1')
-    assert steps.include?('command2')
-    assert !steps.include?('command2 #not3')
-    assert !steps.include?('#not4')
-    assert !steps.include?('#not5')
+    project = project_with_steps({
+      :name => "Project",
+      :vcs_source => "test/files/repo",
+    }, "command1\ncommand2 #not3\n#not4\n     #not5\n")
+    project.build!
+    run_delayed_jobs()
+    output = project.recent_build.parts[0].output
+    assert_equal 2, output.count
+    commands = output.map { |e| e.command }
+    assert commands.include?('command1')
+    assert commands.include?('command2')
+    assert ! commands.include?('command2 #not3')
+    assert ! commands.include?('#not4')
+    assert ! commands.include?('#not5')
   end
-  
+
   private
   def create_project_builds(project, *statuses)
     statuses.reverse.each do |status|

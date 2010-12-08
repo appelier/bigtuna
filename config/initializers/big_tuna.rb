@@ -1,12 +1,12 @@
 module BigTuna
   VCS_BACKENDS = [
     VCS::Git,
-    VCS::Mercurial
+    VCS::Mercurial,
   ]
 
   HOOKS = [
     Hooks::Mailer,
-    Hooks::Xmpp
+    Hooks::Xmpp,
   ]
 
   DEFAULT_CONFIG = {
@@ -30,5 +30,9 @@ module BigTuna
     env_force = ["true", "1", "yes", "y"].include?(ENV["BIGTUNA_READONLY"].to_s.downcase)
     return true if env_force
     config["read_only"]
+  end
+
+  def self.logger
+    @_logger = Logger.new("log/bigtuna_#{Rails.env}.log")
   end
 end

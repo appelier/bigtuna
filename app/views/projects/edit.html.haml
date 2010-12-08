@@ -1,2 +1,25 @@
 = form_for(@project, :url => project_path(@project)) do |f|
   = render :partial => "form", :locals => {:f => f}
+
+%h2 New configuration
+= form_for(StepList.new, :url => step_lists_path(:project_id => @project)) do |f|
+  = render :partial => "step_lists/form", :locals => {:f => f}
+  %span.hint
+    Special variables are available
+    %dl
+      %dt
+        %tt %build_dir%
+      %dd directory where build is checked out
+      %dt
+        %tt %project_dir%
+      %dd directory shared by all builds in project
+      You can comment a step with
+      %tt #
+
+%h2 Available configurations
+- @project.step_lists.each do |step_list|
+  = form_for(step_list, :url => step_list_path(step_list, :project_id => @project), :html => {:method => "PUT"}) do |f|
+    = render :partial => "step_lists/form", :locals => {:f => f}
+  - unless step_list.new_record?
+    = form_for(step_list, :url => step_list_path(step_list, :project_id => @project), :html => {:method => "DELETE", :id => "remove_step_list_#{step_list.id}"}) do |f|
+      %button.crit_button{:type => "submit"} Remove
