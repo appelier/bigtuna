@@ -54,7 +54,7 @@ class Build < ActiveRecord::Base
     return @vcs if @vcs
     vcs_type = self.project.vcs_type
     vcs_branch = self.project.vcs_branch
-    klass = BigTuna::VCS_BACKENDS.find { |e| e::VALUE == vcs_type }
+    klass = BigTuna.vcses.find { |e| e::VALUE == vcs_type }
     raise ArgumentError.new("VCS not supported: %p" % [vcs_type]) if klass.nil?
     @vcs = klass.new(self.build_dir, vcs_branch)
   end
