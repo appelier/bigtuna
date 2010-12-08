@@ -30,7 +30,7 @@ module BigTuna
 
       def perform
         uri = "irc://#{@config[:user_name]}"
-        uri += ":#{@config[:room_password]}" if @config[:userpass].present?
+        uri += ":#{@config[:room_password]}" if @config[:room_password].present?
         uri += "@#{@config[:server]}:#{@config[:port].present? ? '6667' : @config[:port]}"
         uri += "/#{@config[:room]}"
         ShoutBot.shout(uri) { |channel| channel.say @message }
