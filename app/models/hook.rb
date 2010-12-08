@@ -3,7 +3,7 @@ class Hook < ActiveRecord::Base
   serialize :configuration, Hash
 
   def backend
-    @backend ||= BigTuna::HOOKS.find { |e| e::NAME == hook_name }.new
+    @backend ||= BigTuna.hooks.find { |e| e::NAME == hook_name }.new
   end
 
   def configuration

@@ -33,7 +33,7 @@ class Project < ActiveRecord::Base
 
   def hooks
     hook_hash = {}
-    BigTuna::HOOKS.each do |hook|
+    BigTuna.hooks.each do |hook|
       hook_hash[hook::NAME] = hook
     end
     Hook.where(:project_id => self.id)
