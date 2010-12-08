@@ -11,6 +11,9 @@ gem "json"
 #xmpp notifications
 gem "xmpp4r-simple"
 
+#irc notification
+gem "shout-bot"
+
 group :development, :test do
   gem "capybara"
   gem "launchy"

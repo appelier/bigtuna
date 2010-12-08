@@ -7,6 +7,7 @@ module BigTuna
   HOOKS = [
     Hooks::Mailer,
     Hooks::Xmpp,
+    Hooks::Irc
   ]
 
   DEFAULT_CONFIG = {
