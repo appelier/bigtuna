@@ -16,6 +16,12 @@ class Hook < ActiveRecord::Base
     end
   end
 
+  def build_still_passes(build)
+    invoke_with_log(build) do
+      self.backend.build_still_passes(build, self.configuration)
+    end
+  end
+
   def build_fixed(build)
     invoke_with_log(build) do
       self.backend.build_fixed(build, self.configuration)

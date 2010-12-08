@@ -2,9 +2,9 @@ module BigTuna
   class Hooks::Irc < Hooks::Base
     NAME = "irc"
 
-    def build_passed(build, config)
+    def build_still_passes(build, config)
       project = build.project
-      Delayed::Job.enqueue(Job.new(config, "New build in '#{project.name}' PASSED (#{build_url(build)})"))
+      Delayed::Job.enqueue(Job.new(config, "New build in '#{project.name}' STILL PASSES (#{build_url(build)})"))
     end
 
     def build_fixed(build, config)
@@ -31,7 +31,7 @@ module BigTuna
       def perform
         uri = "irc://#{@config[:user_name]}"
         uri += ":#{@config[:room_password]}" if @config[:room_password].present?
-        uri += "@#{@config[:server]}:#{@config[:port].present? ? '6667' : @config[:port]}"
+        uri += "@#{@config[:server]}:#{@config[:port].present? ? @config[:port] : '6667'}"
         uri += "/##{@config[:room].to_s.gsub("#","") }"
         ShoutBot.shout(uri) { |channel| channel.say @message }
       end
