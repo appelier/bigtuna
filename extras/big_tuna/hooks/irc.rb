@@ -4,22 +4,22 @@ module BigTuna
 
     def build_passed(build, config)
       project = build.project
-      Delayed::Job.enqueue(Job.new(config, "Build '#{build.display_name}' in '#{project.name}' PASSED (#{build_url(build)})"))
+      Delayed::Job.enqueue(Job.new(config, "New build in '#{project.name}' PASSED (#{build_url(build)})"))
     end
 
     def build_fixed(build, config)
       project = build.project
-      Delayed::Job.enqueue(Job.new(config, "Build '#{build.display_name}' in '#{project.name}' FIXED (#{build_url(build)})"))
+      Delayed::Job.enqueue(Job.new(config, "New build in '#{project.name}' FIXED (#{build_url(build)})"))
     end
 
     def build_still_fails(build, config)
       project = build.project
-      Delayed::Job.enqueue(Job.new(config, "Build '#{build.display_name}' in '#{project.name}' STILL FAILS (#{build_url(build)})"))
+      Delayed::Job.enqueue(Job.new(config, "New build in '#{project.name}' STILL FAILS (#{build_url(build)})"))
     end
 
     def build_failed(build, config)
       project = build.project
-      Delayed::Job.enqueue(Job.new(config, "Build '#{build.display_name}' in '#{project.name}' FAILED (#{build_url(build)})"))
+      Delayed::Job.enqueue(Job.new(config, "New build in '#{project.name}' FAILED (#{build_url(build)})"))
     end
 
     class Job
@@ -32,7 +32,7 @@ module BigTuna
         uri = "irc://#{@config[:user_name]}"
         uri += ":#{@config[:room_password]}" if @config[:room_password].present?
         uri += "@#{@config[:server]}:#{@config[:port].present? ? '6667' : @config[:port]}"
-        uri += "/#{@config[:room]}"
+        uri += "/##{@config[:room].to_s.gsub("#","") }"
         ShoutBot.shout(uri) { |channel| channel.say @message }
       end
     end
