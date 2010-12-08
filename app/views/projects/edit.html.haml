@@ -21,5 +21,5 @@
   = form_for(step_list, :url => step_list_path(step_list, :project_id => @project), :html => {:method => "PUT"}) do |f|
     = render :partial => "step_lists/form", :locals => {:f => f}
   - unless step_list.new_record?
-    = form_for(step_list, :url => step_list_path(step_list, :project_id => @project), :html => {:method => "DELETE"}) do |f|
+    = form_for(step_list, :url => step_list_path(step_list, :project_id => @project), :html => {:method => "DELETE", :id => "remove_step_list_#{step_list.id}"}) do |f|
       %button.crit_button{:type => "submit"} Remove
