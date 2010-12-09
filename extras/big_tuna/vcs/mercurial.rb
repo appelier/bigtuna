@@ -4,7 +4,13 @@ module BigTuna::VCS
     VALUE = "hg"
 
     def self.supported?
-      @_supported ||= BigTuna::Runner.execute(Dir.pwd, "hg --version").ok?
+      return @_supported unless @_supported.nil?
+      begin
+        @_supported = BigTuna::Runner.execute(Dir.pwd, "hg --version").ok?
+      rescue BigTuna::Runner::Error => e
+        @_supported = false
+      end
+      @_supported
     end
 
     def head_info

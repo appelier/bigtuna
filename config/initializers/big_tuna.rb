@@ -1,15 +1,4 @@
 module BigTuna
-  VCS_BACKENDS = [
-    VCS::Git,
-    VCS::Mercurial,
-  ]
-
-  HOOKS = [
-    Hooks::Mailer,
-    Hooks::Xmpp,
-    Hooks::Irc
-  ]
-
   DEFAULT_CONFIG = {
     "read_only" => false,
   }
@@ -36,4 +25,15 @@ module BigTuna
   def self.logger
     @_logger = Logger.new("log/bigtuna_#{Rails.env}.log")
   end
+
+  def self.hooks
+    @_hooks ||= []
+  end
+
+  def self.vcses
+    @_vcses ||= []
+  end
 end
+
+Dir[File.join("extras", "big_tuna", "vcs", "*.rb")].each { |vcs| require_dependency(vcs) }
+Dir[File.join("extras", "big_tuna", "hooks", "*.rb")].each { |hook| require_dependency(hook) }

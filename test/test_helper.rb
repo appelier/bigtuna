@@ -24,15 +24,10 @@ class ActiveSupport::TestCase
   end
 
   def with_hook_enabled(hook, &blk)
-    old_hooks = BigTuna::HOOKS.clone
-    Kernel.silence_stream(STDERR) do
-      BigTuna.const_set("HOOKS", old_hooks + [hook])
-    end
+    BigTuna.hooks << hook
     blk.call
   ensure
-    Kernel.silence_stream(STDERR) do
-      BigTuna.const_set("HOOKS", old_hooks)
-    end
+    BigTuna.hooks.pop
   end
 
   def project_with_steps(project_attrs, *steps)

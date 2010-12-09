@@ -5,7 +5,7 @@
 %div
   = f.label(:vcs_type)
   %br
-  = f.select(:vcs_type, BigTuna::VCS_BACKENDS.map { |klass| [klass::NAME, klass::VALUE] }, :class => 'textfield')
+  = f.select(:vcs_type, BigTuna.vcses.map { |klass| [klass::NAME, klass::VALUE] }, :class => 'textfield')
 %div
   = f.label(:vcs_source)
   %br
@@ -20,7 +20,7 @@
   = f.text_field(:max_builds, :class => 'textfield')
 %div
   Hooks
-  - BigTuna::HOOKS.each do |hook|
+  - BigTuna.hooks.each do |hook|
     %div{:id => "hook_#{hook::NAME}", :class => "hint"}
       %label{:for => "project_hooks_#{hook::NAME}"}
         = check_box_tag("project[hooks][#{hook::NAME}]", hook::NAME, f.object.hooks.map { |e| e.hook_name }.include?(hook::NAME))

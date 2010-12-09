@@ -11,7 +11,7 @@ class Project < ActiveRecord::Base
 
   validates :hook_name, :uniqueness => {:allow_blank => true}
   validates :name, :presence => true, :uniqueness => true
-  validates :vcs_type, :inclusion => BigTuna::VCS_BACKENDS.map { |e| e::VALUE }
+  validates :vcs_type, :inclusion => BigTuna.vcses.map { |e| e::VALUE }
   validates :vcs_source, :presence => true
   validates :vcs_branch, :presence => true
 
@@ -33,7 +33,7 @@ class Project < ActiveRecord::Base
 
   def hooks
     hook_hash = {}
-    BigTuna::HOOKS.each do |hook|
+    BigTuna.hooks.each do |hook|
       hook_hash[hook::NAME] = hook
     end
     Hook.where(:project_id => self.id)
@@ -60,7 +60,7 @@ class Project < ActiveRecord::Base
 
   def vcs
     return @vcs if @vcs
-    klass = BigTuna::VCS_BACKENDS.find { |e| e::VALUE == vcs_type }
+    klass = BigTuna.vcses.find { |e| e::VALUE == vcs_type }
     raise ArgumentError.new("VCS not supported: %p" % [vcs_type]) if klass.nil?
     @vcs = klass.new(self.vcs_source, self.vcs_branch)
   end

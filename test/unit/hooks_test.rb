@@ -35,4 +35,25 @@ class HooksUnitTest < ActiveSupport::TestCase
       assert_equal Build::STATUS_HOOK_ERROR, build.status
     end
   end
+
+  test "if hook is not enabled it won't get executed" do
+    with_hook_enabled(BigTuna::Hooks::RaisingHook) do
+      project = project_with_steps({
+        :name => "Koss",
+        :vcs_source => "test/files/koss",
+        :max_builds => 2,
+        :hooks => {"raising_hook" => "raising_hook"},
+      }, "true")
+      hook = project.hooks.first
+      hook.hooks_enabled.delete("build_finished")
+      hook.save!
+      assert ! hook.hook_enabled?("build_finished")
+      assert hook.hook_implemented?("build_finished")
+
+      project.build!
+      run_delayed_jobs()
+      build = project.recent_build
+      assert_equal Build::STATUS_OK, build.status
+    end
+  end
 end

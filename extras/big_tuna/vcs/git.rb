@@ -4,7 +4,13 @@ module BigTuna::VCS
     VALUE = "git"
 
     def self.supported?
-      @_supported ||= BigTuna::Runner.execute(Dir.pwd, "git --version").ok?
+      return @_supported unless @_supported.nil?
+      begin
+        @_supported = BigTuna::Runner.execute(Dir.pwd, "git --version").ok?
+      rescue BigTuna::Runner::Error => e
+        @_supported = false
+      end
+      @_supported
     end
 
     def head_info

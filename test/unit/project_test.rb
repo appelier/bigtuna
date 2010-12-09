@@ -134,7 +134,6 @@ class ProjectTest < ActiveSupport::TestCase
 
   test "vcs_type should be one of vcs types available" do
     invalid_backend = "lol"
-    assert ! BigTuna::VCS_BACKENDS.include?(invalid_backend)
     assert_invalid(Project, :vcs_type) { |p| p.vcs_type = invalid_backend }
   end
 
