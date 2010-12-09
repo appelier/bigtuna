@@ -1,9 +1,16 @@
 %h2= "#{@hook.backend.class::NAME} hook for #{@project.name}"
 
 = form_for(@hook, :url => project_config_hook_path(@project, @hook.backend.class::NAME), :html => {:method => "PUT"}) do |f|
+  %div
+    = label_tag("Hooks enabled")
+    - Hook::AVAILABLE_HOOKS.each do |hook_name|
+      - if @hook.hook_implemented?(hook_name)
+        %div
+          = label_tag("hooks_enabled[#{hook_name}]", hook_name.humanize, :class => "hint")
+          = check_box_tag("hooks_enabled[#{hook_name}]", "1", @hook.hooks_enabled.include?(hook_name))
   - begin
     = render(:partial => "#{@hook.backend.class::NAME}/form", :locals => {:f => f})
-    %button{:type => "submit"} Edit
   - rescue ActionView::MissingTemplate
-    %p This hook doesn't have any configuration.
+    - #pass
+  %button{:type => "submit"} Edit
   = link_to("Back to project edit", edit_project_path(@project), :class => "black_button")

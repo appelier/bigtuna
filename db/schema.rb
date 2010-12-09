@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101207163104) do
+ActiveRecord::Schema.define(:version => 20101209113828) do
 
   create_table "build_parts", :force => true do |t|
     t.integer  "build_id",    :null => false
@@ -63,6 +63,7 @@ ActiveRecord::Schema.define(:version => 20101207163104) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "configuration"
+    t.text     "hooks_enabled"
   end
 
   create_table "projects", :force => true do |t|

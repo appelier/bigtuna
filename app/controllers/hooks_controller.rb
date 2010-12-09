@@ -30,6 +30,7 @@ class HooksController < ApplicationController
     @hook = Hook.where(:project_id => @project.id, :hook_name => params[:name]).first
     return render if request.get?
     @hook.configuration = params["configuration"]
+    @hook.hooks_enabled = (params["hooks_enabled"] || {}).keys
     @hook.save!
     redirect_to(project_config_hook_path(@project, @hook.backend.class::NAME))
   end

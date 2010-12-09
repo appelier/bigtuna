@@ -29,9 +29,14 @@ class HooksTest < ActionController::IntegrationTest
       click_link "Configure"
     end
     assert page.has_content?("Recipients")
+    assert page.has_field?("Build still fails")
+    assert page.has_xpath?("//*[@name='hooks_enabled[build_still_fails]' and @checked='checked']")
+    uncheck "Build still fails"
+    click_button "Edit"
+    assert ! page.has_xpath?("//*[@name='hooks_enabled[build_still_fails]' and @checked='checked']")
   end
 
-  test "hooks with no config print out this info to user" do
+  test "hooks with no config work as usually" do
     with_hook_enabled(BigTuna::Hooks::NoConfig) do
       project = project_with_steps({
         :name => "Koss",
@@ -43,7 +48,7 @@ class HooksTest < ActionController::IntegrationTest
       within("#hook_no_config") do
         click_link "Configure"
       end
-      assert page.has_content?("This hook doesn't have any configuration.")
+      assert_status_code 200
     end
   end
 
