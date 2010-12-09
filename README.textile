@@ -4,6 +4,14 @@ BigTuna is a continuous integration software built on top of the Rails 3 framewo
 
 Find out more on "bigtuna.appelier.com":http://bigtuna.appelier.com
 
+h1. Contributors
+
+BigTuna was created by "Michał Bugno":http://twitter.com/michalbugno and "Antek Piechnik":http://twitter.com/antekpiechnik. The following people have kindly contributed to make it a better project:
+
+* "François Lamontagne":http://twitter.com/franklamontagne
+* "Víctor Martínez":http://twitter.com/knoopx
+* "unsay":http://twitter.com/unsay
+
 h1. License
 
 bc.. Copyright (c) 2010  Michal Bugno, Antek Piechnik
