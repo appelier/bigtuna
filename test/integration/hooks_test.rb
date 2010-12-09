@@ -82,8 +82,7 @@ class HooksTest < ActionController::IntegrationTest
     assert page.has_field?("configuration_server")
     assert page.has_field?("configuration_port")
     assert page.has_field?("configuration_room")
-    assert page.has_field?("configuration_room_password")
-
+    #assert page.has_field?("configuration_room_password")
 
     click_button "Edit"
     assert_status_code 200
