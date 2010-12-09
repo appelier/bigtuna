@@ -11,6 +11,9 @@ gem "json"
 #xmpp notifications
 gem "xmpp4r-simple"
 
+# campfire notifications
+gem "tinder"
+
 group :development, :test do
   gem "capybara"
   gem "launchy"
