@@ -2,7 +2,7 @@ class Hook < ActiveRecord::Base
   belongs_to :project
   serialize :configuration, Hash
   serialize :hooks_enabled, Array
-  AVAILABLE_HOOKS = ["build_passed", "build_fixed", "build_still_fails", "build_finished", "build_failed"]
+  AVAILABLE_HOOKS = ["build_passed", "build_fixed", "build_still_fails", "build_still_passes", "build_finished", "build_failed"]
 
   before_create :enable_all_hooks
 
@@ -22,7 +22,7 @@ class Hook < ActiveRecord::Base
 
   def build_still_passes(build)
     invoke_with_log(build) do
-      self.backend.build_still_passes(build, self.configuration)
+      self.backend.build_still_passes(build, self.configuration) if hook_available?("build_still_passes")
     end
   end
 
