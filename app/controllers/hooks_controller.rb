@@ -15,7 +15,8 @@ class HooksController < ApplicationController
     branch = payload["ref"].split("/").last
     url = payload["repository"]["url"]
     public_source = url.gsub(/^https:\/\//, "git://") + ".git"
-    private_source = url.gsub(/^https:\/\//, "git://git@") + ".git"
+    private_source = url.gsub(/^https:\/\//, "git@").
+                         gsub(/github.com\//, "github.com:") + ".git"
 
     project = Project.where(["(vcs_source = ? or vcs_source = ?) AND (vcs_branch = ?)",
                               public_source, private_source, branch]).first
