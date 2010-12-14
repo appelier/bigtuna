@@ -12,6 +12,12 @@ gem 'mysql2'
 #xmpp notifications
 gem "xmpp4r-simple"
 
+#irc notification
+gem "shout-bot"
+
+# campfire notifications
+gem "tinder"
+
 group :development, :test do
   gem "capybara"
   gem "launchy"

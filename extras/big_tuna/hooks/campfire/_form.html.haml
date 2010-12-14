@@ -1,0 +1,19 @@
+%div
+  = label_tag "Campfire API Token"
+  %br
+  = text_field_tag "configuration[token]", @hook.configuration["token"]
+
+%div
+  = label_tag "Campfire Subdomain (subdomain.campfirenow.com)"
+  %br
+  = text_field_tag "configuration[subdomain]", @hook.configuration["subdomain"]
+
+%div
+  = label_tag "Campfire Room"
+  %br
+  = text_field_tag "configuration[room]", @hook.configuration["room"]
+
+%div
+  = label_tag "Use SSL?"
+  %br
+  = check_box_tag "configuration[use_ssl]", "1", (@hook.configuration["use_ssl"].to_s == "1")

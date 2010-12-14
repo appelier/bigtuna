@@ -70,4 +70,26 @@ class HooksTest < ActionController::IntegrationTest
     click_button "Edit"
     assert_status_code 200
   end
+
+  test "irc hook has a valid configuration form" do
+    project = project_with_steps({
+      :name => "Koss",
+      :vcs_source => "test/files/repo",
+      :max_builds => 2,
+      :hooks => {"irc" => "irc"},
+    }, "ls")
+
+    visit edit_project_path(project)
+    within("#hook_irc") do
+      click_link "Configure"
+    end
+    assert page.has_field?("configuration_user_name")
+    assert page.has_field?("configuration_server")
+    assert page.has_field?("configuration_port")
+    assert page.has_field?("configuration_room")
+    #assert page.has_field?("configuration_room_password")
+
+    click_button "Edit"
+    assert_status_code 200
+  end
 end

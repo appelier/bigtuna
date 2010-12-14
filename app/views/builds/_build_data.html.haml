@@ -9,3 +9,7 @@
 %tr
   %td.title Message
   %td.value= build.commit_data? ? build.commit_message : "Message not yet available"
+- build.parts.each_with_index do |part, index|
+  %tr
+    %td.title= part.name
+    %td.value= link_to(formatted_status(part.status), build_path(build, :stderr => build.status == Build::STATUS_OK ? nil : 1, :anchor => "part_#{index}"))

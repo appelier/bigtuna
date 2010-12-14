@@ -1,0 +1,24 @@
+%div
+  = label_tag("Send the notification as the following username")
+  %br
+  = text_field_tag("configuration[user_name]", @hook.configuration["user_name"])
+
+%div
+  = label_tag("IRC server")
+  %br
+  = text_field_tag("configuration[server]", @hook.configuration["server"] || "irc.freenode.net")
+
+%div
+  = label_tag("IRC port")
+  %br
+  = text_field_tag("configuration[port]", @hook.configuration["port"] || "6667")
+
+%div
+  = label_tag("Room")
+  %br
+  = text_field_tag("configuration[room]", @hook.configuration["room"])
+
+-#%div
+-#  = label_tag("Room password")
+-#  %br
+-#  = password_field_tag("configuration[room_password]", @hook.configuration["room_password"])

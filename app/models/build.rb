@@ -109,8 +109,10 @@ class Build < ActiveRecord::Base
   def after_passed
     previous_build = self.project.builds.order("created_at DESC").offset(1).first
     build_fixed = (status == STATUS_OK && previous_build && previous_build.status == STATUS_FAILED)
+    build_still_passes = (status == STATUS_OK && previous_build && previous_build.status == STATUS_OK)
     project.hooks.each do |hook|
       hook.build_passed(self)
+      hook.build_still_passes(self) if build_still_passes
       hook.build_fixed(self) if build_fixed
     end
   end
