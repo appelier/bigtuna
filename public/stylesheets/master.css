@@ -30,7 +30,8 @@ a                              { color: #000; text-decoration: none; }
 #listing .updown a             { display: block; padding: 5px 10px; }
 
 #build pre                     { font-family: "Monaco", "Courier New", monospace; }
-#build pre                     { white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap; word-wrap: break-word; line-height: 1.1em; }
+/*#build pre                     { white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap; word-wrap: break-word; line-height: 1.1em; }*/
+#build pre                     { overflow: auto; line-height: 1.1em; }
 #build pre                     { background-color:#444; color:#fff; text-shadow: #000 0 1px 1px; font-size: 10px; padding: 10px; border: solid 1px #282828; margin: 20px auto 20px auto; }
 #build pre .stderr             { color: #888; }
 #build .output_box             { padding: 0 8px 0 8px; }
