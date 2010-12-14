@@ -7,6 +7,7 @@ gem "delayed_job"
 gem "stringex"
 gem "open4"
 gem "json"
+gem 'mysql2'
 
 #xmpp notifications
 gem "xmpp4r-simple"
