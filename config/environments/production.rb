@@ -37,7 +37,7 @@ BigTuna::Application.configure do
   config.action_mailer.smtp_settings = YAML.load_file("config/email.yml")[Rails.env]
 
   if BigTuna.config['url_host']
-    config.action_mailer.default_url_options = { :host => bigtuna_config['url_host'] }
+    config.action_mailer.default_url_options = { :host => BigTuna.config['url_host'] }
   else
     raise "No url_host set in config/bigtuna.yml. Notification links will not work."
   end
