@@ -8,10 +8,18 @@ gem "stringex"
 gem "open4"
 gem "json"
 
+
 #xmpp notifications
 gem "xmpp4r-simple"
 
+#irc notification
+gem "shout-bot"
+
+# campfire notifications
+gem "tinder"
+
 group :development, :test do
+  
   gem "capybara"
   gem "launchy"
   gem "faker"
@@ -20,7 +28,8 @@ group :development, :test do
   gem "mocha"
   gem "database_cleaner"
   gem "crack"
-
+  gem 'context'
+  
   platforms :mri_18 do
     gem "ruby-debug"
   end

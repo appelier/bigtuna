@@ -2,6 +2,10 @@ class ProjectsController < ApplicationController
   before_filter :locate_project, :only => [:show, :build, :edit, :update, :remove, :destroy, :arrange, :feed]
   def index
     @projects = Project.order("position ASC")
+    respond_to do |format|
+      format.html{}
+      format.js{}
+    end
   end
 
   def show
