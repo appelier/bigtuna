@@ -83,6 +83,7 @@ GEM
     mocha (0.9.9)
       rake
     multipart-post (1.0.1)
+    mysql2 (0.2.6)
     nokogiri (1.4.4)
     open4 (1.0.1)
     polyglot (0.3.1)
@@ -165,6 +166,7 @@ DEPENDENCIES
   launchy
   machinist
   mocha
+  mysql2
   nokogiri
   open4
   rails (= 3.0.3)
