@@ -34,6 +34,7 @@ namespace :deploy do
     run "ln -nfs #{shared_path}/config/database.yml #{release_path}/config/database.yml"
     run "ln -nfs #{shared_path}/builds #{release_path}/builds"
     run "ln -nfs #{shared_path}/config/email.yml #{release_path}/config/email.yml"
+    run "ln -nfs #{shared_path}/config/bigtuna.yml #{release_path}/config/bigtuna.yml"
   end
 
   task :bootstrap do
