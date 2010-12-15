@@ -19,7 +19,6 @@ gem "shout-bot"
 gem "tinder"
 
 
-
 group :development, :test do
   
   gem "capybara"
