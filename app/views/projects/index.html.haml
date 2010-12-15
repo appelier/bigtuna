@@ -1,8 +1,9 @@
 #listing
   = render :partial => 'projects'
+
+%script
+  $(document).ready(function(){setInterval('reloadProjects()', 5000);});
+
 - content_for :sidebar do
   - unless BigTuna.read_only?
     %li= link_to("New project", new_project_path, :class => 'black_button')
-
-%script
-  $(document).ready(function(){setInterval(reloadProjects, 5000);});

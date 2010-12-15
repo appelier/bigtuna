@@ -9,7 +9,11 @@ class ProjectsController < ApplicationController
   end
 
   def show
-    @builds = @project.builds.order("created_at DESC").limit(@project.max_builds)
+    @builds = @project.builds.order("created_at DESC").limit(@project.max_builds).includes(:project, :parts).all
+    respond_to do |format|
+      format.html{}
+      format.js{}
+    end
   end
 
   def feed

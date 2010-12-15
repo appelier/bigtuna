@@ -41,12 +41,11 @@ GEM
       rack-test (>= 0.5.4)
       selenium-webdriver (>= 0.0.27)
       xpath (~> 0.1.2)
-    celerity (0.8.4)
+    celerity (0.8.5)
     childprocess (0.1.4)
       ffi (~> 0.6.3)
     columnize (0.3.2)
     configuration (1.2.0)
-    context (0.0.16)
     crack (0.1.8)
     culerity (0.2.12)
     daemons (1.1.0)
@@ -123,7 +122,7 @@ GEM
     ruby_core_source (0.1.4)
       archive-tar-minitar (>= 0.5.2)
     rubyzip (0.9.4)
-    selenium-webdriver (0.1.0)
+    selenium-webdriver (0.1.1)
       childprocess (= 0.1.4)
       ffi (~> 0.6.3)
       json_pure
@@ -157,7 +156,6 @@ PLATFORMS
 
 DEPENDENCIES
   capybara
-  context
   crack
   database_cleaner
   delayed_job
