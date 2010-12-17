@@ -5,6 +5,10 @@ module ApplicationHelper
     ret
   end
 
+  def strip_shell_colorization(text)
+    text.gsub(/\e\[[^m]+m/, '')
+  end
+
   def build_duration(build)
     seconds = (build.finished_at - build.started_at).to_i
     minutes = seconds / 60

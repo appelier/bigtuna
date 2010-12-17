@@ -42,4 +42,15 @@ class BuildsTest < ActionController::IntegrationTest
       assert page.has_content?("Task was not executed")
     end
   end
+
+  test "if build is scheduled then visiting its page should work" do
+    project = project_with_steps({:name => "myproject", :vcs_source => "test/files/repo", :vcs_type => "git"}, "true\ntrue\ntrue")
+    visit "/"
+    click_link_or_button "myproject"
+    assert_difference("Delayed::Job.count", +1) do
+      click_link_or_button "Build now"
+    end
+    # run_delayed_jobs()
+    visit build_path(project.recent_build)
+  end
 end

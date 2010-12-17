@@ -36,6 +36,23 @@ class AutobuildTest < ActionController::IntegrationTest
     end
   end
 
+  test "github post for a private repo will build correctly" do
+    project = github_project(:name => 'seotool', :vcs_branch => 'master',
+                             :vcs_source => "git@github.com:company/secretrepo.git")
+    old_token = BigTuna.config['github_secure']
+    begin
+      BigTuna.config["github_secure"] = "mytoken"
+      token = BigTuna.github_secure
+      assert_difference("project.builds.count", +1) do
+        post "/hooks/build/github/#{token}", :payload => github_payload(project)
+        assert_status_code(200)
+        assert response.body.include?("build for \"#{project.name}\" triggered")
+      end
+    ensure
+      BigTuna.config['github_secure'] = old_token
+    end
+  end
+
   test "github post with invalid token won't build anything" do
     project1 = github_project(:name => "obywatelgc", :vcs_branch => "master")
     project2 = github_project(:name => "obywatelgc2", :vcs_branch => "development")
@@ -76,7 +93,10 @@ class AutobuildTest < ActionController::IntegrationTest
   end
 
   def github_payload(project)
-    url = project.vcs_source.gsub(/^git:\/\//, "https://").gsub(/\.git$/, "")
+    match = project.vcs_source.match(/github\.com(?:\/|:)(.+)$/)
+    name = match[1].strip.gsub(/\.git$/, '')
+    url = "https://github.com/#{name}"
+
     payload = {
       "ref" => "refs/heads/#{project.vcs_branch}",
       "repository" => { "url" => url },

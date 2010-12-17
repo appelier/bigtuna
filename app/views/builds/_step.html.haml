@@ -11,5 +11,5 @@
     %pre
       - step.all.each do |type, text|
         - if (type != BigTuna::Runner::Output::TYPE_STDERR or params[:stderr])
-          %span{:class => type}= text
+          %span{:class => type}= strip_shell_colorization(text)
 %br
