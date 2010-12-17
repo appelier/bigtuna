@@ -1,3 +1,5 @@
+require "bundler/capistrano"
+
 set :application, "bigtuna"
 set :domain, "your.domain"
 set :repository, "git@your.domain:big_tuna.git"
@@ -24,16 +26,12 @@ namespace :deploy do
     run "touch #{current_release}/tmp/restart.txt"
   end
 
-  desc "Run bundler task to bundle app"
-  task :bundle, :roles => :app do
-    run "cd #{current_release} && bundle install --path #{deploy_to}/shared/bundle --without test:development"
-  end
-
   desc "Updates the symlink for config files to the just deployed release."
   task :symlink_configs do
     run "ln -nfs #{shared_path}/config/database.yml #{release_path}/config/database.yml"
     run "ln -nfs #{shared_path}/builds #{release_path}/builds"
     run "ln -nfs #{shared_path}/config/email.yml #{release_path}/config/email.yml"
+    run "ln -nfs #{shared_path}/config/bigtuna.yml #{release_path}/config/bigtuna.yml"
   end
 
   task :bootstrap do
@@ -45,6 +43,5 @@ namespace :deploy do
   end
 end
 
-after "deploy:update_code", "deploy:bundle"
 after "deploy:finalize_update", "deploy:symlink_configs"
 before "deploy:restart", "deploy:bootstrap"
