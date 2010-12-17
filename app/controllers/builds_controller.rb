@@ -1,6 +1,9 @@
 class BuildsController < ApplicationController
   before_filter :locate_build, :only => [:show, :destroy]
+  respond_to :js, :only => :show
+
   def show
+  
   end
 
   def destroy
