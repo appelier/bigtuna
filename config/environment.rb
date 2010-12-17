@@ -2,7 +2,7 @@
 require File.expand_path('../application', __FILE__)
 
 module BigTuna
-  VERSION = "0.1.0"
+  VERSION = "0.1.1"
 
   DEFAULT_CONFIG = {
     "read_only" => false,
