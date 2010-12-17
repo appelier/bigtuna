@@ -12,7 +12,7 @@
     #main
       %div#ad
         checked with
-        = link_to("BigTuna", "http://bigtuna.appelier.com", :target => "_blank")
+        = link_to("BigTuna", "http://bigtuna.appelier.com", :target => "_blank", :title => "BigTuna v#{BigTuna::VERSION}")
       #content
         = flash[:error]
         = flash[:notice]
