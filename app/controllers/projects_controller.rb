@@ -1,19 +1,14 @@
 class ProjectsController < ApplicationController
   before_filter :locate_project, :only => [:show, :build, :edit, :update, :remove, :destroy, :arrange, :feed]
+  respond_to :js, :only => [:index, :show]
+  
+  
   def index
     @projects = Project.order("position ASC")
-    respond_to do |format|
-      format.html{}
-      format.js{}
-    end
   end
 
   def show
     @builds = @project.builds.order("created_at DESC").limit(@project.max_builds).includes(:project, :parts).all
-    respond_to do |format|
-      format.html{}
-      format.js{}
-    end
   end
 
   def feed
