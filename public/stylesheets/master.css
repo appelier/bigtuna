@@ -60,3 +60,5 @@ a                              { color: #000; text-decoration: none; }
 .clear                         { clear: both; }
 
 form button                    { border: 0; }
+
+/*#ajax-reload                   { display:none; }*/

@@ -1,11 +1,8 @@
-function reloadProjects(){
-  $.ajax({method: 'get',url : '/projects.js'});
+function setAjaxReload(url){
+  $(document).ready(function(){setInterval('ajaxReload("' + url + '")', 5000);});
 }
-
-function reloadBuilds(project_id){
-  $.ajax({method: 'get',url : '/projects/' + project_id + '.js'});
-}
-
-function reloadBuild(build_id){
-  $.ajax({method: 'get',url : '/builds/' + build_id + '.js'});
+function ajaxReload(url){
+  if($("#ajax-reload").html() == 'true'){
+    $.ajax({method: 'get', url : url});
+  }
 }

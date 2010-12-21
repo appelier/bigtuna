@@ -1,6 +1,6 @@
 module BigTuna
   DEFAULT_CONFIG = {
-    "read_only" => false,
+    "read_only" => false
   }
 
   def self.config
@@ -10,6 +10,10 @@ module BigTuna
       config.merge!(YAML.load_file("config/bigtuna.yml")[Rails.env] || {})
     end
     @config = config
+  end
+
+  def self.ajax_reload
+    config["ajax_reload"]
   end
 
   def self.github_secure

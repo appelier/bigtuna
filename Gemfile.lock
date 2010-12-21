@@ -46,7 +46,6 @@ GEM
       ffi (~> 0.6.3)
     columnize (0.3.2)
     configuration (1.2.0)
-    context (0.0.16)
     crack (0.1.8)
     culerity (0.2.12)
     daemons (1.1.0)
@@ -81,7 +80,7 @@ GEM
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
     mime-types (1.16)
-    mocha (0.9.9)
+    mocha (0.9.10)
       rake
     multipart-post (1.0.1)
     nokogiri (1.4.4)
@@ -157,7 +156,6 @@ PLATFORMS
 
 DEPENDENCIES
   capybara
-  context
   crack
   database_cleaner
   delayed_job

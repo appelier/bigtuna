@@ -13,6 +13,15 @@ class Build < ActiveRecord::Base
   before_create :set_build_values
   serialize :output, Array
 
+
+  def ajax_reload?
+    case BigTuna.ajax_reload
+    when "always" then true
+    when "building" then [STATUS_IN_QUEUE, STATUS_PROGRESS].include?(self.status)
+    else false
+    end
+  end
+  
   def perform
     self.update_attributes!(:status => STATUS_PROGRESS)
     self.started_at = Time.now

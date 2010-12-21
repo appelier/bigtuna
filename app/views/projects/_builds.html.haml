@@ -1,4 +1,5 @@
 #builds
+  #ajax-reload= @project.ajax_reload?
   - @builds.each do |build|      
     %div{:class => "#{build.status} project", :id => dom_id(build)}
       - unless BigTuna.read_only?

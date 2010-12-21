@@ -28,7 +28,7 @@ group :development, :test do
   gem "mocha"
   gem "database_cleaner"
   gem "crack"
-  gem 'context'
+
   
   platforms :mri_18 do
     gem "ruby-debug"
