@@ -9,6 +9,7 @@ gem "open4"
 gem "json"
 gem 'jquery-rails'
 
+
 #xmpp notifications
 gem "xmpp4r-simple"
 
@@ -29,6 +30,7 @@ group :development, :test do
   gem "mocha"
   gem "database_cleaner"
   gem "crack"
+
   
   platforms :mri_18 do
     gem "ruby-debug"
