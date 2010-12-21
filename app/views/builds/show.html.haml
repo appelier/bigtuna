@@ -1,8 +1,8 @@
 #build
   = render :partial => 'build'
 
-%script
-  = "$(document).ready(function(){setInterval('reloadBuild(#{@build.id})', 5000);});"
+= ajaxReload(build_path(@build, :format => :js))
+
   
 - content_for :sidebar do
   - if params[:stderr].nil?

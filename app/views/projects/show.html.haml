@@ -12,10 +12,11 @@
 
   = render :partial => 'builds'
 
-%script
-  = "$(document).ready(function(){setInterval('reloadBuilds(#{@project.id})', 5000);});"
-  
-  
+
+= ajaxReload(project_path(@project, :format => :js))
+
+
+
 - content_for :sidebar do
   - unless BigTuna.read_only?
     %li= link_to("Edit", edit_project_path(@project), :class => "black_button")

@@ -1,4 +1,11 @@
 module ApplicationHelper
+  
+  
+  def ajaxReload(url)
+    "<script> 
+      setAjaxReload('#{url}');
+    </script>".html_safe
+  end
   def strip_rails_root(dir)
     ret = dir.gsub(Rails.root.to_s, "")
     ret = ret[1 .. -1] if ret =~ Regexp.new("^/")

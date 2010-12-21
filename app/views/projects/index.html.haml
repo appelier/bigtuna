@@ -1,8 +1,7 @@
 #listing
   = render :partial => 'projects'
-
-%script
-  $(document).ready(function(){setInterval('reloadProjects()', 5000);});
+  
+= ajaxReload(projects_path(:format => :js))
 
 - content_for :sidebar do
   - unless BigTuna.read_only?

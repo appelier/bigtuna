@@ -11,6 +11,78 @@ class BuildTest < ActiveSupport::TestCase
     super
   end
 
+  test "Project.ajax_reload? method with ajax_reload => always" do
+    BigTuna.stubs(:ajax_reload).returns('always')
+      
+    build = Build.new
+
+    build.status = Build::STATUS_IN_QUEUE
+    assert(build.ajax_reload?, "Should be true.")
+
+    build.status = Build::STATUS_PROGRESS
+    assert(build.ajax_reload?, "Should be true.")
+    
+    build.status = Build::STATUS_OK
+    assert(build.ajax_reload?, "Should be true.")
+
+    build.status = Build::STATUS_FAILED
+    assert(build.ajax_reload?, "Should be true.")
+
+    build.status = Build::STATUS_BUILDER_ERROR
+    assert(build.ajax_reload?, "Should be true.")
+
+    build.status = Build::STATUS_BUILDER_ERROR
+    assert(build.ajax_reload?, "Should be true.")
+  end
+
+  test "Project.ajax_reload? method with ajax_reload => building" do
+    BigTuna.stubs(:ajax_reload).returns('building')
+      
+    build = Build.new
+
+    build.status = Build::STATUS_IN_QUEUE
+    assert(build.ajax_reload?, "Should be true.")
+
+    build.status = Build::STATUS_PROGRESS
+    assert(build.ajax_reload?, "Should be true.")
+    
+    build.status = Build::STATUS_OK
+    assert(!build.ajax_reload?, "Should be false.")
+
+    build.status = Build::STATUS_FAILED
+    assert(!build.ajax_reload?, "Should be false.")
+
+    build.status = Build::STATUS_BUILDER_ERROR
+    assert(!build.ajax_reload?, "Should be false.")
+
+    build.status = Build::STATUS_BUILDER_ERROR
+    assert(!build.ajax_reload?, "Should be false.")
+  end
+  
+  test "Project.ajax_reload? method with ajax_reload => false" do
+    BigTuna.stubs(:ajax_reload).returns('false')
+          
+    build = Build.new
+
+    build.status = Build::STATUS_IN_QUEUE
+    assert(!build.ajax_reload?, "Should be false.")
+
+    build.status = Build::STATUS_PROGRESS
+    assert(!build.ajax_reload?, "Should be false.")
+    
+    build.status = Build::STATUS_OK
+    assert(!build.ajax_reload?, "Should be false.")
+
+    build.status = Build::STATUS_FAILED
+    assert(!build.ajax_reload?, "Should be false.")
+
+    build.status = Build::STATUS_BUILDER_ERROR
+    assert(!build.ajax_reload?, "Should be false.")
+
+    build.status = Build::STATUS_BUILDER_ERROR
+    assert(!build.ajax_reload?, "Should be false.")
+  end
+
   test "invalid build is marked as invalid and failed count gets updated" do
     project = project_with_steps({
       :name => "Koss",
