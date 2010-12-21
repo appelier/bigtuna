@@ -2,7 +2,6 @@
   = render :partial => 'build'
 
 = ajaxReload(build_path(@build, :format => :js))
-
   
 - content_for :sidebar do
   - if params[:stderr].nil?

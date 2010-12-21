@@ -425,6 +425,13 @@ class ProjectTest < ActiveSupport::TestCase
     assert ! commands.include?('#not5')
   end
 
+  test "invoking #build! cancels previously queued build" do
+    project = project_with_steps({:vcs_source => "test/files/repo"}, "true", "true\nfalse")
+    assert_difference("Delayed::Job.count", +1) do
+      3.times { project.build! }
+    end
+  end
+
   private
   def create_project_builds(project, *statuses)
     statuses.reverse.each do |status|

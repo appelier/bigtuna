@@ -39,12 +39,12 @@ class Project < ActiveRecord::Base
 
   def build!
     new_total_builds = self.total_builds + 1
-    build = nil
     ActiveRecord::Base.transaction do
       build = self.builds.create!({:scheduled_at => Time.now, :build_no => new_total_builds})
       self.update_attributes!(:total_builds => new_total_builds)
+      remove_project_jobs_in_queue()
+      Delayed::Job.enqueue(build)
     end
-    Delayed::Job.enqueue(build)
   end
 
   def hooks
@@ -134,5 +134,17 @@ class Project < ActiveRecord::Base
     to_add.each do |name|
       Hook.create!(:project => self, :hook_name => name)
     end
+  end
+
+  def remove_project_jobs_in_queue
+    jobs_to_destroy = []
+    Delayed::Job.all.each do |job|
+      build = job.payload_object
+      next unless build.is_a?(Build)
+      if build.status = Build::STATUS_IN_QUEUE && build.project == self
+        jobs_to_destroy << job
+      end
+    end
+    jobs_to_destroy.each { |job| job.destroy }
   end
 end
