@@ -2,7 +2,6 @@
 require File.expand_path('../application', __FILE__)
 
 module BigTuna
-
   VERSION = "0.1.1"
 
   DEFAULT_CONFIG = {
