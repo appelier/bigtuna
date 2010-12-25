@@ -1,0 +1,29 @@
+#ajax-reload= @build.ajax_reload?
+%h2= @build.project.name
+
+%table.value_list
+  = render :partial => "builds/build_data", :locals => {:build => @build}
+  %tr
+    %td.title Directory
+    %td.value= strip_rails_root(@build.build_dir)
+  %tr
+    %td.title Scheduled at
+    %td.value= l(@build.scheduled_at, :format => :full)
+  - if @build.started?
+    %tr
+      %td.title Started at
+      %td.value= l(@build.started_at, :format => :full)
+  - if @build.finished?
+    %tr
+      %td.title Duration
+      %td.value= build_duration(@build)
+
+- if @build.output[0]
+  %h3 VCS
+  = render :partial => "step", :locals => {:step => @build.output[0], :step_no => 0}
+- @build.parts.each_with_index do |part, index|
+  %h3= part.name
+  %ol{:id => "part_#{index}"}
+    - part.output.each_with_index do |output, index|
+      %li{:id => "step_#{index + 1}"}
+        = render :partial => "step", :locals => {:step => output, :step_no => index + 1}

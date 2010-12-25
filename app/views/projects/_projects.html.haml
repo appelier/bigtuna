@@ -1,0 +1,17 @@
+#ajax-reload= Project.ajax_reload?
+%h2 Projects
+= "No projects yet." unless !@projects.empty?
+- @projects.each do |project|
+  %ol
+    %li{:class => "#{project.status} project", :id => dom_id(project)}
+      - unless BigTuna.read_only?
+        .updown
+          = link_to("&uarr;".html_safe, arrange_project_path(project, :up => true)) unless project.first?
+          = link_to("&darr;".html_safe, arrange_project_path(project, :down => true)) unless project.last?
+      %h3= link_to(project.name, project_path(project))
+      - if project.recent_build
+        %table.value_list
+          = render :partial => "builds/build_data", :locals => {:build => project.recent_build}
+          %tr
+            %td.title Stability
+            %td.value= format_stability(project.stability)

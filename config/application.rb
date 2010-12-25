@@ -39,5 +39,6 @@ module BigTuna
     # Configure sensitive parameters which will be filtered from the log file.
     config.filter_parameters += [:password]
     Haml::Template.options[:ugly] = true
+    # config.action_view.javascript_expansions[:defaults] = %w(jquery.min rails application)
   end
 end
