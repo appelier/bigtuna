@@ -1,0 +1,11 @@
+#builds
+  #ajax-reload= @project.ajax_reload?
+  - @builds.each do |build|      
+    %div{:class => "#{build.status} project", :id => dom_id(build)}
+      - unless BigTuna.read_only?
+        .info
+          = form_tag(build_path(build), :method => "DELETE") do
+            %button.crit_button{:type => "submit"} Delete
+      %h3= link_to(build.display_name, build_path(build, :stderr => build.status == Build::STATUS_OK ? nil : 1))
+      %table.value_list
+        = render :partial => "builds/build_data", :locals => {:build => build}

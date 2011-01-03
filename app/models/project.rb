@@ -16,7 +16,23 @@ class Project < ActiveRecord::Base
   validates :vcs_branch, :presence => true
 
   acts_as_list
-
+  
+  def self.ajax_reload?
+    case BigTuna.ajax_reload
+    when "always" then true
+    when "building" then self.all.map(&:recent_build).compact.map(&:ajax_reload?).include?(true)
+    else false
+    end
+  end
+  
+  def ajax_reload?
+    case BigTuna.ajax_reload
+    when "always" then true
+    when "building" then self.recent_build.try(:ajax_reload?)
+    else false
+    end
+  end
+  
   def recent_build
     builds.order("created_at DESC").first
   end

@@ -17,6 +17,10 @@ module BigTuna
     @config = config
   end
 
+  def self.ajax_reload
+    config["ajax_reload"]
+  end
+
   def self.github_secure
     config["github_secure"]
   end

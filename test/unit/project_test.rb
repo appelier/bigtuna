@@ -10,6 +10,228 @@ class ProjectTest < ActiveSupport::TestCase
     FileUtils.rm_rf("test/files/repo")
     super
   end
+  
+  
+  test "Project.ajax_reload? method with ajax_reload => always" do
+    BigTuna.stubs(:ajax_reload).returns('always')
+    
+    
+
+    project = project_with_steps({
+      :name => "Project",
+      :vcs_source => "test/files/repo",
+      :max_builds => 1,
+    }, "echo 'lol'")
+    
+    
+    assert(Project.ajax_reload?, "Should be true.")
+
+    project.build!
+    build = project.recent_build
+
+    build.update_attribute(:status, Build::STATUS_IN_QUEUE)
+    assert(Project.ajax_reload?, "Should be true.")
+
+
+    build.update_attribute(:status, Build::STATUS_PROGRESS)
+    assert(Project.ajax_reload?, "Should be true.")
+    
+    build.update_attribute(:status, Build::STATUS_OK)
+    assert(Project.ajax_reload?, "Should be true.")
+    
+    build.update_attribute(:status, Build::STATUS_FAILED)
+    assert(Project.ajax_reload?, "Should be true.")
+    
+    build.update_attribute(:status, Build::STATUS_BUILDER_ERROR)
+    assert(Project.ajax_reload?, "Should be true.")
+    
+    build.update_attribute(:status, Build::STATUS_BUILDER_ERROR)
+    assert(Project.ajax_reload?, "Should be true.")
+
+  end
+  
+  test "Project.ajax_reload? method with ajax_reload => building" do
+    BigTuna.stubs(:ajax_reload).returns('building')
+
+
+    project = project_with_steps({
+      :name => "Project",
+      :vcs_source => "test/files/repo",
+      :max_builds => 1,
+    }, "echo 'lol'")
+    
+    
+    assert(!Project.ajax_reload?, "Should be false.")
+
+    project.build!
+    build = project.recent_build
+
+    build.update_attribute(:status, Build::STATUS_IN_QUEUE)
+    assert(Project.ajax_reload?, "Should be true.")
+
+
+    build.update_attribute(:status, Build::STATUS_PROGRESS)
+    assert(Project.ajax_reload?, "Should be true.")
+    
+    build.update_attribute(:status, Build::STATUS_OK)
+    assert(!Project.ajax_reload?, "Should be false.")
+    
+    build.update_attribute(:status, Build::STATUS_FAILED)
+    assert(!Project.ajax_reload?, "Should be false.")
+    
+    build.update_attribute(:status, Build::STATUS_BUILDER_ERROR)
+    assert(!Project.ajax_reload?, "Should be false.")
+    
+    build.update_attribute(:status, Build::STATUS_BUILDER_ERROR)
+    assert(!Project.ajax_reload?, "Should be false.")
+  end
+  
+  test "Project.ajax_reload? method with ajax_reload => false" do
+    BigTuna.stubs(:ajax_reload).returns(false)
+  
+
+
+    project = project_with_steps({
+      :name => "Project",
+      :vcs_source => "test/files/repo",
+      :max_builds => 1,
+    }, "echo 'lol'")
+    
+    
+    assert(!Project.ajax_reload?, "Should be false.")
+
+    project.build!
+    build = project.recent_build
+
+    build.update_attribute(:status, Build::STATUS_IN_QUEUE)
+    assert(!Project.ajax_reload?, "Should be false.")
+
+
+    build.update_attribute(:status, Build::STATUS_PROGRESS)
+    assert(!Project.ajax_reload?, "Should be false.")
+    
+    build.update_attribute(:status, Build::STATUS_OK)
+    assert(!Project.ajax_reload?, "Should be false.")
+    
+    build.update_attribute(:status, Build::STATUS_FAILED)
+    assert(!Project.ajax_reload?, "Should be false.")
+    
+    build.update_attribute(:status, Build::STATUS_BUILDER_ERROR)
+    assert(!Project.ajax_reload?, "Should be false.")
+    
+    build.update_attribute(:status, Build::STATUS_BUILDER_ERROR)
+    assert(!Project.ajax_reload?, "Should be false.")
+
+  end
+  
+
+  test "ajax_reload? method with ajax_reload => always" do
+    BigTuna.stubs(:ajax_reload).returns('always')
+
+    project = project_with_steps({
+      :name => "Project",
+      :vcs_source => "test/files/repo",
+      :max_builds => 1,
+    }, "echo 'lol'")
+    
+    assert(project.ajax_reload?, "Should be true.")
+
+    project.build!
+    build = project.recent_build
+
+    build.update_attribute(:status, Build::STATUS_IN_QUEUE)
+    assert(project.ajax_reload?, "Should be true.")
+
+    build.update_attribute(:status, Build::STATUS_PROGRESS)
+    assert(project.ajax_reload?, "Should be true.")
+    
+    build.update_attribute(:status, Build::STATUS_OK)
+    assert(project.ajax_reload?, "Should be true.")
+    
+    build.update_attribute(:status, Build::STATUS_FAILED)
+    assert(project.ajax_reload?, "Should be true.")
+    
+    build.update_attribute(:status, Build::STATUS_BUILDER_ERROR)
+    assert(project.ajax_reload?, "Should be true.")
+    
+    build.update_attribute(:status, Build::STATUS_BUILDER_ERROR)
+    assert(project.ajax_reload?, "Should be true.")
+  end
+  
+  test "ajax_reload? method with ajax_reload => building" do
+    BigTuna.stubs(:ajax_reload).returns('building')
+
+
+    project = project_with_steps({
+      :name => "Project",
+      :vcs_source => "test/files/repo",
+      :max_builds => 1,
+    }, "echo 'lol'")
+    
+    
+    assert(!project.ajax_reload?, "Should be false.")
+
+    project.build!
+    build = project.recent_build
+
+    build.update_attribute(:status, Build::STATUS_IN_QUEUE)
+    assert(project.ajax_reload?, "Should be true.")
+
+
+    build.update_attribute(:status, Build::STATUS_PROGRESS)
+    assert(project.ajax_reload?, "Should be true.")
+    
+    build.update_attribute(:status, Build::STATUS_OK)
+    assert(!project.ajax_reload?, "Should be false.")
+    
+    build.update_attribute(:status, Build::STATUS_FAILED)
+    assert(!project.ajax_reload?, "Should be false.")
+    
+    build.update_attribute(:status, Build::STATUS_BUILDER_ERROR)
+    assert(!project.ajax_reload?, "Should be false.")
+    
+    build.update_attribute(:status, Build::STATUS_BUILDER_ERROR)
+    assert(!project.ajax_reload?, "Should be false.")
+
+  end
+  
+  test "ajax_reload? method with ajax_reload => false" do
+    BigTuna.stubs(:ajax_reload).returns(false)
+  
+  
+
+    project = project_with_steps({
+      :name => "Project",
+      :vcs_source => "test/files/repo",
+      :max_builds => 1,
+    }, "echo 'lol'")
+    
+    
+    assert(!Project.ajax_reload?, "Should be false.")
+
+    project.build!
+    build = project.recent_build
+
+    build.update_attribute(:status, Build::STATUS_IN_QUEUE)
+    assert(!project.ajax_reload?, "Should be false.")
+
+
+    build.update_attribute(:status, Build::STATUS_PROGRESS)
+    assert(!project.ajax_reload?, "Should be false.")
+    
+    build.update_attribute(:status, Build::STATUS_OK)
+    assert(!project.ajax_reload?, "Should be false.")
+    
+    build.update_attribute(:status, Build::STATUS_FAILED)
+    assert(!project.ajax_reload?, "Should be false.")
+    
+    build.update_attribute(:status, Build::STATUS_BUILDER_ERROR)
+    assert(!project.ajax_reload?, "Should be false.")
+    
+    build.update_attribute(:status, Build::STATUS_BUILDER_ERROR)
+    assert(!project.ajax_reload?, "Should be false.")
+
+  end
 
   test "only recent builds are kept on disk" do
     project = project_with_steps({
