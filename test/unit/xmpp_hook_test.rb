@@ -80,7 +80,7 @@ class XmppHookTest < ActiveSupport::TestCase
   def stub_xmpp(hook, message)
     s = Mocha::Mock.new
     s.expects(:initialize).with(hook.configuration["sender_full_jid"], hook.configuration["sender_password"]).returns(s)
-    hook.configuration["recipients"].each do |recipient|
+    hook.configuration["recipients"].to_s.split(",").each do |recipient|
       s.expects(:deliver).with(recipient).returns(s)
     end
     s

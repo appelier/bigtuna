@@ -91,7 +91,8 @@ class ProjectsTest < ActionController::IntegrationTest
       assert page.has_xpath?("a[contains(@href, 'down')]")
       assert ! page.has_xpath?("a[contains(@href, 'up')]")
     end
-    click_link "↓"
+
+    click_link "\342\206\223"
     within("#project_#{project1.id} .updown") do
       assert page.has_xpath?("a[contains(@href, 'up=')]")
       assert ! page.has_xpath?("a[contains(@href, 'down=')]")
