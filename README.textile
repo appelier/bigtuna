@@ -11,6 +11,8 @@ BigTuna was created by "Michał Bugno":http://twitter.com/michalbugno and "Antek
 * "François Lamontagne":http://twitter.com/franklamontagne
 * "Víctor Martínez":http://twitter.com/knoopx
 * "unsay":http://twitter.com/unsay
+* "Jonathan Dance":https://github.com/wuputah
+* ...and others (some mentioned in the "pull request * list":https://github.com/appelier/bigtuna/pulls)
 
 h1. License
 
