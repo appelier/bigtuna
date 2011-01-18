@@ -31,11 +31,11 @@ module BigTuna::VCS
 
     def head_info
       info = {}
-      command = "git log --max-count=1 --format=\"%H%n%an%n%ae%n%ad%n%s\" #{self.branch}"
+      command = "git log --max-count=1 --pretty=format:%H%n%an%n%ae%n%ad%n%s #{self.branch}"
       begin
         output = BigTuna::Runner.execute(self.source, command)
       rescue BigTuna::Runner::Error => e
-        raise VCS::Error.new("Couldn't access repository log")
+        raise BigTuna::VCS::Error.new("Couldn't access repository log")
       end
       head_hash = output.stdout
       info[:commit] = head_hash.shift
