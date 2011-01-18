@@ -31,7 +31,11 @@ module BigTuna::VCS
 
     def head_info
       info = {}
-      command = "git log --max-count=1 --pretty=format:%H%n%an%n%ae%n%ad%n%s #{self.branch}"
+      if self.class.version_at_least?("1.5.1")
+        command = "git log --max-count=1 --pretty=format:%H%n%an%n%ae%n%ad%n%s #{self.branch}"
+      else
+        command = "git log --max-count=1 --format=\"%H%n%an%n%ae%n%ad%n%s\" #{self.branch}"
+      end
       begin
         output = BigTuna::Runner.execute(self.source, command)
       rescue BigTuna::Runner::Error => e
