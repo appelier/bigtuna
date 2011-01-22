@@ -10,7 +10,7 @@ module BigTuna::VCS
       rescue BigTuna::Runner::Error => e
         @_supported = false
       end
-      @_supported
+      @_supported &&= self.class.version_at_least?("1.5.1")
     end
 
     def self.version_at_least?(version)
@@ -31,11 +31,7 @@ module BigTuna::VCS
 
     def head_info
       info = {}
-      if self.class.version_at_least?("1.5.1")
-        command = "git log --max-count=1 --pretty=format:%H%n%an%n%ae%n%ad%n%s #{self.branch}"
-      else
-        command = "git log --max-count=1 --format=\"%H%n%an%n%ae%n%ad%n%s\" #{self.branch}"
-      end
+      command = "git log --max-count=1 --pretty=format:%H%n%an%n%ae%n%ad%n%s #{self.branch}"
       begin
         output = BigTuna::Runner.execute(self.source, command)
       rescue BigTuna::Runner::Error => e
