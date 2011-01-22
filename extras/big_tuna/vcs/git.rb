@@ -10,7 +10,7 @@ module BigTuna::VCS
       rescue BigTuna::Runner::Error => e
         @_supported = false
       end
-      @_supported &&= self.class.version_at_least?("1.5.1")
+      @_supported &&= self.version_at_least?("1.5.1")
     end
 
     def self.version_at_least?(version)
