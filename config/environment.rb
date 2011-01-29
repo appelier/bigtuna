@@ -21,6 +21,10 @@ module BigTuna
     config["github_secure"]
   end
 
+  def self.bitbucket_secure
+    config["bitbucket_secure"]
+  end
+
   def self.read_only?
     env_force = ["true", "1", "yes", "y"].include?(ENV["BIGTUNA_READONLY"].to_s.downcase)
     return true if env_force
