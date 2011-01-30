@@ -1,6 +1,7 @@
 ENV["RAILS_ENV"] = "test"
 require File.expand_path('../../config/environment', __FILE__)
 require 'rails/test_help'
+require 'webmock/test_unit'
 require "blueprints"
 
 DatabaseCleaner.strategy = :truncation

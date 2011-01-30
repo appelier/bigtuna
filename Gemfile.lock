@@ -147,6 +147,9 @@ GEM
       eventmachine (>= 0.12.8)
       roauth (>= 0.0.2)
     tzinfo (0.3.23)
+    webmock (1.6.2)
+      addressable (>= 2.2.2)
+      crack (>= 0.1.7)
     xmpp4r (0.5)
     xpath (0.1.2)
       nokogiri (~> 1.3)
@@ -175,3 +178,4 @@ DEPENDENCIES
   sqlite3-ruby
   stringex
   tinder
+  webmock
