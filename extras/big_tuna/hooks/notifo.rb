@@ -32,7 +32,7 @@ module BigTuna
           recipients.each do |recipient|
             recipient.strip!
             notifo.subscribe_user(recipient)
-            notifo.post(recipient, @message, @message, @build_url)
+            notifo.post(recipient, @message, @project_name, @build_url)
           end
         end
       end
