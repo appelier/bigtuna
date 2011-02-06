@@ -1,0 +1,16 @@
+%div
+  = label_tag("Send with this Notifo service")
+  %br
+  = text_field_tag("configuration[user]", @hook.configuration["user"], :size => 50)
+
+%div
+  = label_tag("Identified by this API key")
+  %br
+  = password_field_tag("configuration[key]", @hook.configuration["key"], :size => 50)
+
+%div
+  = label_tag("Send to these recipients (separated by comma)")
+  %br
+  = text_area_tag("configuration[recipients]", @hook.configuration["recipients"], :cols => 50)
+  
+%p.hint= "You can create a new Notifo service <a href='http://notifo.com/services' target='_blank'>here</a>".html_safe

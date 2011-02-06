@@ -60,6 +60,8 @@ GEM
       multipart-post (~> 1.0.1)
       rack (>= 1.1.0, < 2)
     haml (3.0.24)
+    httparty (0.4.5)
+      crack (>= 0.1.1)
     i18n (0.4.2)
     jquery-rails (0.2.6)
       rails (~> 3.0)
@@ -82,6 +84,8 @@ GEM
       rake
     multipart-post (1.0.1)
     nokogiri (1.4.4)
+    notifo (0.1.0)
+      httparty (~> 0.4.5)
     open4 (1.0.1)
     polyglot (0.3.1)
     rack (1.2.1)
@@ -163,6 +167,7 @@ DEPENDENCIES
   machinist
   mocha
   nokogiri
+  notifo
   open4
   rails (= 3.0.3)
   ruby-debug
