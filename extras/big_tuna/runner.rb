@@ -18,17 +18,9 @@ module BigTuna
       end
     end
 
-    def self.with_clean_env(dir, &blk)
-      old_env = ENV.clone
-      ENV.clear
-      ORIGINAL_ENV.each { |key, value| ENV[key] = value }
-      ENV["RAILS_ENV"] = "test"
-      result = blk.call
-      result
-    ensure
-      ENV.clear
-      old_env.each do |key, value|
-        ENV[key] = value
+    def self.with_clean_env(dir)
+      Bundler.with_clean_env do
+        yield
       end
     end
 
