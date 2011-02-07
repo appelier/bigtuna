@@ -20,9 +20,9 @@ class AutobuildTest < ActionController::IntegrationTest
   test "if github posts hook we look for specified branch to build" do
     project1 = github_project(:name => "obywatelgc", :vcs_branch => "master")
     project2 = github_project(:name => "obywatelgc2", :vcs_branch => "development")
-    old_token = BigTuna.config["github_secure"]
+    old_token = BigTuna.config[:github_secure]
     begin
-      BigTuna.config["github_secure"] = "mytoken"
+      BigTuna.config[:github_secure] = "mytoken"
       token = BigTuna.github_secure
       assert_difference("project1.builds.count", +1) do
         assert_difference("project2.builds.count", 0) do
@@ -32,16 +32,16 @@ class AutobuildTest < ActionController::IntegrationTest
         end
       end
     ensure
-      BigTuna.config["github_secure"] = old_token
+      BigTuna.config[:github_secure] = old_token
     end
   end
 
   test "github post for a private repo will build correctly" do
     project = github_project(:name => 'seotool', :vcs_branch => 'master',
                              :vcs_source => "git@github.com:company/secretrepo.git")
-    old_token = BigTuna.config['github_secure']
+    old_token = BigTuna.config[:github_secure]
     begin
-      BigTuna.config["github_secure"] = "mytoken"
+      BigTuna.config[:github_secure] = "mytoken"
       token = BigTuna.github_secure
       assert_difference("project.builds.count", +1) do
         post "/hooks/build/github/#{token}", :payload => github_payload(project)
@@ -49,16 +49,16 @@ class AutobuildTest < ActionController::IntegrationTest
         assert response.body.include?("build for \"#{project.name}\" triggered")
       end
     ensure
-      BigTuna.config['github_secure'] = old_token
+      BigTuna.config[:github_secure] = old_token
     end
   end
 
   test "github post with invalid token won't build anything" do
     project1 = github_project(:name => "obywatelgc", :vcs_branch => "master")
     project2 = github_project(:name => "obywatelgc2", :vcs_branch => "development")
-    old_token = BigTuna.config["github_secure"]
+    old_token = BigTuna.config[:github_secure]
     begin
-      BigTuna.config["github_secure"] = "mytoken"
+      BigTuna.config[:github_secure] = "mytoken"
       token = BigTuna.github_secure
       invalid_token = token + "a"
       assert_difference("Build.count", 0) do
@@ -67,21 +67,21 @@ class AutobuildTest < ActionController::IntegrationTest
         assert response.body.include?("invalid secure token")
       end
     ensure
-      BigTuna.config["github_secure"] = old_token
+      BigTuna.config[:github_secure] = old_token
     end
   end
 
   test "github token has to be set up" do
     project1 = github_project(:name => "obywatelgc", :vcs_branch => "master")
-    old_token = BigTuna.config["github_secure"]
+    old_token = BigTuna.config[:github_secure]
     begin
-      BigTuna.config["github_secure"] = nil
+      BigTuna.config[:github_secure] = nil
       assert_equal nil, BigTuna.github_secure
       post "/hooks/build/github/4ff", :payload => github_payload(project1)
       assert_status_code(403)
       assert response.body.include?("github secure token is not set up")
     ensure
-      BigTuna.config["github_secure"] = old_token
+      BigTuna.config[:github_secure] = old_token
     end
   end
 

@@ -3,7 +3,7 @@ class BuildsController < ApplicationController
   respond_to :js, :only => :show
 
   def show
-  
+
   end
 
   def destroy

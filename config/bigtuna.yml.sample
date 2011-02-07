@@ -1,5 +1,6 @@
 # production:
-#   read_only: true # default: false
+#   read_only: true                        # default: false
 #   github_secure: "think_of_secure_token" # default: nil
 #   url_host: "ci.yoursite.com"
-#   ajax_reload: false # "building" or "always"
+#   ajax_reload: false                     # "building" or "always"
+#   build_dir: "tmp"                       # default: "builds"
