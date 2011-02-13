@@ -31,6 +31,14 @@ class ActiveSupport::TestCase
     BigTuna.hooks.pop
   end
 
+  def with_config(key, new_value, &blk)
+    old_value = BigTuna.config[key]
+    BigTuna.config[key] = new_value
+    blk.call
+  ensure
+    BigTuna.config[key] = old_value
+  end
+
   def project_with_steps(project_attrs, *steps)
     project = Project.make(project_attrs)
     steps.each do |step_list|

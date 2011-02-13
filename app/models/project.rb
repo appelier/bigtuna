@@ -16,7 +16,7 @@ class Project < ActiveRecord::Base
   validates :vcs_branch, :presence => true
 
   acts_as_list
-  
+
   def self.ajax_reload?
     case BigTuna.ajax_reload
     when "always" then true
@@ -24,7 +24,7 @@ class Project < ActiveRecord::Base
     else false
     end
   end
-  
+
   def ajax_reload?
     case BigTuna.ajax_reload
     when "always" then true
@@ -32,7 +32,7 @@ class Project < ActiveRecord::Base
     else false
     end
   end
-  
+
   def recent_build
     builds.order("created_at DESC").first
   end
@@ -100,7 +100,11 @@ class Project < ActiveRecord::Base
 
   private
   def build_dir_from_name(name)
-    File.join(Rails.root, "builds", name.downcase.gsub(/[^A-Za-z0-9]/, "_"))
+    if BigTuna.build_dir[0] == '/'[0]
+      File.join(BigTuna.build_dir, name.downcase.gsub(/[^A-Za-z0-9]/, "_"))
+    else
+      File.join(Rails.root, BigTuna.build_dir, name.downcase.gsub(/[^A-Za-z0-9]/, "_"))
+    end
   end
 
   def remove_build_folder

@@ -133,6 +133,7 @@ class ProjectsTest < ActionController::IntegrationTest
     project = project_with_steps({
       :name => "Atom project 2",
       :vcs_source => "no/such/repo",
+      :max_builds => 3,
     }, "echo 'ha'")
     build_1 = Build.make(:project => project, :created_at => 2.weeks.ago)
     build_2 = Build.make(:project => project, :created_at => 1.week.ago)

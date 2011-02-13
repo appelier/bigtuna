@@ -1,5 +1,7 @@
 require 'test_helper'
 
+require 'tmpdir'
+
 class ProjectTest < ActiveSupport::TestCase
   def setup
     super
@@ -10,20 +12,27 @@ class ProjectTest < ActiveSupport::TestCase
     FileUtils.rm_rf("test/files/repo")
     super
   end
-  
-  
+
+  def build_and_run_project_with_steps(steps = nil, project_attrs = {})
+    steps ||= "ls -al file"
+    project = project_with_steps(project_attrs, steps)
+    project.build!
+    run_delayed_jobs
+    project
+  end
+
   test "Project.ajax_reload? method with ajax_reload => always" do
     BigTuna.stubs(:ajax_reload).returns('always')
-    
-    
+
+
 
     project = project_with_steps({
       :name => "Project",
       :vcs_source => "test/files/repo",
       :max_builds => 1,
     }, "echo 'lol'")
-    
-    
+
+
     assert(Project.ajax_reload?, "Should be true.")
 
     project.build!
@@ -35,21 +44,21 @@ class ProjectTest < ActiveSupport::TestCase
 
     build.update_attribute(:status, Build::STATUS_PROGRESS)
     assert(Project.ajax_reload?, "Should be true.")
-    
+
     build.update_attribute(:status, Build::STATUS_OK)
     assert(Project.ajax_reload?, "Should be true.")
-    
+
     build.update_attribute(:status, Build::STATUS_FAILED)
     assert(Project.ajax_reload?, "Should be true.")
-    
+
     build.update_attribute(:status, Build::STATUS_BUILDER_ERROR)
     assert(Project.ajax_reload?, "Should be true.")
-    
+
     build.update_attribute(:status, Build::STATUS_BUILDER_ERROR)
     assert(Project.ajax_reload?, "Should be true.")
 
   end
-  
+
   test "Project.ajax_reload? method with ajax_reload => building" do
     BigTuna.stubs(:ajax_reload).returns('building')
 
@@ -59,8 +68,8 @@ class ProjectTest < ActiveSupport::TestCase
       :vcs_source => "test/files/repo",
       :max_builds => 1,
     }, "echo 'lol'")
-    
-    
+
+
     assert(!Project.ajax_reload?, "Should be false.")
 
     project.build!
@@ -72,23 +81,23 @@ class ProjectTest < ActiveSupport::TestCase
 
     build.update_attribute(:status, Build::STATUS_PROGRESS)
     assert(Project.ajax_reload?, "Should be true.")
-    
+
     build.update_attribute(:status, Build::STATUS_OK)
     assert(!Project.ajax_reload?, "Should be false.")
-    
+
     build.update_attribute(:status, Build::STATUS_FAILED)
     assert(!Project.ajax_reload?, "Should be false.")
-    
+
     build.update_attribute(:status, Build::STATUS_BUILDER_ERROR)
     assert(!Project.ajax_reload?, "Should be false.")
-    
+
     build.update_attribute(:status, Build::STATUS_BUILDER_ERROR)
     assert(!Project.ajax_reload?, "Should be false.")
   end
-  
+
   test "Project.ajax_reload? method with ajax_reload => false" do
     BigTuna.stubs(:ajax_reload).returns(false)
-  
+
 
 
     project = project_with_steps({
@@ -96,8 +105,8 @@ class ProjectTest < ActiveSupport::TestCase
       :vcs_source => "test/files/repo",
       :max_builds => 1,
     }, "echo 'lol'")
-    
-    
+
+
     assert(!Project.ajax_reload?, "Should be false.")
 
     project.build!
@@ -109,21 +118,21 @@ class ProjectTest < ActiveSupport::TestCase
 
     build.update_attribute(:status, Build::STATUS_PROGRESS)
     assert(!Project.ajax_reload?, "Should be false.")
-    
+
     build.update_attribute(:status, Build::STATUS_OK)
     assert(!Project.ajax_reload?, "Should be false.")
-    
+
     build.update_attribute(:status, Build::STATUS_FAILED)
     assert(!Project.ajax_reload?, "Should be false.")
-    
+
     build.update_attribute(:status, Build::STATUS_BUILDER_ERROR)
     assert(!Project.ajax_reload?, "Should be false.")
-    
+
     build.update_attribute(:status, Build::STATUS_BUILDER_ERROR)
     assert(!Project.ajax_reload?, "Should be false.")
 
   end
-  
+
 
   test "ajax_reload? method with ajax_reload => always" do
     BigTuna.stubs(:ajax_reload).returns('always')
@@ -133,7 +142,7 @@ class ProjectTest < ActiveSupport::TestCase
       :vcs_source => "test/files/repo",
       :max_builds => 1,
     }, "echo 'lol'")
-    
+
     assert(project.ajax_reload?, "Should be true.")
 
     project.build!
@@ -144,20 +153,20 @@ class ProjectTest < ActiveSupport::TestCase
 
     build.update_attribute(:status, Build::STATUS_PROGRESS)
     assert(project.ajax_reload?, "Should be true.")
-    
+
     build.update_attribute(:status, Build::STATUS_OK)
     assert(project.ajax_reload?, "Should be true.")
-    
+
     build.update_attribute(:status, Build::STATUS_FAILED)
     assert(project.ajax_reload?, "Should be true.")
-    
+
     build.update_attribute(:status, Build::STATUS_BUILDER_ERROR)
     assert(project.ajax_reload?, "Should be true.")
-    
+
     build.update_attribute(:status, Build::STATUS_BUILDER_ERROR)
     assert(project.ajax_reload?, "Should be true.")
   end
-  
+
   test "ajax_reload? method with ajax_reload => building" do
     BigTuna.stubs(:ajax_reload).returns('building')
 
@@ -167,8 +176,8 @@ class ProjectTest < ActiveSupport::TestCase
       :vcs_source => "test/files/repo",
       :max_builds => 1,
     }, "echo 'lol'")
-    
-    
+
+
     assert(!project.ajax_reload?, "Should be false.")
 
     project.build!
@@ -180,33 +189,33 @@ class ProjectTest < ActiveSupport::TestCase
 
     build.update_attribute(:status, Build::STATUS_PROGRESS)
     assert(project.ajax_reload?, "Should be true.")
-    
+
     build.update_attribute(:status, Build::STATUS_OK)
     assert(!project.ajax_reload?, "Should be false.")
-    
+
     build.update_attribute(:status, Build::STATUS_FAILED)
     assert(!project.ajax_reload?, "Should be false.")
-    
+
     build.update_attribute(:status, Build::STATUS_BUILDER_ERROR)
     assert(!project.ajax_reload?, "Should be false.")
-    
+
     build.update_attribute(:status, Build::STATUS_BUILDER_ERROR)
     assert(!project.ajax_reload?, "Should be false.")
 
   end
-  
+
   test "ajax_reload? method with ajax_reload => false" do
     BigTuna.stubs(:ajax_reload).returns(false)
-  
-  
+
+
 
     project = project_with_steps({
       :name => "Project",
       :vcs_source => "test/files/repo",
       :max_builds => 1,
     }, "echo 'lol'")
-    
-    
+
+
     assert(!Project.ajax_reload?, "Should be false.")
 
     project.build!
@@ -218,16 +227,16 @@ class ProjectTest < ActiveSupport::TestCase
 
     build.update_attribute(:status, Build::STATUS_PROGRESS)
     assert(!project.ajax_reload?, "Should be false.")
-    
+
     build.update_attribute(:status, Build::STATUS_OK)
     assert(!project.ajax_reload?, "Should be false.")
-    
+
     build.update_attribute(:status, Build::STATUS_FAILED)
     assert(!project.ajax_reload?, "Should be false.")
-    
+
     build.update_attribute(:status, Build::STATUS_BUILDER_ERROR)
     assert(!project.ajax_reload?, "Should be false.")
-    
+
     build.update_attribute(:status, Build::STATUS_BUILDER_ERROR)
     assert(!project.ajax_reload?, "Should be false.")
 
@@ -303,19 +312,33 @@ class ProjectTest < ActiveSupport::TestCase
     assert_equal Build::STATUS_FAILED, build.status
   end
 
-  test "removing project removes its build folder" do
-    project = project_with_steps({
-      :name => "Project",
-      :vcs_source => "test/files/repo",
-      :max_builds => 1,
-    }, "ls -al file")
-    project.build!
-    run_delayed_jobs()
+  def assert_project_lifecycle(project)
+    assert_match Regexp.new(BigTuna.config[:build_dir]), project.build_dir
     assert File.exist?(project.build_dir)
-    assert_difference("Dir[File.join('builds', '*')].size", -1) do
+    assert_difference("Dir[File.join(BigTuna.build_dir, '*')].size", -1) do
       project.destroy
     end
-    assert ! File.exist?(project.build_dir)
+    assert !File.exist?(project.build_dir)
+  end
+
+  test "removing project removes its build folder" do
+    assert_project_lifecycle build_and_run_project_with_steps
+  end
+
+  test "build location respects global build_dir configuration" do
+    with_config(:build_dir, "tmp/plz_run_here") do
+      assert_project_lifecycle build_and_run_project_with_steps
+    end
+  end
+
+  test "build location works when passed an absolute path" do
+    tmp_dir = Dir::tmpdir
+    # only run this test if the system gives us an absolute tmp path
+    if tmp_dir[0] == '/'[0]
+      with_config(:build_dir, File.join(tmp_dir, 'bigtuna_builds')) do
+        assert_project_lifecycle build_and_run_project_with_steps
+      end
+    end
   end
 
   test "hook_name should be unique" do

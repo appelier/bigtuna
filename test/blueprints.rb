@@ -8,7 +8,7 @@ end
 
 Project.blueprint do
   name { Sham.name }
-  max_builds { 3 }
+  max_builds { 1 }
   vcs_type { "git" }
   vcs_source { "test/files/repo" }
   vcs_branch { "master" }
