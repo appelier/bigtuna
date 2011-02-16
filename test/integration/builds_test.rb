@@ -3,7 +3,7 @@ require "integration_test_helper"
 class BuildsTest < ActionController::IntegrationTest
   def setup
     super
-    @output = `cd test/files; mkdir repo; cd repo; git init; echo "my file" > file; git add file; git commit -m "my file added"; git log --format=%H --max-count=1`
+    @output = `cd test/files; mkdir repo; cd repo; git init; echo "my file" > file; git add file; git commit -m "my file added"; git log --pretty=format:%H --max-count=1`
   end
 
   def teardown
