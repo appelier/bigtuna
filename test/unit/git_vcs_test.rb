@@ -3,13 +3,10 @@ require 'test_helper'
 if BigTuna::VCS::Git.supported?
 
 class GitVCSTest < ActiveSupport::TestCase
-  def setup
-    super
-    `cd test/files; mkdir repo; cd repo; git init; echo "my file" > file; git add file; git commit -m "my file added"`
-  end
+
+  include WithTestRepo
 
   def teardown
-    FileUtils.rm_rf("test/files/repo")
     FileUtils.rm_rf("test/files/repo_clone")
     super
   end

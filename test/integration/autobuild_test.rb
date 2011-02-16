@@ -1,15 +1,8 @@
 require "integration_test_helper"
 
 class AutobuildTest < ActionController::IntegrationTest
-  def setup
-    super
-    `cd test/files; mkdir repo; cd repo; git init; echo "my file" > file; git add file; git commit -m "my file added"`
-  end
 
-  def teardown
-    FileUtils.rm_rf("test/files/repo")
-    super
-  end
+  include WithTestRepo
 
   test "if hook name is not found, 404 status is returned with appropriate description" do
     post "/hooks/build/not_found_halp"

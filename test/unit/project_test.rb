@@ -3,15 +3,8 @@ require 'test_helper'
 require 'tmpdir'
 
 class ProjectTest < ActiveSupport::TestCase
-  def setup
-    super
-    `cd test/files; mkdir repo; cd repo; git init; echo "my file" > file; git add file; git commit -m "my file added"`
-  end
 
-  def teardown
-    FileUtils.rm_rf("test/files/repo")
-    super
-  end
+  include WithTestRepo
 
   def build_and_run_project_with_steps(steps = nil, project_attrs = {})
     steps ||= "ls -al file"
@@ -313,7 +306,7 @@ class ProjectTest < ActiveSupport::TestCase
   end
 
   def assert_project_lifecycle(project)
-    assert_match Regexp.new(BigTuna.config[:build_dir]), project.build_dir
+    assert project.build_dir.include?(BigTuna.config[:build_dir])
     assert File.exist?(project.build_dir)
     assert_difference("Dir[File.join(BigTuna.build_dir, '*')].size", -1) do
       project.destroy

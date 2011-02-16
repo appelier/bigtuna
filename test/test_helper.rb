@@ -58,4 +58,34 @@ class ActiveSupport::TestCase
     end
     ran_jobs
   end
+
+  def create_test_repo
+    command = <<-CMD.gsub("\n", "; ")
+      mkdir -p test/files/repo
+      cd test/files/repo
+      git init
+      git config user.name git
+      git config user.email git@example.com
+      echo "my file" > file
+      git add file
+      git commit -m "my file added"
+    CMD
+    `#{command}`
+  end
+
+  def destroy_test_repo
+    FileUtils.rm_rf 'test/files/repo'
+  end
+
+  module WithTestRepo
+    def setup
+      super
+      create_test_repo
+    end
+
+    def teardown
+      destroy_test_repo
+      super
+    end
+  end
 end

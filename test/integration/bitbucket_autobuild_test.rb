@@ -8,7 +8,6 @@ class BitbucketAutobuildTest < ActionController::IntegrationTest
 
   def teardown
     FileUtils.rm_rf("test/files/repo")
-    FileUtils.rm_rf("builds/*")
     super
   end
 

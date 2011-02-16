@@ -1,15 +1,8 @@
 require "integration_test_helper"
 
 class ProjectsTest < ActionController::IntegrationTest
-  def setup
-    super
-    `cd test/files; mkdir repo; cd repo; git init; echo "my file" > file; git add file; git commit -m "my file added"`
-  end
 
-  def teardown
-    FileUtils.rm_rf("test/files/repo")
-    super
-  end
+  include WithTestRepo
 
   test "user can add a project" do
     visit "/"

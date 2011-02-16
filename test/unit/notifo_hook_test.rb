@@ -1,15 +1,8 @@
 require 'test_helper'
 
 class NotifoHookTest < ActiveSupport::TestCase
-  def setup
-    super
-    `cd test/files; mkdir koss; cd koss; git init; echo "my file" > file; git add file; git commit -m "my file added"`
-  end
 
-  def teardown
-    FileUtils.rm_rf("test/files/koss")
-    super
-  end
+  include WithTestRepo
 
   test "notifo message stating that build failed is sent when build failed" do
     BigTuna::Hooks::Notifo::Job.any_instance.expects(:perform).at_least_once.returns(true)
@@ -60,8 +53,8 @@ class NotifoHookTest < ActiveSupport::TestCase
   private
   def notifo_project_with_steps(steps)
     project = project_with_steps({
-      :name => "Koss",
-      :vcs_source => "test/files/koss",
+      :name => "repo",
+      :vcs_source => "test/files/repo",
       :vcs_type => "git",
       :max_builds => 2,
       :hooks => {"notifo" => "notifo"},

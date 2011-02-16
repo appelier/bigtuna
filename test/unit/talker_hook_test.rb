@@ -2,22 +2,16 @@ require 'test_helper'
 
 class TalkerHookTest < ActiveSupport::TestCase
 
+  include WithTestRepo
+
   def setup
     super
-    `cd test/files; mkdir koss; cd koss; git init; echo "my file" > file; git add file; git commit -m "my file added"`
-
     stub_request(:post, "http://www.example.com:443/rooms/1234/messages.json").
-      with(:body => /Koss/,
+      with(:body => /repo/,
            :headers => {'Accept'=>'application/json', 'Content-Type'=>'application/json', 'X-Talker-Token'=>'foobar'}).
       to_return(:status => 200, :body => "", :headers => {})
 
     Build.any_instance.stubs(:author).returns('Bob')
-  end
-
-  def teardown
-    FileUtils.rm_rf("test/files/koss")
-    FileUtils.rm_rf("builds/koss")
-    super
   end
 
   test "talker stating the build failed" do
@@ -77,8 +71,8 @@ class TalkerHookTest < ActiveSupport::TestCase
   private
     def talker_project_with_steps(steps)
       project = project_with_steps({
-        :name => 'Koss',
-        :vcs_source => 'test/files/koss',
+        :name => 'repo',
+        :vcs_source => 'test/files/repo',
         :vcs_type => 'git',
         :max_builds => 2,
         :hooks => {"talker" => "talker"},

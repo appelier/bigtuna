@@ -10,21 +10,14 @@ module BigTuna
 end
 
 class HooksUnitTest < ActiveSupport::TestCase
-  def setup
-    super
-    `cd test/files; mkdir koss; cd koss; git init; echo "my file" > file; git add file; git commit -m "my file added"`
-  end
 
-  def teardown
-    FileUtils.rm_rf("test/files/koss")
-    super
-  end
+  include WithTestRepo
 
   test "if hook produces error it is handled and marks build as hook failed" do
     with_hook_enabled(BigTuna::Hooks::RaisingHook) do
       project = project_with_steps({
-        :name => "Koss",
-        :vcs_source => "test/files/koss",
+        :name => "repo",
+        :vcs_source => "test/files/repo",
         :max_builds => 2,
         :hooks => {"raising_hook" => "raising_hook"},
       }, "true")
@@ -39,8 +32,8 @@ class HooksUnitTest < ActiveSupport::TestCase
   test "if hook is not enabled it won't get executed" do
     with_hook_enabled(BigTuna::Hooks::RaisingHook) do
       project = project_with_steps({
-        :name => "Koss",
-        :vcs_source => "test/files/koss",
+        :name => "repo",
+        :vcs_source => "test/files/repo",
         :max_builds => 2,
         :hooks => {"raising_hook" => "raising_hook"},
       }, "true")

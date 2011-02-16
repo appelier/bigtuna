@@ -1,15 +1,8 @@
 require 'test_helper'
 
 class MailerHookTest < ActiveSupport::TestCase
-  def setup
-    super
-    `cd test/files; mkdir koss; cd koss; git init; echo "my file" > file; git add file; git commit -m "my file added"`
-  end
 
-  def teardown
-    FileUtils.rm_rf("test/files/koss")
-    super
-  end
+  include WithTestRepo
 
   test "mail stating that build failed is sent when build failed" do
     project = mailing_project_with_steps("ls invalid_file_here")
@@ -63,8 +56,8 @@ class MailerHookTest < ActiveSupport::TestCase
 
   def mailing_project_with_steps(steps)
     project = project_with_steps({
-       :name => "Koss",
-       :vcs_source => "test/files/koss",
+       :name => "repo",
+       :vcs_source => "test/files/repo",
        :max_builds => 2,
        :hooks => {"mailer" => "mailer"},
     }, steps)

@@ -7,15 +7,8 @@ module BigTuna
 end
 
 class HooksTest < ActionController::IntegrationTest
-  def setup
-    super
-    `cd test/files; mkdir repo; cd repo; git init; echo "my file" > file; git add file; git commit -m "my file added"`
-  end
 
-  def teardown
-    FileUtils.rm_rf("test/files/repo")
-    super
-  end
+  include WithTestRepo
 
   test "hooks config renders hook config partial if it's present" do
     project = project_with_steps({
