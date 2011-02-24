@@ -18,7 +18,7 @@ module BigTuna
     @config = config.symbolize_keys!
   end
 
-  [:ajax_reload, :github_secure, :bitbucket_secure, :build_dir, :read_only].each do |key|
+  [:ajax_reload, :github_secure, :log, :bitbucket_secure, :build_dir, :read_only].each do |key|
     define_method key do
       config[key]
     end
@@ -27,7 +27,7 @@ module BigTuna
   alias_method :read_only?, :read_only
 
   def logger
-    @_logger ||= Logger.new("log/bigtuna_#{Rails.env}.log")
+    @_logger ||= self.log ? Logger.new(self.log) : Rails.logger
   end
 
   def hooks
