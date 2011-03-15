@@ -12,6 +12,7 @@ class BigTunaTest < ActiveSupport::TestCase
 
   test "BigTuna's build directory has proper permissions" do
     BigTuna.create_build_dir
-    assert_equal 492, File.world_readable?(File.join(Rails.root.to_s, BigTuna.build_dir))
+    # Check if the permission is actually 0754
+    assert_equal 492, File.stat(File.join(Rails.root.to_s, BigTuna.build_dir)).mode & 0777
   end
 end
