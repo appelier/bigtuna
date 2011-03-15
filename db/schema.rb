@@ -10,10 +10,10 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110315112044) do
+ActiveRecord::Schema.define(:version => 20110315133903) do
 
   create_table "build_parts", :force => true do |t|
-    t.integer  "build_id",    :null => false
+    t.integer  "build_id",         :null => false
     t.string   "name"
     t.text     "steps"
     t.text     "output"
@@ -22,6 +22,7 @@ ActiveRecord::Schema.define(:version => 20110315112044) do
     t.datetime "finished_at"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.text     "shared_variables"
   end
 
   create_table "builds", :force => true do |t|
