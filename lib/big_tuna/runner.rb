@@ -3,7 +3,7 @@ module BigTuna
     def self.execute(dir, command)
       end_command = "cd #{dir} && #{command}"
       BigTuna.logger.debug("Executing: #{end_command}")
-      with_clean_env(dir) do
+      with_clean_env do
         output = Output.new(dir, command)
         buffer = []
         status = Open4.popen4(end_command) do |_, _, stdout, stderr|
@@ -18,7 +18,7 @@ module BigTuna
       end
     end
 
-    def self.with_clean_env(dir)
+    def self.with_clean_env
       Bundler.with_clean_env do
         yield
       end
