@@ -14,6 +14,7 @@ BigTuna::Application.routes.draw do
     end
     resources :builds
     resources :step_lists
+    resources :shared_variables
 
   end
 

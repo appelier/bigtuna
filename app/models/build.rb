@@ -102,11 +102,15 @@ class Build < ActiveRecord::Base
   end
 
   def run_build_parts
-    statuses = []
     self.project.step_lists.each do |step_list|
+      replacements = {}
+      step_list.shared_variables.all.each { |var| replacements[var.name] = var.value }
+      replacements["build_dir"] = self.build_dir
+      replacements["project_dir"] = self.project.build_dir
       attrs = {
         :name => step_list.name,
         :steps => step_list.steps,
+        :shared_variables => replacements,
       }
       part = self.parts.build(attrs)
       part.save!

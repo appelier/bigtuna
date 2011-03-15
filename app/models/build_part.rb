@@ -8,6 +8,7 @@ class BuildPart < ActiveRecord::Base
 
   before_create :set_build_values
   serialize :output, Array
+  serialize :shared_variables, Hash
 
   def build!
     self.update_attributes!(:status => STATUS_IN_QUEUE)
@@ -50,8 +51,16 @@ class BuildPart < ActiveRecord::Base
 
   private
   def format_step_command(cmd)
-    new_cmd = cmd.gsub("%build_dir%", self.build_dir)
-    new_cmd.gsub!("%project_dir%", self.build.project.build_dir)
+    new_cmd = cmd.dup
+    keys = shared_variables.keys
+    keys.reject! { |key| key == "project_dir" || key == "build_dir" }
+    keys.push("project_dir")
+    keys.push("build_dir")
+    # order is important, so that we can use %project_dir% in custom variables
+    keys.each do |var_name|
+      var_value = shared_variables[var_name]
+      new_cmd.gsub!("%#{var_name}%", var_value)
+    end
     comment_at = new_cmd.index("#")
     new_cmd = new_cmd[0...comment_at] unless comment_at.nil?
     new_cmd.strip!
