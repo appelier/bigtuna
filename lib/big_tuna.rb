@@ -38,6 +38,10 @@ module BigTuna
     @_vcses ||= []
   end
 
+  def create_build_dir
+    Dir.mkdir(File.join(Rails.root, self.build_dir), 0754) unless File.directory?(File.join(Rails.root, self.build_dir))
+  end
+
   private
   def to_bool(value)
     return value if [true, false, nil].include?(value)
