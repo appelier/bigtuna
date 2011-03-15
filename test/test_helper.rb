@@ -13,7 +13,7 @@ class ActiveSupport::TestCase
 
   def teardown
     DatabaseCleaner.clean
-    FileUtils.rm_rf(File.join(Rails.root.to_s, "builds"))
+    FileUtils.rm_rf(File.join(Rails.root.to_s, BigTuna.build_dir))
   end
 
   def assert_invalid(klass, field, &block)
