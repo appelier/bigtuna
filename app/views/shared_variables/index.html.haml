@@ -1,0 +1,40 @@
+%h2= "Shared variables for &quot;#{@step_list.project.name}&quot;".html_safe
+%p You can set up configuration&ndash;specific <tt>%variables%</tt> here. Real&ndash;life examples would be
+%ul
+  %li= "<tt><b>%runner%</b> rvm 1.8.7 exec</tt>".html_safe
+  %li= "<tt><b>%envs%</b> env RAILS_ENV=test BUNDLE_GEMFILE=%build_dir%/Gemfile</tt>".html_safe
+
+%p And then use them in steps like:
+
+<pre>cp /shared/config.yml %build_dir%/config/
+\%runner% %envs% bundle install --deployment --path=%project_dir%/bundle
+\%runner% %envs% bundle exec rake db:migrate
+\%runner% %envs% bundle exec rake</pre>
+
+%p Shared variables cannot contain other shared variables except <tt>%build_dir%</tt> and <tt>%project_dir%</tt>.
+
+%h3 Create new variable
+= form_for(@shared_variable, :url => shared_variables_path(:step_list_id => @step_list)) do |f|
+  %div
+    = f.label(:name)
+    = f.text_field(:name)
+  %div
+    = f.label(:value)
+    = f.text_field(:value)
+  %div
+    %button.black_button{:type => "submit"}
+      = f.object.new_record? ? "Create" : "Update"
+
+%h3 Already existing variables
+- @shared_variables.each do |variable|
+  = form_for(variable, :url => shared_variable_path(variable, :step_list_id => @step_list)) do |f|
+    %div
+      = f.label(:name)
+      = f.text_field(:name)
+    %div
+      = f.label(:value)
+      = f.text_field(:value)
+    %div
+      %button.black_button{:type => "submit"} Update
+  = form_for(variable, :url => shared_variable_path(variable, :step_list_id => @step_list), :html => {:method => :delete}) do |f|
+    %button.crit_button{:type => "submit"} Remove
