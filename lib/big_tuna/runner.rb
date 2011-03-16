@@ -20,7 +20,12 @@ module BigTuna
 
     def self.with_clean_env
       Bundler.with_clean_env do
-        yield
+        begin
+          rails_env = ENV.delete("RAILS_ENV")
+          yield
+        ensure
+          ENV["RAILS_ENV"] = rails_env if rails_env # if nil, then don't set any key
+        end
       end
     end
 
