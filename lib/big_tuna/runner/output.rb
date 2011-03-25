@@ -50,10 +50,10 @@ module BigTuna
       
       return if txt.nil?
       
-      lines = txt.split /\r?\n/
+      lines = txt.split /\r?\n/, -1
       
-      # continue from where we left off
-      if @output != [] && @output.last[0] == stream
+      # continue from where we left off?
+      unless @output.empty? || @output.last[0] != stream
         @output.last[1] << lines.shift
       end
       

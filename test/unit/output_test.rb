@@ -37,4 +37,17 @@ class OutputTest < ActiveSupport::TestCase
   end
   
   
+  test 'trailing linebreaks are seperated' do
+    
+    @output.append_stdout "a\n"
+    @output.append_stdout "b"
+    @output.append_stderr 'c'
+    
+    result = @output.finish 0
+    
+    assert_equal result, [[OUT, 'a'],[OUT, 'b'],[ERR,'c']]
+    
+  end
+  
+  
 end
