@@ -48,17 +48,23 @@ module BigTuna
 
     private
     def convert_output
-      grouped_by_type = []
-      while ! @output.empty?
-        current_entry = @output.shift
-        group = current_entry[1]
-        if current_entry[0] == TYPE_STDOUT
-          group << @output.shift[1] while (@output.any? and @output[0][0] == TYPE_STDOUT)
-        elsif current_entry[0] == TYPE_STDERR
-          group << @output.shift[1] while (@output.any? and @output[0][0] == TYPE_STDERR)
+      
+      grouped_by_type = @output.inject [] do |sofar, current|
+        
+        # start fresh if this is a new type of stream
+        if sofar == [] || sofar.last[0] != current[0]
+          sofar << current
+        
+        # or we just append the content
+        else
+          sofar.last[1] << current[1]
         end
-        grouped_by_type << [current_entry[0], group]
+        
+        sofar
+        
       end
+      
+      
       grouped_by_type.map! { |type, text| text.gsub("\r", "").split("\n").map { |line| [type, line] } }
       @output = []
       grouped_by_type.each { |entries| entries.each { |entry| @output << entry } }
