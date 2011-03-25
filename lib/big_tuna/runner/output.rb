@@ -12,13 +12,11 @@ module BigTuna
     end
 
     def append_stdout(txt)
-      return if txt.nil?
-      @output << [TYPE_STDOUT, txt]
+      append TYPE_STDOUT, txt
     end
 
     def append_stderr(txt)
-      return if txt.nil?
-      @output << [TYPE_STDERR, txt]
+      append TYPE_STDERR, txt
     end
 
     def stdout
@@ -39,7 +37,7 @@ module BigTuna
 
     def finish(exit_code)
       self.exit_code = exit_code
-      convert_output
+      @output
     end
 
     def has_output?
@@ -47,28 +45,23 @@ module BigTuna
     end
 
     private
-    def convert_output
+    
+    def append stream, txt
       
-      grouped_by_type = @output.inject [] do |sofar, current|
-        
-        # start fresh if this is a new type of stream
-        if sofar == [] || sofar.last[0] != current[0]
-          sofar << current
-        
-        # or we just append the content
-        else
-          sofar.last[1] << current[1]
-        end
-        
-        sofar
-        
+      return if txt.nil?
+      
+      lines = txt.split /\r?\n/
+      
+      # continue from where we left off
+      if @output != [] && @output.last[0] == stream
+        @output.last[1] << lines.shift
       end
       
+      lines.each do |line|
+        @output << [stream,line]
+      end
       
-      grouped_by_type.map! { |type, text| text.gsub("\r", "").split("\n").map { |line| [type, line] } }
-      @output = []
-      grouped_by_type.each { |entries| entries.each { |entry| @output << entry } }
-      @output
     end
+    
   end
 end
