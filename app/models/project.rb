@@ -8,13 +8,13 @@ class Project < ActiveRecord::Base
   before_update :rename_build_folder
   before_create :set_default_build_counts
   after_save :update_hooks
-
+  
   validates :hook_name, :uniqueness => {:allow_blank => true}
   validates :name, :presence => true, :uniqueness => true
   validates :vcs_type, :inclusion => BigTuna.vcses.map { |e| e::VALUE }
   validates :vcs_source, :presence => true
   validates :vcs_branch, :presence => true
-
+  
   acts_as_list
   
   def self.ajax_reload?
@@ -97,7 +97,11 @@ class Project < ActiveRecord::Base
   def hooks=(hooks)
     @_hooks = hooks
   end
-
+  
+  def fetch_type
+    self[:fetch_type].to_sym
+  end
+  
   private
   def build_dir_from_name(name)
     File.join(Rails.root, "builds", name.downcase.gsub(/[^A-Za-z0-9]/, "_"))

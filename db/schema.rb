@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101209113828) do
+ActiveRecord::Schema.define(:version => 20110326142448) do
 
   create_table "build_parts", :force => true do |t|
     t.integer  "build_id",    :null => false
@@ -67,9 +67,9 @@ ActiveRecord::Schema.define(:version => 20101209113828) do
   end
 
   create_table "projects", :force => true do |t|
-    t.string   "name",          :null => false
-    t.string   "vcs_type",      :null => false
-    t.string   "vcs_source",    :null => false
+    t.string   "name",                               :null => false
+    t.string   "vcs_type",                           :null => false
+    t.string   "vcs_source",                         :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "max_builds"
@@ -78,6 +78,7 @@ ActiveRecord::Schema.define(:version => 20101209113828) do
     t.string   "vcs_branch"
     t.integer  "total_builds"
     t.integer  "failed_builds"
+    t.string   "fetch_type",    :default => "clone"
   end
 
   create_table "step_lists", :force => true do |t|
