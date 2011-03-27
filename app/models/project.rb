@@ -101,7 +101,11 @@ class Project < ActiveRecord::Base
   end
   
   def fetch_type
-    self[:fetch_type].to_sym
+    if self[:fetch_type]
+      self[:fetch_type].to_sym
+    else
+      :clone
+    end
   end
   
   private
@@ -155,6 +159,6 @@ class Project < ActiveRecord::Base
   end
   
   def validate_vcs_incremental_support
-    errors.add(:fetch_type, "not support by the vcs") if fecth_type = :incremental && !vcs.support_incremental_build?
+    errors.add(:fetch_type, " #{fetch_type} not support by the vcs") if fetch_type == :incremental && !vcs.support_incremental_build?
   end
 end
