@@ -26,7 +26,7 @@ class Build < ActiveRecord::Base
     self.started_at = Time.now
     project = self.project
     begin
-      out = project.vcs.clone(self.build_dir)
+      out = fetch_project_sources(project)
       self.update_attributes!(vcs.head_info[0].merge(:output => [out]))
       vcs_ok = true
     rescue BigTuna::Runner::Error => e
@@ -147,6 +147,15 @@ class Build < ActiveRecord::Base
       File.join(project.build_dir, "checkout")
     else
       File.join(project.build_dir, "build_#{self.build_no}_#{self.scheduled_at.strftime("%Y%m%d%H%M%S")}")
+    end
+  end
+  
+  def fetch_project_sources(project)
+    case project.fetch_type
+    when :clone
+      project.vcs.clone(self.build_dir)
+    when :incremental
+      project.vcs.update(self.build_dir)
     end
   end
 end
