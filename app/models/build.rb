@@ -95,7 +95,7 @@ class Build < ActiveRecord::Base
 
   def set_build_values
     project_dir = project.build_dir
-    self.build_dir = File.join(project_dir, "build_#{self.build_no}_#{self.scheduled_at.strftime("%Y%m%d%H%M%S")}")
+    self.build_dir = compute_build_dir
     self.status = STATUS_IN_QUEUE
     self.scheduled_at = Time.now
     self.output = []
@@ -139,6 +139,14 @@ class Build < ActiveRecord::Base
     previous_build = self.project.builds.order("created_at DESC").offset(1).first
     project.hooks.each do |hook|
       hook.build_finished(self)
+    end
+  end
+  
+  def compute_build_dir
+    if project.fetch_type == :incremental
+      File.join(project.build_dir, "checkout")
+    else
+      File.join(project.build_dir, "build_#{self.build_no}_#{self.scheduled_at.strftime("%Y%m%d%H%M%S")}")
     end
   end
 end
