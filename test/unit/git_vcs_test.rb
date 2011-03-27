@@ -48,6 +48,12 @@ class GitVCSTest < ActiveSupport::TestCase
     assert File.file?("test/files/repo_clone/new_file")
   end
 
+  test "git should support incremental_build" do
+    vcs = init_repo
+
+    assert vcs.support_incremental_build?
+  end
+  
   private
   def init_repo(dir = "test/files/repo", branch = "master")
     BigTuna::VCS::Git.new(dir, branch)

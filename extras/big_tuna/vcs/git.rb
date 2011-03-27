@@ -54,5 +54,9 @@ module BigTuna::VCS
       end
       BigTuna::Runner.execute(Dir.pwd, command)
     end
+    
+    def update(where_to)
+      
+    end
   end
 end
