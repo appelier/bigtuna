@@ -28,4 +28,22 @@ class ProjectFetchTypeTest < ActiveSupport::TestCase
     assert_equal :incremental, @project.fetch_type, 'should persist the fetch_type'
   end
   
+  test 'should validate a incremental build project if the vcs supports it' do
+    vcs = mocha
+    vcs.expects(:support_incremental_build?).returns(true)
+    @project.expects(:vcs).returns(vcs)
+    @project.fetch_type = :incremental
+
+    assert @project.valid?
+  end
+  
+  test 'should not validate a incremental build project if the vcs does not support it' do
+    vcs = mocha
+    vcs.expects(:support_incremental_build?).returns(false)
+    @project.expects(:vcs).returns(vcs)
+    @project.fetch_type = :incremental
+
+    assert !@project.valid?
+  end
+    
 end

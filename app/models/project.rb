@@ -15,6 +15,8 @@ class Project < ActiveRecord::Base
   validates :vcs_source, :presence => true
   validates :vcs_branch, :presence => true
   
+  validate :validate_vcs_incremental_support
+  
   acts_as_list
   
   def self.ajax_reload?
@@ -150,5 +152,9 @@ class Project < ActiveRecord::Base
       end
     end
     jobs_to_destroy.each { |job| job.destroy }
+  end
+  
+  def validate_vcs_incremental_support
+    errors.add(:fetch_type, "not support by the vcs") if fecth_type = :incremental && !vcs.support_incremental_build?
   end
 end
