@@ -151,4 +151,70 @@ class BuildTest < ActiveSupport::TestCase
     assert build.to_param.include?(project.name.to_url)
     assert build.to_param.include?(build.display_name.to_url)
   end
+  
+  test 'in clone fetch type, the build should always clone' do
+    vcs = mock_vcs
+    project = mock_project(vcs)
+    build = mock_build(project, vcs)
+    
+    project.fetch_type = :clone
+    
+    vcs.expects(:clone).once
+    vcs.expects(:update).never
+
+    build.perform
+  end
+
+  test 'in incremental fetch type, the build shoud update ios clone' do
+    vcs = mock_vcs
+    project = mock_project(vcs)
+    build = mock_build(project, vcs)
+    
+    project.fetch_type = :incremental
+    build.stubs(:project_sources_already_present?).returns(true)
+    
+    vcs.expects(:update).once
+    vcs.expects(:clone).never
+
+    build.perform
+  end
+  
+  test 'in incremental fetch type, if the build dir is not present, it should clone' do
+    vcs = mock_vcs
+    project = mock_project(vcs)
+    build = mock_build(project, vcs)
+    
+    project.fetch_type = :incremental
+    build.stubs(:project_sources_already_present?).returns(false)
+    
+    vcs.expects(:clone).once
+    
+    build.perform
+  end
+  
+  private
+  
+  def mock_vcs
+    vcs = mocha
+    vcs.stubs(:head_info).returns([{},nil])
+    vcs
+  end
+  
+  def mock_project(vcs)
+    project = project_with_steps({
+      :name => "Atom project",
+      :vcs_source => "no/such/repo",
+    }, "echo 'ha'")
+    
+    project.stubs(:vcs).returns(vcs)
+    project
+  end
+  
+  def mock_build(project, vcs)
+    build = Build.make(:project => project)
+    build.project = project
+    build.stubs(:vcs).returns(vcs)
+    build
+  end
+  
 end

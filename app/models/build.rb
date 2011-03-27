@@ -153,9 +153,33 @@ class Build < ActiveRecord::Base
   def fetch_project_sources(project)
     case project.fetch_type
     when :clone
-      project.vcs.clone(self.build_dir)
+      fetch_project_sources_by_cloning
     when :incremental
-      project.vcs.update(self.build_dir)
+      fetch_project_sources_incrementally
     end
+  end
+  
+  def fetch_project_sources_incrementally
+    if project_sources_already_present?
+      update_project
+    else
+      fetch_project_sources_by_cloning
+    end
+  end
+  
+  def fetch_project_sources_by_cloning
+    clone_project
+  end
+  
+  def clone_project
+    project.vcs.clone(self.build_dir)
+  end
+  
+  def update_project
+    project.vcs.update(self.build_dir)
+  end
+  
+  def project_sources_already_present?
+    File.directory? self.build_dir 
   end
 end
