@@ -8,6 +8,7 @@ class BuildTest < ActiveSupport::TestCase
 
   def teardown
     FileUtils.rm_rf("test/files/koss")
+    FileUtils.rm_rf('test/files/build')
     super
   end
 
@@ -190,6 +191,22 @@ class BuildTest < ActiveSupport::TestCase
     vcs.expects(:clone).once
     
     build.perform
+  end
+  
+  test 'in incremental fetch type, destroying a build should not remove the build dir' do
+    vcs = mock_vcs
+    project = mock_project(vcs)
+    build = mock_build(project, vcs)
+    
+    build.build_dir = 'test/files/build'
+    `mkdir test/files/build`
+    
+    project.fetch_type = :incremental
+    
+    build.save!
+    build.destroy
+    
+    assert File.directory?('test/files/build')
   end
   
   private

@@ -86,10 +86,12 @@ class Build < ActiveRecord::Base
 
   private
   def remove_build_dir
-    if File.directory?(self.build_dir)
-      FileUtils.rm_rf(self.build_dir)
-    else
-      BigTuna.logger.info("Couldn't find build dir to remove: %p" % [self.build_dir])
+    if project.fetch_type == :clone
+      if File.directory?(self.build_dir)
+        FileUtils.rm_rf(self.build_dir)
+      else
+        BigTuna.logger.info("Couldn't find build dir to remove: %p" % [self.build_dir])
+      end
     end
   end
 
