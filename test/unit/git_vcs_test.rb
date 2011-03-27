@@ -54,6 +54,17 @@ class GitVCSTest < ActiveSupport::TestCase
     assert vcs.support_incremental_build?
   end
   
+  test "git update should get commit in the clone" do
+    `cd test/files/repo; echo "new file" > new_file; git add new_file; git commit -m "new file"`
+    vcs = init_repo("test/files/repo", "master")
+    vcs.clone("test/files/repo_clone")
+    
+    `cd test/files/repo; echo "new file" > new_file_2; git add new_file_2; git commit -m "new second file"`
+    vcs.update("test/files/repo_clone")
+    
+    assert File.file?("test/files/repo_clone/new_file_2"), "The file has not been pulled"
+  end
+  
   private
   def init_repo(dir = "test/files/repo", branch = "master")
     BigTuna::VCS::Git.new(dir, branch)

@@ -56,7 +56,8 @@ module BigTuna::VCS
     end
     
     def update(where_to)
-      
+      command = 'git pull'
+      BigTuna::Runner.execute(File.join(Dir.pwd, where_to), command)
     end
   end
 end
