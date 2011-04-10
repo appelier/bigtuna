@@ -1,8 +1,8 @@
 class ProjectsController < ApplicationController
-  before_filter :locate_project, :only => [:show, :build, :edit, :update, :remove, :destroy, :arrange, :feed]
+  before_filter :locate_project, :only => [:show, :build, :edit, :update, :remove, :destroy, :arrange, :feed, :duplicate]
   respond_to :js, :only => [:index, :show]
-  
-  
+
+
   def index
     @projects = Project.order("position ASC")
   end
@@ -24,6 +24,17 @@ class ProjectsController < ApplicationController
   rescue BigTuna::VCS::Error => e
     flash[:error] = e.message
     redirect_to project_path(@project)
+  end
+
+  def duplicate
+    project_clone = @project.duplicate_project
+
+    if project_clone.nil?
+      flash[:error] = "Failed to clone the project"
+      redirect_to project_path(@project)
+    else
+      redirect_to project_path(project_clone)
+    end
   end
 
   def new
