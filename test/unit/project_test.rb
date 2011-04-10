@@ -448,6 +448,13 @@ class ProjectTest < ActiveSupport::TestCase
     end
   end
 
+  test "renaming a project with zero builds" do
+    project = project_with_steps({:vcs_source => "test/files/repo"}, "true", "true\nfalse")
+    assert_equal 0, project.total_builds
+    project.update_attributes({:name => "new name"})
+    assert_equal "new name", project.name
+  end
+
   private
   def create_project_builds(project, *statuses)
     statuses.reverse.each do |status|
