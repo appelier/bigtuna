@@ -28,13 +28,10 @@ class ProjectsController < ApplicationController
 
   def duplicate
     project_clone = @project.duplicate_project
-
-    if project_clone.nil?
-      flash[:error] = "Failed to clone the project"
-      redirect_to project_path(@project)
-    else
-      redirect_to project_path(project_clone)
-    end
+    redirect_to project_path(project_clone)
+  rescue ActiveRecord::RecordInvalid => e
+    flash[:error] = e.message
+    redirect_to project_path(@project)
   end
 
   def new
