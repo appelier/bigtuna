@@ -23,6 +23,18 @@ class ProjectsTest < ActionController::IntegrationTest
     end
   end
 
+  test "user can duplicate a project" do
+    project = project_with_steps({
+      :name => "Project to duplicate",
+      :vcs_source => " test/files/repo",
+    }, "ls -al file")
+    visit "/"
+    click_link_or_button("Project to duplicate")
+    click_link_or_button("Duplicate")
+    assert page.has_content?("Project to duplicate COPY")
+  end
+
+
   test "one can successfully build a project" do
     project = project_with_steps({
       :name => "Valid",

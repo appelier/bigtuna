@@ -448,6 +448,25 @@ class ProjectTest < ActiveSupport::TestCase
     end
   end
 
+  test "duplicating a project makes a copy" do
+    project = project_with_steps({:vcs_source => "test/files/repo"}, "true", "true\nfalse")
+    assert_difference("Project.count", +1) do
+      project_clone = project.duplicate_project
+    end
+  end
+
+  test "duplicating a project copies its name" do
+    project = project_with_steps({:vcs_source => "test/files/repo"}, "true", "true\nfalse")
+    project_clone = project.duplicate_project
+    assert_equal project_clone.name, project.name + " COPY"
+  end
+
+  test "duplicating a project copies its step lists" do
+    project = project_with_steps({:vcs_source => "test/files/repo"}, "true", "true\nfalse")
+    project_clone = project.duplicate_project
+    assert_equal project.step_lists.length, project_clone.step_lists.length
+  end
+
   private
   def create_project_builds(project, *statuses)
     statuses.reverse.each do |status|

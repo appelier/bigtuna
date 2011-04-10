@@ -11,6 +11,7 @@ BigTuna::Application.routes.draw do
     resources :projects do
       member { get "build"; get "remove"; get "arrange"; get "feed" }
       match "/hooks/:name/configure", :to => "hooks#configure", :as => "config_hook"
+      member { get "duplicate" }
     end
     resources :builds
     resources :step_lists

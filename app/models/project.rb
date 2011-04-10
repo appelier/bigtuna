@@ -25,6 +25,23 @@ class Project < ActiveRecord::Base
     end
   end
 
+  def duplicate_project
+    project_clone = self.clone
+    project_clone.name += " COPY"
+
+    self.step_lists.each do |step_list|
+      new_step_list = step_list.clone
+      new_step_list.save
+      project_clone.step_lists << new_step_list
+    end
+
+    if project_clone.save
+      project_clone
+    else
+      nil
+    end
+  end
+
   def ajax_reload?
     case BigTuna.ajax_reload
     when "always" then true
