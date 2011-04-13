@@ -75,6 +75,7 @@ class ActiveSupport::TestCase
 
   def destroy_test_repo
     FileUtils.rm_rf 'test/files/repo'
+    FileUtils.rm_rf 'test/files/build'
   end
 
   module WithTestRepo

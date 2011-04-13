@@ -455,6 +455,22 @@ class ProjectTest < ActiveSupport::TestCase
     assert_equal "new name", project.name
   end
 
+  test 'by default a project should build by cloning' do
+    project = project_with_steps({:vcs_source => "test/files/repo"}, "true", "true\nfalse")
+
+    project.save!
+
+    assert_equal :clone, project.fetch_type, 'by default a project should build by cloning'
+  end
+
+  test 'should persist the fetch_type' do
+    project = project_with_steps({:vcs_source => "test/files/repo", :fetch_type => :incremental}, "true", "true\nfalse")
+
+    project.save!
+
+    assert_equal :incremental, project.fetch_type, 'should persist the fetch_type'
+  end
+
   private
   def create_project_builds(project, *statuses)
     statuses.reverse.each do |status|

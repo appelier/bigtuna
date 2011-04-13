@@ -15,5 +15,9 @@ module BigTuna::VCS
       BigTuna.vcses << klass
       BigTuna.logger.info("Registered VCS: %s" % [klass])
     end
+    
+    def support_incremental_build?
+      respond_to?(:update)
+    end
   end
 end
