@@ -46,4 +46,20 @@ class BuildsTest < ActionController::IntegrationTest
     # run_delayed_jobs()
     visit build_path(project.recent_build)
   end
+
+  test "edit project from build view" do
+    project = project_with_steps({
+      :name => "Valid",
+      :vcs_source => "test/files/repo",
+    }, "ls -al file")
+    visit "/projects/#{[project.id, project.name.to_url].join("-")}"
+    assert_difference("Delayed::Job.count", +1) do
+      click_link_or_button "Build now"
+    end
+    visit build_path(project.recent_build)
+    within("#sidebar") do
+      click_link_or_button "Edit"
+    end
+    assert_equal current_path, "/projects/#{[project.id, project.name.to_url].join("-")}/edit"
+  end
 end
