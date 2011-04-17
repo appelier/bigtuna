@@ -30,4 +30,24 @@ class StepListTest < ActionController::IntegrationTest
     assert_equal new_name, @step2.name
     assert_equal new_steps, @step2.steps
   end
+
+  test "user cant add a step list without steps" do
+    visit edit_project_path(@project)
+    new_steps = "  "
+    within("#edit_step_list_#{@step2.id}") do
+      fill_in "Steps", :with => new_steps
+      click_button "Update"
+    end
+    assert page.has_content?("Steps can't be blank")
+  end
+
+  test "user cant add a step list with only commented steps" do
+    visit edit_project_path(@project)
+    new_steps = "#invalid\n   \n#very invalid"
+    within("#edit_step_list_#{@step2.id}") do
+      fill_in "Steps", :with => new_steps
+      click_button "Update"
+    end
+    assert page.has_content?("Steps can't be comments only")
+  end
 end

@@ -17,6 +17,8 @@ end
 
 StepList.blueprint do
   name { Sham.name }
+  steps { "ls -al\ntrue" }
+  project { Project.make }
 end
 
 Build.blueprint do
