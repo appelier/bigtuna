@@ -62,4 +62,13 @@ class BuildsTest < ActionController::IntegrationTest
     end
     assert_equal current_path, "/projects/#{[project.id, project.name.to_url].join("-")}/edit"
   end
+
+  test "test with no steps has green status after build" do
+    project = Project.make(:name => "myproject", :vcs_source => "test/files/repo", :vcs_type => "git")
+    visit "/projects/#{[project.id, project.name.to_url].join("-")}"
+    click_link_or_button "Build now"
+    run_delayed_jobs()
+    visit "/projects/#{[project.id, project.name.to_url].join("-")}"
+    assert page.has_xpath?("//div[@class='status_build_ok project']")
+  end
 end
