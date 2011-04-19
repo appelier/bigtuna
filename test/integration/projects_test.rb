@@ -149,4 +149,28 @@ class ProjectsTest < ActionController::IntegrationTest
     assert_equal "#{build_1.display_name} - #{build_1.status == Build::STATUS_OK ? "SUCCESS" : "FAILED"}", parsed["feed"]["entry"][0]["title"]
     assert_equal "#{build_2.display_name} - #{build_2.status == Build::STATUS_OK ? "SUCCESS" : "FAILED"}", parsed["feed"]["entry"][1]["title"]
   end
+
+  test "navigating to project details on edit" do
+    project = project_with_steps({
+      :name => "Atom project 2",
+      :vcs_source => "no/such/repo",
+      :max_builds => 3,
+    }, "echo 'ha'")
+    visit "/projects/#{[project.id, project.name.to_url].join("-")}/edit"
+    within("#sidebar") do
+      click_link_or_button "Project"
+    end
+    assert_equal current_path, "/projects/#{[project.id, project.name.to_url].join("-")}"
+  end
+
+  test "building the project from edit view" do
+    project = project_with_steps({
+      :name => "Valid",
+      :vcs_source => "test/files/repo",
+    }, "ls -al file")
+    visit "/projects/#{[project.id, project.name.to_url].join("-")}/edit"
+    assert_difference("Delayed::Job.count", +1) do
+      click_link_or_button "Build now"
+    end
+  end
 end

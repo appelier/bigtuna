@@ -15,6 +15,13 @@
   %br
   = f.text_field(:vcs_branch, :class => 'textfield')
 %div
+  = f.label(:fetch_type)
+  %br
+  = f.label(:clone)
+  = f.radio_button(:fetch_type, :clone)
+  = f.label(:incremental)
+  = f.radio_button(:fetch_type, :incremental)
+%div
   = f.label(:max_builds)
   %br
   = f.text_field(:max_builds, :class => 'textfield')

@@ -8,6 +8,7 @@ h1. Contributors
 
 BigTuna was created by "Michał Bugno":http://twitter.com/michalbugno and "Antek Piechnik":http://twitter.com/antekpiechnik. The following people have kindly contributed to make it a better project:
 
+* "David Rouchy":https://github.com/drouchy
 * "François Lamontagne":http://twitter.com/franklamontagne
 * "Víctor Martínez":http://twitter.com/knoopx
 * "unsay":http://twitter.com/unsay

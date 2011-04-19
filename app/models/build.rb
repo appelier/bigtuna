@@ -26,7 +26,7 @@ class Build < ActiveRecord::Base
     self.started_at = Time.now
     project = self.project
     begin
-      out = project.vcs.clone(self.build_dir)
+      out = fetch_project_sources(project)
       self.update_attributes!(vcs.head_info[0].merge(:output => [out]))
       vcs_ok = true
     rescue BigTuna::Runner::Error => e
@@ -86,35 +86,43 @@ class Build < ActiveRecord::Base
 
   private
   def remove_build_dir
-    if File.directory?(self.build_dir)
-      FileUtils.rm_rf(self.build_dir)
-    else
-      BigTuna.logger.info("Couldn't find build dir to remove: %p" % [self.build_dir])
+    if project.fetch_type == :clone
+      if File.directory?(self.build_dir)
+        FileUtils.rm_rf(self.build_dir)
+      else
+        BigTuna.logger.info("Couldn't find build dir to remove: %p" % [self.build_dir])
+      end
     end
   end
 
   def set_build_values
     project_dir = project.build_dir
-    self.build_dir = File.join(project_dir, "build_#{self.build_no}_#{self.scheduled_at.strftime("%Y%m%d%H%M%S")}")
+    self.build_dir = compute_build_dir
     self.status = STATUS_IN_QUEUE
     self.scheduled_at = Time.now
     self.output = []
   end
 
   def run_build_parts
-    self.project.step_lists.each do |step_list|
-      replacements = {}
-      step_list.shared_variables.all.each { |var| replacements[var.name] = var.value }
-      replacements["build_dir"] = self.build_dir
-      replacements["project_dir"] = self.project.build_dir
-      attrs = {
-        :name => step_list.name,
-        :steps => step_list.steps,
-        :shared_variables => replacements,
-      }
-      part = self.parts.build(attrs)
-      part.save!
-      part.build!
+    if self.project.step_lists.empty?
+      self.update_attributes!(:status => STATUS_OK)
+      after_passed()
+      after_finished()
+    else
+      self.project.step_lists.each do |step_list|
+        replacements = {}
+        step_list.shared_variables.all.each { |var| replacements[var.name] = var.value }
+        replacements["build_dir"] = self.build_dir
+        replacements["project_dir"] = self.project.build_dir
+        attrs = {
+          :name => step_list.name,
+          :steps => step_list.steps,
+          :shared_variables => replacements,
+        }
+        part = self.parts.build(attrs)
+        part.save!
+        part.build!
+      end
     end
   end
 
@@ -144,5 +152,46 @@ class Build < ActiveRecord::Base
     project.hooks.each do |hook|
       hook.build_finished(self)
     end
+  end
+  
+  def compute_build_dir
+    if project.fetch_type == :incremental
+      File.join(project.build_dir, "checkout")
+    else
+      File.join(project.build_dir, "build_#{self.build_no}_#{self.scheduled_at.strftime("%Y%m%d%H%M%S")}")
+    end
+  end
+  
+  def fetch_project_sources(project)
+    case project.fetch_type
+    when :clone
+      fetch_project_sources_by_cloning
+    when :incremental
+      fetch_project_sources_incrementally
+    end
+  end
+  
+  def fetch_project_sources_incrementally
+    if project_sources_already_present?
+      update_project
+    else
+      fetch_project_sources_by_cloning
+    end
+  end
+  
+  def fetch_project_sources_by_cloning
+    clone_project
+  end
+  
+  def clone_project
+    project.vcs.clone(self.build_dir)
+  end
+  
+  def update_project
+    project.vcs.update(self.build_dir)
+  end
+  
+  def project_sources_already_present?
+    File.directory? self.build_dir 
   end
 end
