@@ -34,7 +34,6 @@ class ProjectsTest < ActionController::IntegrationTest
     assert page.has_content?("Project to duplicate COPY")
   end
 
-
   test "one can successfully build a project" do
     project = project_with_steps({
       :name => "Valid",
