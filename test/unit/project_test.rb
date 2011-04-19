@@ -490,6 +490,12 @@ class ProjectTest < ActiveSupport::TestCase
     assert_equal project.step_lists.length, project_clone.step_lists.length
   end
 
+  test "duplicating a project copies its cloning method" do
+    project = project_with_steps({:fetch_type => :incremental, :vcs_source => "test/files/repo"}, "true", "true\nfalse")
+    project_clone = project.duplicate_project
+    assert_equal :incremental, project_clone.fetch_type
+  end
+
   test "duplicating a project copies and changes its hook name" do
     project = project_with_steps({:vcs_source => "test/files/repo", :hook_name => "my_hook"}, "true", "true\nfalse")
     project_clone = project.duplicate_project
