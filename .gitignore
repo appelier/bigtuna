@@ -18,3 +18,5 @@ db/*.sqlite
 
 builds/*
 test/files/*
+
+.idea

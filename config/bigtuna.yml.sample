@@ -4,3 +4,5 @@
 #   url_host: "ci.yoursite.com"
 #   ajax_reload: false                     # "building" or "always"
 #   build_dir: "tmp"                       # default: "builds"
+#   auth_user:                             # http basic authentication user
+#   auth_password:			   # http basic authentication password
