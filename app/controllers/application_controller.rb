@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
   private
 
   def authenticate
-    if !BigTuna.auth_user.blank? and !BigTuna.auth_pasword.blank?
+    if !BigTuna.auth_user.blank? and !BigTuna.auth_password.blank?
       authenticate_or_request_with_http_basic do |user_name, password|
         user_name == BitTuna.auth_user && password == BigTuna.auth_password
       end
