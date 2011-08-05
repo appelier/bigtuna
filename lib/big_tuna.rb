@@ -18,7 +18,7 @@ module BigTuna
     @config = config.symbolize_keys!
   end
 
-  [:ajax_reload, :github_secure, :bitbucket_secure, :build_dir, :read_only].each do |key|
+  [:ajax_reload, :github_secure, :bitbucket_secure, :build_dir, :read_only, :auth_user, :auth_password].each do |key|
     define_method key do
       config[key]
     end
