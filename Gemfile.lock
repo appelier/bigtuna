@@ -170,6 +170,7 @@ DEPENDENCIES
   notifo
   open4
   rails (= 3.0.3)
+  rake
   ruby-debug
   ruby-debug19
   scashin133-xmpp4r-simple (= 0.8.9)
