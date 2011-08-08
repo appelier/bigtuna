@@ -8,7 +8,7 @@ gem "stringex"
 gem "open4"
 gem "json"
 gem 'jquery-rails'
-gem 'rake'
+gem 'rake', '>= 0.9.2'
 
 # ruby 1.9 compatible version
 gem "scashin133-xmpp4r-simple", '0.8.9', :require => 'xmpp4r-simple'
