@@ -17,16 +17,17 @@ class HooksController < ApplicationController
     public_source = url.gsub(/^https:\/\//, "git://") + ".git"
     private_source = url.gsub(/^https:\/\//, "git@").
                          gsub(/github.com\//, "github.com:") + ".git"
+    secure_source = url.gsub(/^https:\/\//, "https://%:%@") + ".git"
 
-    project = Project.where(["(vcs_source = ? or vcs_source = ?) AND (vcs_branch = ?)",
-                              public_source, private_source, branch]).first
+    project = Project.where(["(vcs_source = ? or vcs_source = ? or vcs_source like ?) AND (vcs_branch = ?)",
+                              public_source, private_source, secure_source, branch]).first
 
     if BigTuna.github_secure.nil?
       render :text => "github secure token is not set up", :status => 403
     elsif project and params[:secure] == BigTuna.github_secure
       trigger_and_respond(project)
     else
-      render :text => "invalid secure token", :status => 404
+      render :text => "invalid secure token or unrecognized project", :status => 404
     end
   end
 
