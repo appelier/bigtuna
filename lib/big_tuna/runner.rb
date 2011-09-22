@@ -22,6 +22,7 @@ module BigTuna
       Bundler.with_clean_env do
         begin
           rails_env = ENV.delete("RAILS_ENV")
+          rubyopt = ENV.delete("RUBYOPT")
           old_bundle_gemfile = nil
           bundle_gemfile = File.join(dir, "Gemfile")
           if File.file?(bundle_gemfile)
@@ -31,6 +32,7 @@ module BigTuna
           yield
         ensure
           ENV["RAILS_ENV"] = rails_env if rails_env # if nil, then don't set any key
+          ENV["RUBYOPT"] = rubyopt if rubyopt
           ENV["BUNDLE_GEMFILE"] = old_bundle_gemfile if old_bundle_gemfile
         end
       end
