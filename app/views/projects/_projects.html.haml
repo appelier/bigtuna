@@ -3,7 +3,9 @@
   .hero-unit
     %h1= "No projects yet."
     %p
-      Add a new project using the New Project button on the navigation bar and start continuously testing your software!
+      Add a new project and start continuously testing your software!
+    %p
+      = link_to("Set up a new project", new_project_path, :class => 'btn primary large')
 
 - @projects.each do |project|
   %ol
