@@ -131,6 +131,7 @@ GEM
     ruby_core_source (0.1.5)
       archive-tar-minitar (>= 0.5.2)
     rubyzip (0.9.4)
+    rugged (0.16.0)
     scashin133-xmpp4r-simple (0.8.9)
       xmpp4r (>= 0.3.2)
     selenium-webdriver (0.1.4)
@@ -188,6 +189,7 @@ DEPENDENCIES
   rails (~> 3.0.11)
   ruby-debug
   ruby-debug19
+  rugged
   scashin133-xmpp4r-simple (= 0.8.9)
   shout-bot
   sqlite3-ruby
