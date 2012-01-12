@@ -1,6 +1,10 @@
 #ajax-reload= Project.ajax_reload?
-%h2 Projects
-= "No projects yet." unless !@projects.empty?
+- if @projects.empty?
+  .hero-unit
+    %h1= "No projects yet."
+    %p
+      Add a new project using the New Project button on the navigation bar and start continuously testing your software!
+
 - @projects.each do |project|
   %ol
     %li{:class => "#{project.status} project", :id => dom_id(project)}
