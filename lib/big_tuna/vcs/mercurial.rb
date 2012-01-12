@@ -34,5 +34,10 @@ module BigTuna::VCS
       command = "hg clone -u #{self.branch} #{self.source} #{where_to}"
       BigTuna::Runner.execute(Dir.pwd, command)
     end
+
+    def update(where_to)
+      command = "hg pull -u"
+      BigTuna::Runner.execute(where_to, command)
+    end
   end
 end

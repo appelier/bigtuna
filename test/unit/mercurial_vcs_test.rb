@@ -48,6 +48,22 @@ class MercurialVCSTest < ActiveSupport::TestCase
     assert File.file?("test/files/repo_clone/new_file")
   end
 
+  test "hg should support incremental_build" do
+    vcs = init_repo
+    assert vcs.support_incremental_build?
+  end
+
+  test "hg update should get commit in the clone" do
+    vcs = init_repo
+    vcs.clone("test/files/repo_clone")
+    message = 'last commit message'
+    assert_not_equal vcs.head_info[0][:commit_message], 'last commit message'
+    `cd test/files/repo; echo "new file" > new_file; hg add new_file; hg commit -m "#{message}"`
+    vcs.update("test/files/repo_clone")
+    assert_equal vcs.head_info[0][:commit_message], 'last commit message'
+    assert File.file?("test/files/repo_clone/new_file"), "The file has not been pulled"
+  end
+
   private
   def init_repo(dir = "test/files/repo", branch = "default")
     BigTuna::VCS::Mercurial.new(dir, branch)
