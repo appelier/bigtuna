@@ -1,8 +1,10 @@
 #build
   = render :partial => 'build'
 
-= ajaxReload(build_path(@build, :format => :js))
-  
+- unless @build.finished?
+  - build_path_params = params[:stderr] ? {:format => :js, :stderr => 1} : {:format => :js}
+  = ajaxReload(build_path(@build, build_path_params))
+
 - content_for :sidebar do
   - if params[:stderr].nil?
     %li= link_to("Show stderr", build_path(@build, :stderr => 1), :class => "black_button")
