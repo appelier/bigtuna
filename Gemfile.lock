@@ -48,7 +48,7 @@ GEM
     culerity (0.2.12)
     daemons (1.1.0)
     database_cleaner (0.6.0)
-    delayed_job (2.1.1)
+    delayed_job (2.1.4)
       activesupport (~> 3.0)
       daemons
     erubis (2.6.6)
