@@ -1,0 +1,16 @@
+language: ruby
+rvm:
+  - 1.8.7
+  - 1.9.2
+  - 1.9.3
+  - rbx-18mode
+  - ree
+env:
+  - DB=sqlite
+  - DB=mysql
+  - DB=postgres
+before_script:
+  - "cp config/database.yml.travis.$DB config/database.yml"
+  - "RAILS_ENV=test bundle exec rake db:create"
+  - "RAILS_ENV=test bundle exec rake db:migrate"
+script: bundle exec rake
