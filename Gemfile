@@ -21,6 +21,11 @@ gem "notifo"
 # campfire notifications
 gem "tinder"
 
+case ENV["DB"]
+when "mysql" then gem "mysql2", "~>0.2.0"
+when "postgres" then gem "pg"
+end
+
 group :development, :test do
   gem "capybara"
   gem "launchy"
