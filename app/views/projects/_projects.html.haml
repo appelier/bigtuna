@@ -6,6 +6,11 @@
       Add a new project and start continuously testing your software!
     %p
       = link_to("Set up a new project", new_project_path, :class => 'btn primary large')
+- else
+  .page-header
+    %h1
+      Projects
+      %small List of your projects
 
 - @projects.each do |project|
   %ol
