@@ -448,6 +448,40 @@ class ProjectTest < ActiveSupport::TestCase
     end
   end
 
+  test "duplicating a project makes a copy" do
+    project = project_with_steps({:vcs_source => "test/files/repo"}, "true", "true\nfalse")
+    assert_difference("Project.count", +1) do
+      project_clone = project.duplicate_project
+    end
+  end
+
+  test "duplicating a project copies its name" do
+    project = project_with_steps({:vcs_source => "test/files/repo"}, "true", "true\nfalse")
+    project_clone = project.duplicate_project
+    assert_equal project_clone.name, project.name + " COPY"
+  end
+
+  test "duplicating a project copies its step lists" do
+    project = project_with_steps({:vcs_source => "test/files/repo"}, "true", "true\nfalse")
+    project_clone = project.duplicate_project
+    assert_equal project.step_lists.length, project_clone.step_lists.length
+  end
+
+  test "duplicating a project copies its cloning method" do
+    project = project_with_steps({:fetch_type => :incremental, :vcs_source => "test/files/repo"}, "true", "true\nfalse")
+    project_clone = project.duplicate_project
+    assert_equal :incremental, project_clone.fetch_type
+  end
+
+  test "duplicating a project copies and changes its hook name" do
+    project = project_with_steps({:vcs_source => "test/files/repo", :hook_name => "my_hook"}, "true", "true\nfalse")
+    project_clone = project.duplicate_project
+    assert_equal project_clone.hook_name, project.hook_name + "_copy"
+    project_with_empty_hook = project_with_steps({:vcs_source => "test/files/repo", :hook_name => ""}, "true", "true\nfalse")
+    project_clone = project_with_empty_hook.duplicate_project
+    assert_equal project_clone.hook_name, project_with_empty_hook.hook_name
+  end
+
   test "renaming a project with zero builds" do
     project = project_with_steps({:vcs_source => "test/files/repo"}, "true", "true\nfalse")
     assert_equal 0, project.total_builds
