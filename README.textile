@@ -13,7 +13,11 @@ BigTuna was created by "Michał Bugno":http://twitter.com/michalbugno and "Antek
 * "Víctor Martínez":http://twitter.com/knoopx
 * "unsay":http://twitter.com/unsay
 * "Jonathan Dance":https://github.com/wuputah
+* "Pawel Obrok":https://github.com/obrok
+* "Pawel Pierzchala":https://github.com/wrozka
 * ...and others (some mentioned in the "pull request * list":https://github.com/appelier/bigtuna/pulls)
+
+h1. Build Status !https://secure.travis-ci.org/appelier/bigtuna.png!:http://travis-ci.org/appelier/bigtuna
 
 h1. License
 
