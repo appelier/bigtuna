@@ -1,11 +1,20 @@
 #builds
   #ajax-reload= @project.ajax_reload?
-  - @builds.each do |build|      
-    %div{:class => "#{build.status} project", :id => dom_id(build)}
+- if @builds.empty?
+  .hero-unit
+    %h1= "No builds yet."
+    %p
+      Press the Build now button to start a build!
+- else
+  %h1 Builds
+
+- @builds.each do |build|
+  %div{:class => "#{build.status} project", :id => dom_id(build)}
+    %h2
+      = link_to(build.display_name, build_path(build, :stderr => build.status == Build::STATUS_OK ? nil : 1))
       - unless BigTuna.read_only?
-        .info
-          = form_tag(build_path(build), :method => "DELETE") do
-            %button.crit_button{:type => "submit"} Delete
-      %h3= link_to(build.display_name, build_path(build, :stderr => build.status == Build::STATUS_OK ? nil : 1))
-      %table.value_list
-        = render :partial => "builds/build_data", :locals => {:build => build}
+        = form_tag(build_path(build), :method => "DELETE", :class => 'pull-right') do
+          %button.btn.danger.small{:type => "submit"} Delete build
+    %table.value_list
+      = render :partial => "builds/build_data", :locals => {:build => build}
+  %hr
