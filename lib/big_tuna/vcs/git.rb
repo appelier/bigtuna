@@ -28,6 +28,12 @@ module BigTuna::VCS
       end
       return true
     end
+    
+    def last_commit
+      repo = Rugged::Repository.new(self.source)
+      ref = Rugged::Reference.lookup(repo, "refs/heads/#{self.branch}")
+      repo.lookup(ref.target) # commit lookup
+    end
 
     def head_info
       info = {}
@@ -37,12 +43,11 @@ module BigTuna::VCS
       rescue BigTuna::Runner::Error => e
         raise BigTuna::VCS::Error.new("Couldn't access repository log")
       end
-      head_hash = output.stdout
-      info[:commit] = head_hash.shift
-      info[:author] = head_hash.shift
-      info[:email] = head_hash.shift
-      info[:committed_at] = Time.parse(head_hash.shift)
-      info[:commit_message] = head_hash.join("\n")
+      info[:commit] = last_commit.oid
+      info[:author] = last_commit.committer[:name]
+      info[:email] = last_commit.committer[:email]
+      info[:committed_at] = last_commit.committer[:time]
+      info[:commit_message] = last_commit.message.split("\n").join(" ")
       [info, command]
     end
 
