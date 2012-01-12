@@ -1,3 +1,7 @@
+- if f.object.errors.any?
+  - f.object.errors.full_messages.each do |msg|
+    %p= msg
+
 %div
   = f.label(:name)
   %br
