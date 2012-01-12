@@ -4,21 +4,28 @@
     %title BigTuna Continuous Integration
     = stylesheet_link_tag "reset.css"
     = stylesheet_link_tag "master.css"
+    = stylesheet_link_tag "http://twitter.github.com/bootstrap/1.4.0/bootstrap.min.css"
     = javascript_include_tag :all
     = csrf_meta_tag
     %meta{:"http-equiv" => "Content-Type", :content => "text/html;charset=UTF-8"}
     %meta{:name => "keywords", :content => "keywords"}
     %meta{:name => "description", :content => "description"}
-  %body
-    #main
-      %div#ad
-        checked with
-        = link_to("BigTuna", "http://bigtuna.appelier.com", :target => "_blank", :title => "BigTuna v#{BigTuna::VERSION}")
+  %body{ :style => 'padding-top: 60px;' }
+    .topbar
+      .topbar-inner
+        .container
+          %h3
+            = link_to("Home", root_path)
+          %ul.nav
+            = yield :topbar
+
+          %p.pull-right
+            checked with
+            = link_to("BigTuna", "http://bigtuna.appelier.com", :target => "_blank", :title => "BigTuna v#{BigTuna::VERSION}")
+    .container
       #content
         = flash[:error]
         = flash[:notice]
         = yield
       %ol#sidebar
-        %li= link_to("home", root_path, :class => "black_button")
-        = yield :sidebar
       #footer
