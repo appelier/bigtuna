@@ -121,7 +121,7 @@ class ProjectsTest < ActionController::IntegrationTest
     job = Delayed::Job.order("created_at DESC").first
     job.invoke_job
     click_link build.display_name
-    assert page.has_content?("Could not switch to 'no/such'")
+    assert page.has_content?("fatal: repository 'no/such/repo' does not exist")
   end
 
   test "project should have a link to the atom feed" do
