@@ -1,4 +1,5 @@
 .bundle
+bin/*
 log/*.log
 tmp/**/*
 
