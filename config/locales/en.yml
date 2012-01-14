@@ -2,3 +2,6 @@ en:
   time:
     formats:
       full: "%Y-%m-%d %H:%M:%S"
+  token:
+    missing: 'Please add a secure token to the BigTuna configuration in order accept hooks from this service.' 
+    configured: 'BigTuna is configured to accept hooks from this service.'
