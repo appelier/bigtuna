@@ -7,7 +7,7 @@
       Press the Build now button to start a build!
 - else
   %h3 Recent Builds
-  %ul.build-list
+  %ul.list-with-status
     - @builds.each do |build|
       %li{ :class => build.status }
         - if build.status == 'status_build_in_progress'
