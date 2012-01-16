@@ -6,23 +6,16 @@
       Add a new project and start continuously testing your software!
     %p
       = link_to("Set up a new project", new_project_path, :class => 'btn primary large')
-- else
-  .page-header
-    %h1
-      Projects
-      %small List of your projects
 
 - @projects.each do |project|
-  %ol.list-with-status
+  %ol.list-with-status.build-status.projects
     %li{:class => "#{project.status} project", :id => dom_id(project)}
       - unless BigTuna.read_only?
         .updown
           = link_to("&uarr;".html_safe, arrange_project_path(project, :up => true)) unless project.first?
           = link_to("&darr;".html_safe, arrange_project_path(project, :down => true)) unless project.last?
+      .stability
+        = format_stability(project.stability)
       %h3= link_to(project.name, project_path(project))
       - if project.recent_build
-        %table.value_list
-          = render :partial => "builds/build_data", :locals => {:build => project.recent_build}
-          %tr
-            %td.title Stability
-            %td.value= format_stability(project.stability)
+        = render :partial => "builds/build_data", :locals => {:build => project.recent_build}
