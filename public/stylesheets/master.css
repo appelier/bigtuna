@@ -45,18 +45,18 @@ div.project {
   margin-left: 1em;
 }
 
-.build-list li.status_build_ok pre.step {
+.list-with-status li.status_build_ok pre.step {
   display:none; 
 }
 
-.build-list {
+.list-with-status {
   position: relative;
   list-style-type: none;
   padding: 0px;
   margin: 0px;
 }
 
-.build-list li {
+.list-with-status li {
   background-repeat: no-repeat;
   background-position: 0px 0px; 
   margin:0;
@@ -64,11 +64,11 @@ div.project {
   padding-left: 18px; 
 }
 
-.build-list li.status_build_in_progress {
+.list-with-status li.status_build_in_progress {
   background-image: url(../images/in_progress.png);
 }
 
-.build-list li.status_build_ok {
+.list-with-status li.status_build_ok {
   background-image: url(../images/ok.png);
 }
 
@@ -133,13 +133,14 @@ pre.step {
   border: solid 1px #ddd;
 }
 
+/* Give the in progress builds a little CSS3 panache. */
 .pulse {
     width: 8px;
     height: 8px;
     display: block;
     position: absolute;
     margin-top: 3px;
-    left: 2px;
+    left: 3px;
     border: 2px solid rgb(228, 138, 42);
     border-radius: 50px;
     box-shadow: 0 0 5px #a0eaff;
