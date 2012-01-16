@@ -23,6 +23,7 @@ samp {
 }
 .commit-detail blockquote {
   margin-top: 1em;
+  font-size: .9em;
 }
 
 div.project {
