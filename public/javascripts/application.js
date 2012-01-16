@@ -7,6 +7,7 @@ function ajaxReload(url){
   }
 }
 
-jQuery('ol.build-list div.command_box').click(function() {
-  console.log($('pre.step', this));
+jQuery('ol.list-with-status div.command_box').click(function() {
+  //console.log($('pre.step', this));
+  console.log ('foo');
 });
