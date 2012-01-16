@@ -1,4 +1,6 @@
-#listing
-  = render :partial => 'projects'
+.row
+  .span11
+    = render :partial => 'projects'
+  .span5  
 
 = ajaxReload(projects_path(:format => :js))
