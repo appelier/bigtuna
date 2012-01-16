@@ -1,16 +1,8 @@
-#builds
-  #ajax-reload= @project.ajax_reload?
-- if @builds.empty?
-  .hero-unit
-    %h1= "No builds yet."
-    %p
-      Press the Build now button to start a build!
-- else
-  %h3 Recent Builds
-  %ul.list-with-status
-    - @builds.each do |build|
-      %li{ :class => build.status }
-        - if build.status == 'status_build_in_progress'
-          %div.pulse
-        = link_to("##{build.build_no}", build_path(build, :stderr => build.status == Build::STATUS_OK ? nil : 1))
-        = format_stability(build.project.stability)
+%h3 Recent Builds
+%ul.list-with-status
+  - @builds.each do |build|
+    %li{ :class => build.status }
+      - if build.status == 'status_build_in_progress'
+        %div.pulse
+      = link_to("##{build.build_no}", build_path(build, :stderr => build.status == Build::STATUS_OK ? nil : 1))
+      = format_stability(build.project.stability)

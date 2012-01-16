@@ -13,14 +13,21 @@
 
 .row
   .span11
-    = render :partial => 'builds/build', :locals => { :build => @project.builds.last }
+    - if @project.builds.any?
+      = render :partial => 'builds/build', :locals => { :build => @project.builds.last }
+    - else
+      .hero-unit
+        %h1= "No builds yet."
+        %p
+          Press the Build now button to start a build!
   .span5
     - unless BigTuna.read_only?
       %div.project-actions
         = link_to("Edit", edit_project_path(@project), :class => "btn small")
         = link_to("Duplicate", duplicate_project_path(@project), :class => "btn small")
         = link_to("Remove project", remove_project_path(@project), :class => "btn small danger")
-    = render :partial => 'builds'
+    - if @project.builds.any?
+      = render :partial => 'builds'
     = ajaxReload(project_path(@project, :format => :js))
 
 - content_for :topbar do
