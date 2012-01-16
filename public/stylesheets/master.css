@@ -53,6 +53,18 @@ div.project {
   margin-left: 1em;
 }
 
+pre.step {
+  overflow-x: scroll;
+}
+
+pre.step span {
+  white-space: nowrap;
+}
+
+pre.step:hover {
+  width: 800px;
+}
+
 .list-with-status li.status_build_ok pre.step {
   display:none; 
 }
