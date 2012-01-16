@@ -18,6 +18,13 @@ samp {
   margin: 0 .5em;
 }  
 
+.commit-detail code.commit {
+  font-size:.7em;
+}
+.commit-detail blockquote {
+  margin-top: 1em;
+}
+
 div.project {
   padding: 1.5em;
 } 
