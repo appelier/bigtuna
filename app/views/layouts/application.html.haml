@@ -26,8 +26,12 @@
             checked with
             = link_to("BigTuna", "http://bigtuna.appelier.com", :target => "_blank", :title => "BigTuna v#{BigTuna::VERSION}")
     .container
-      = flash[:error]
-      = flash[:notice]
+      - if flash[:error]
+        .alert-message.error
+          = flash[:error]
+      - if flash[:notice]
+        .alert-message.info
+          = flash[:notice]
       = yield
 
     = yield :sidebar

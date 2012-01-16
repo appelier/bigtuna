@@ -1,11 +1,13 @@
-%div
+.clearfix
   = f.label(:name)
-  %br
-  = f.text_field(:name, :class => 'textfield')
-%div
+  .input
+    = f.text_field(:name, :class => 'textfield')
+.clearfix
   = f.label(:steps)
-  %br
-  = f.text_area(:steps, :class => 'textarea')
-%div
-  %button.black_button{:type => "submit"}
+  .input
+    = f.text_area(:steps, :class => 'textarea span12 pre')
+.clearfix
+.actions
+  %button.btn.primary{:type => "submit"}
     = f.object.new_record? ? "Create" : "Update"
+    Config

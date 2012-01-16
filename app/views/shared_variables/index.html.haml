@@ -1,8 +1,18 @@
-%h2= "Shared variables for &quot;#{@step_list.project.name}&quot;".html_safe
-%p You can set up configuration&ndash;specific <tt>%variables%</tt> here. Real&ndash;life examples would be
+%h2= "Shared variables for &ldquo;#{@step_list.project.name}&rdquo;".html_safe
+
+%p
+  You can set up configuration&ndash;specific 
+  <code>%variables%</code> here. Real&ndash;life examples would be:
+
 %ul
-  %li= "<tt><b>%runner%</b> rvm 1.8.7 exec</tt>".html_safe
-  %li= "<tt><b>%envs%</b> env RAILS_ENV=test BUNDLE_GEMFILE=%build_dir%/Gemfile</tt>".html_safe
+  %li
+    %tt
+      %code %runner%
+      rvm 1.8.7 exec
+  %li
+    %tt  
+      %code %envs%
+      env RAILS_ENV=test BUNDLE_GEMFILE=%build_dir%/Gemfile
 
 %p And then use them in steps like:
 
@@ -11,30 +21,35 @@
 \%runner% %envs% bundle exec rake db:migrate
 \%runner% %envs% bundle exec rake</pre>
 
-%p Shared variables cannot contain other shared variables except <tt>%build_dir%</tt> and <tt>%project_dir%</tt>.
+%p Shared variables cannot contain other shared variables except <code>%build_dir%</code> and <code>%project_dir%</code>.
 
 %h3 Create new variable
 = form_for(@shared_variable, :url => shared_variables_path(:step_list_id => @step_list)) do |f|
-  %div
+  .clearfix 
     = f.label(:name)
-    = f.text_field(:name)
-  %div
+    .input
+      = f.text_field(:name, :class => 'pre')
+  .clearfix 
     = f.label(:value)
-    = f.text_field(:value)
-  %div
-    %button.black_button{:type => "submit"}
+    .input
+      = f.text_field(:value, :class => 'span8 pre')
+  .actions 
+    %button.btn.primary{:type => "submit"}
       = f.object.new_record? ? "Create" : "Update"
 
-%h3 Already existing variables
-- @shared_variables.each do |variable|
-  = form_for(variable, :url => shared_variable_path(variable, :step_list_id => @step_list)) do |f|
-    %div
-      = f.label(:name)
-      = f.text_field(:name)
-    %div
-      = f.label(:value)
-      = f.text_field(:value)
-    %div
-      %button.black_button{:type => "submit"} Update
-  = form_for(variable, :url => shared_variable_path(variable, :step_list_id => @step_list), :html => {:method => :delete}) do |f|
-    %button.crit_button{:type => "submit"} Remove
+- if @shared_variables.any?
+  %h3 Already existing variables
+  - @shared_variables.each do |variable|
+    = form_for(variable, :url => shared_variable_path(variable, :step_list_id => @step_list)) do |f|
+      .clearfix
+        = f.label(:name)
+        .input
+          = f.text_field(:name, :class => 'pre')
+      .clearfix 
+        = f.label(:value)
+        .input
+          = f.text_field(:value, :class => 'span8 pre')
+      .actions 
+        %button.btn.primary{:type => "submit"} Update
+    = form_for(variable, :url => shared_variable_path(variable, :step_list_id => @step_list), :html => {:method => :delete}) do |f|
+      %button.btn.danger{:type => "submit"} Remove

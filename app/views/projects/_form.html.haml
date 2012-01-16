@@ -60,4 +60,3 @@
   %button.btn.large.primary{:type => "submit"}
     = f.object.new_record? ? "Create project" : "Update"
   = link_to("Back to project", project_path(f.object), :class => "btn large") unless f.object.new_record?
-
