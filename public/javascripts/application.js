@@ -6,3 +6,7 @@ function ajaxReload(url){
     $.ajax({method: 'get', url : url});
   }
 }
+
+jQuery('ol.build-list div.command_box').click(function() {
+  console.log($('pre.step', this));
+});

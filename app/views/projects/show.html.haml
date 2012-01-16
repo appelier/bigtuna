@@ -1,26 +1,26 @@
 .page-header
   %h1
     = @project.name
-    %small Project summary
-    = link_to("Build now", build_project_path(@project), :class => "btn crm large success pull-right")
+    - if @project.builds.any?
+      = "##{@project.builds.last.build_no}"
+    %small
+      via
+      %code= @project.vcs_source 
+      on
+      %code= @project.vcs_branch
+    - unless BigTuna.read_only?
+      = link_to("Build now", build_project_path(@project), :class => "btn crm large success pull-right")
 
 .row
-  .span5
-    %h6 Repository
-    %small= @project.vcs_source
-
-    %h6 Branch
-    %small= @project.vcs_branch
-
-    %p
-
-    %p
-      = link_to("Duplicate", duplicate_project_path(@project), :class => "btn small")
-      = link_to("Remove project", remove_project_path(@project), :class => "btn small danger")
-
   .span11
+    = render :partial => 'builds/build', :locals => { :build => @project.builds.last }
+  .span5
+    - unless BigTuna.read_only?
+      %div.project-actions 
+        = link_to("Edit", edit_project_path(@project), :class => "btn small")
+        = link_to("Duplicate", duplicate_project_path(@project), :class => "btn small")
+        = link_to("Remove project", remove_project_path(@project), :class => "btn small danger")
     = render :partial => 'builds'
-
     = ajaxReload(project_path(@project, :format => :js))
 
 - content_for :topbar do

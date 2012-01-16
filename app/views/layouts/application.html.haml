@@ -15,8 +15,11 @@
       .topbar-inner
         .container
           %h3
-            = link_to("Home", root_path)
+            = link_to("BigTuna", root_path)
           %ul.nav
+            - unless BigTuna.read_only?
+              %li
+                = link_to("New Project", new_project_path)
             = yield :topbar
 
           %p.pull-right
