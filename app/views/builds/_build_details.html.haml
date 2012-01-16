@@ -1,0 +1,19 @@
+%hr
+.build-information
+  %span.label Scheduled 
+  = time_ago_in_words(@build.scheduled_at)
+  ago
+  %br
+  - if @build.started?
+    %span.label Started
+    = time_ago_in_words(@build.started_at)
+    ago
+    %br
+  - if @build.finished?
+    %span.label Duration 
+    = build_duration(@build)
+    %br
+  %span.label Directory 
+  %code{ :style => 'float:left;' }= strip_rails_root(@build.build_dir)
+%hr 
+  = render :partial => "builds/build_data", :locals => {:build => @build}

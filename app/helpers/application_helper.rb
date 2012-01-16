@@ -59,4 +59,18 @@ module ApplicationHelper
       "in progress"
     end
   end
+
+  def status_css_class(status)
+    case status
+    when BuildPart::STATUS_OK
+      "success"
+    when BuildPart::STATUS_FAILED
+      "important"
+    when BuildPart::STATUS_IN_QUEUE
+      "notice"
+    when BuildPart::STATUS_PROGRESS
+      "warning"
+    end
+  end
+
 end
