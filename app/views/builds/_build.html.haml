@@ -2,7 +2,7 @@
   %ul.part-status
     - if build.parts.empty?
       %li      
-        %span{ :class => "label" } Queueing
+        %span{ :class => "label notice" } Queued
     - build.parts.each_with_index do |part, index|
       %li
         %span{ :class => "label #{status_css_class(part.status)}" }
