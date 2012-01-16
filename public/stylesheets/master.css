@@ -167,6 +167,14 @@ pre.step {
   border: solid 1px #ddd;
 }
 
+.container ul.nav li a.rss {
+  height: 30px;
+  width: 30px;
+  background: url('/images/rss-icon.png') center center no-repeat;
+  padding: 0;
+  margin-top: 5px;
+}
+
 /* Give the in progress builds a little CSS3 panache. */
 .pulse {
     width: 8px;
