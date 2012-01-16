@@ -14,6 +14,6 @@
     = build_duration(@build)
     %br
   %span.label Directory 
-  %code{ :style => 'float:left;' }= strip_rails_root(@build.build_dir)
+  %code.directory= truncate(strip_rails_root(@build.build_dir), :length => 28, :omission => '…')
 %hr 
   = render :partial => "builds/build_data", :locals => {:build => @build}
