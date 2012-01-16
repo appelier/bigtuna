@@ -76,7 +76,7 @@ pre.step span {
 }
 
 pre.step:hover {
-  width: 800px;
+  width: 880px;
 }
 
 .list-with-status li.status_build_ok pre.step {
