@@ -2,8 +2,3 @@
   = render :partial => 'projects'
 
 = ajaxReload(projects_path(:format => :js))
-
-- content_for :topbar do
-  - unless BigTuna.read_only?
-    %li
-      = link_to("New project", new_project_path)
