@@ -13,7 +13,7 @@
       %small List of your projects
 
 - @projects.each do |project|
-  %ol
+  %ol.list-with-status
     %li{:class => "#{project.status} project", :id => dom_id(project)}
       - unless BigTuna.read_only?
         .updown
