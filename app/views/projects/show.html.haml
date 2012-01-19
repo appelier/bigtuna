@@ -29,3 +29,8 @@
     - if @project.builds.any?
       = render :partial => 'builds'
     = ajaxReload(project_path(@project, :format => :js))
+
+- content_for :topbar do
+  - unless BigTuna.read_only?
+    %li= link_to("Edit", edit_project_path(@project), :class => "black_button")
+  %li= link_to("", feed_project_path(@project, :format => "atom"), :class => "rss")

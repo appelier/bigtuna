@@ -30,3 +30,10 @@
         = link_to("Duplicate", duplicate_project_path(@build.project), :class => "btn small")
         = link_to("Remove project", remove_project_path(@build.project), :class => "btn small danger")
     = render :partial => 'build_details'
+    - if params[:stderr].nil?
+      %li= link_to("Show stderr", build_path(@build, :stderr => 1), :class => "black_button")
+    - else
+      %li= link_to("Hide stderr", build_path(@build), :class => "black_button")
+
+- content_for :topbar do
+  %li= link_to("", feed_project_path(@project, :format => "atom"), :class => "rss")
