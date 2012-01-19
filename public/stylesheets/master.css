@@ -85,18 +85,6 @@ div.project {
   margin-left: 1em;
 }
 
-pre.step {
-  overflow-x: scroll;
-}
-
-pre.step span {
-  white-space: nowrap;
-}
-
-pre.step:hover {
-  width: 880px;
-}
-
 .list-with-status li.status_build_ok pre.step {
   display:none; 
 }
@@ -180,11 +168,22 @@ li.status_build_failed {
 }
 
 pre.step {
-  background-color: #eee;
+  background-color: whiteSmoke;
   font-size: 1.0em;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
   padding: 1.5em;
-  color: #333;
-  border: solid 1px #ddd;
+  overflow-x: scroll;
+  border: none;
+}
+
+pre.step span {
+  white-space: nowrap;
+}
+
+pre.step:hover {
+  width: 880px;
 }
 
 .container ul.nav li a.rss {
