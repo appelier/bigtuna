@@ -10,9 +10,9 @@
   = form_for(StepList.new, :url => step_lists_path(:project_id => @project)) do |f|
     = render :partial => "step_lists/form", :locals => {:f => f}
 
+.row
   %h2 Available configurations
-  - @project.step_lists.each do |step_list|
-
+  .span8
     Special variables are available.
     %ul
       %li 
@@ -21,7 +21,11 @@
       %li
         %code %project_dir%
         directory shared by all builds in project
-        
+    %p
+      You may comment a step out with
+      %code #
+  .span8       
+  - @project.step_lists.each do |step_list|
     - if step_list.shared_variables.any?
       Project variables are available.
       %ul
@@ -30,14 +34,8 @@
             %tt
               %code= "%#{variable.name}%"
               = variable.value
-
-    %p
-      You may comment a step out with
-      %code #
-
     %p
       = link_to("Edit config-specific vars", shared_variables_path(:step_list_id => step_list))
-
     = form_for(step_list, :url => step_list_path(step_list, :project_id => @project), :html => {:method => "PUT"}) do |f|
       = render :partial => "step_lists/form", :locals => {:f => f}
     - unless step_list.new_record?
