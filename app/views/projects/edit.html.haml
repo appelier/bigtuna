@@ -22,12 +22,15 @@
 
     - unless @project.step_lists.empty?
       - @project.step_lists.each do |step_list|
-        %h3= step_list.name
+        %h3.step-list-header= step_list.name
+        - unless step_list.new_record?
+          = form_for(step_list, :url => step_list_path(step_list, :project_id => @project), :html => {:method => "DELETE", :id => "remove_step_list_#{step_list.id}"}) do |f|
+            %button{:class => 'btn btn-danger btn-small btn-tiny' , :type => "submit"} Remove
         %div.hint
           %ul
             - step_list.shared_variables.each do |variable|
               %li= "<tt><b>%#{variable.name}%</b> #{variable.value}</tt>".html_safe
-          = link_to("Edit configuration specific variables", shared_variables_path(:step_list_id => step_list), :class => 'btn btn-small pull-up')
+          = link_to("Edit configuration specific variables", shared_variables_path(:step_list_id => step_list), :class => 'pull-up')
         = form_for(step_list, :url => step_list_path(step_list, :project_id => @project), :html => { :class => 'form-horizontal', :method => "PUT"}) do |f|
           = render :partial => "step_lists/form", :locals => {:f => f}
 

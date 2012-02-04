@@ -2,6 +2,14 @@
   margin-top: 4px;
 }
 
+.btn-tiny {
+  padding: 2px;
+}
+
+h3.step-list-header {
+  margin-top: 15px;
+}
+
 .pull-up {
   margin-bottom: 10px;
 }

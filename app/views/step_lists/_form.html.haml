@@ -11,6 +11,4 @@
 .form-actions
   %button.btn.btn-primary{:type => "submit"}
     = f.object.new_record? ? "Create configuration" : "Update configuration"
-  - unless f.object.new_record?
-    = form_for(f.object, :url => step_list_path(f.object, :project_id => @project), :html => {:method => "DELETE", :id => "remove_step_list_#{f.object.id}"}) do |f|
-      %button{:class => 'btn btn-danger' , :type => "submit"} Remove
+
