@@ -9,10 +9,10 @@
       on
       %code= @project.vcs_branch
     - unless BigTuna.read_only?
-      = link_to("Build now", build_project_path(@project), :class => "btn crm large success pull-right")
+      = link_to("Build now", build_project_path(@project), :class => "btn crm btn-large btn-success pull-right")
 
 .row
-  .span11
+  .span8
     - if @project.builds.any?
       = render :partial => 'builds/build', :locals => { :build => @project.builds.last }
     - else
@@ -20,12 +20,12 @@
         %h1= "No builds yet."
         %p
           Press the Build now button to start a build!
-  .span5
+  .span4
     - unless BigTuna.read_only?
       %div.project-actions
-        = link_to("Edit", edit_project_path(@project), :class => "btn small")
-        = link_to("Duplicate", duplicate_project_path(@project), :class => "btn small")
-        = link_to("Remove project", remove_project_path(@project), :class => "btn small danger")
+        = link_to("Edit", edit_project_path(@project), :class => "btn")
+        = link_to("Duplicate", duplicate_project_path(@project), :class => "btn")
+        = link_to("Remove project", remove_project_path(@project), :class => "btn btn-danger")
     - if @project.builds.any?
       = render :partial => 'builds'
     = ajaxReload(project_path(@project, :format => :js))

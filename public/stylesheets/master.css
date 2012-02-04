@@ -33,7 +33,7 @@ samp {
 }
 
 .commit-detail code.commit {
-  font-size:.8em;
+  font-size:.9em;
 }
 .commit-detail blockquote {
   margin-top: 1em;
@@ -46,15 +46,6 @@ div.project {
 
 .build-details {
   position: relative;
-}
-
-.build-details h3 {
-  position: absolute;
-  margin-top: -10px;
-  left: -305px;
-  width: 300px;
-  font-size: 1em;
-  text-align: right;
 }
 
 .part-status {
@@ -96,6 +87,14 @@ pre.step:hover {
   margin:0;
   padding:0;
   padding-left: 18px;
+}
+
+.list-with-status.in-build li {
+  margin-left: -18px;
+}
+
+.list-with-status.in-recent-builds li {
+  background-position: 0px 0px;
 }
 
 .list-with-status li.status_build_in_progress {
@@ -146,6 +145,10 @@ li.status_build_failed {
   color: #fff;
 }
 
+.build-status.tiny {
+  margin-left: 0;
+  margin-top: 1em;
+}
 
 .build-status {
   background-color: #FFF;
