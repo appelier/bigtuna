@@ -37,6 +37,8 @@
       %h3 Already existing variables
       - @shared_variables.each do |variable|
         %h3= variable.name
+        = form_for(variable, :url => shared_variable_path(variable, :step_list_id => @step_list), :html => {:method => :delete}) do |f|
+          %button{:class => 'btn btn-danger btn-small btn-tiny', :type => "submit"} Remove 
         = form_for(variable, :url => shared_variable_path(variable, :step_list_id => @step_list), :html => { :class => 'form-horizontal'}) do |f|
           .control-group
             = f.label(:name)
@@ -46,8 +48,5 @@
             = f.label(:value)
             .controls
               = f.text_field(:value)
-
           .form-actions
             %button{:class => 'btn btn-primary', :type => "submit"} Update
-            = form_for(variable, :url => shared_variable_path(variable, :step_list_id => @step_list), :html => {:method => :delete}) do |f|
-              %button{:class => 'btn btn-danger', :type => "submit"} Remove
