@@ -11,7 +11,7 @@ class BuildsTest < ActionController::IntegrationTest
     click_link_or_button "myproject"
     build = project.recent_build
     within('.in-recent-builds') do
-      click_link_or_button "##{build.id}"
+      click_link_or_button "Build ##{build.id}"
     end
     within(".page-header .btn-group") do
       assert_difference("Build.count", -1) do
