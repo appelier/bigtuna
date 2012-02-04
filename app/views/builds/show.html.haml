@@ -10,6 +10,17 @@
     - unless BigTuna.read_only?
       = link_to("Build now", build_project_path(@build.project), :class => "btn crm btn-large btn-success pull-right")
 
+  .btn-group.light
+    - if params[:stderr].nil?
+      = link_to("Show stderr", build_path(@build, :stderr => 1), :class => "btn btn-warning")
+    - else
+      = link_to("Hide stderr", build_path(@build), :class => "btn btn-warning")
+    - unless BigTuna.read_only?
+      = link_to("Edit project", edit_project_path(@build.project), :class => "btn")
+      = form_tag(build_path(@build), :method => "DELETE") do
+        %button{:class => 'btn btn-danger', :type => "submit"} Delete build
+
+
 #build.row
   .span8
     #ajax-reload= @build.ajax_reload?
@@ -22,17 +33,9 @@
   .span4
     - unless BigTuna.read_only?
       %div.project-actions
-        - if params[:stderr].nil?
-          = link_to("Show stderr", build_path(@build, :stderr => 1), :class => "btn btn-small btn-warning")
-        - else
-          = link_to("Hide stderr", build_path(@build), :class => "btn btn-small btn-warning")
-        %br
-        = link_to("Project home", project_path(@build.project), :class => "btn-pull-down btn btn-small")
-        = link_to("Edit project", edit_project_path(@build.project), :class => "btn-pull-down btn btn-small")
         - unless BigTuna.read_only?
-          = form_tag(build_path(@build), :method => "DELETE") do
-            %button{:class => 'btn btn-small btn-danger btn-pull-down', :type => "submit"} Delete build
-      = render :partial => 'build_details'
+          = render :partial => 'build_details'
 
 - content_for :topbar do
+  %li= link_to("#{@build.project.name} home", project_path(@build.project))
   %li= link_to("", feed_project_path(@project, :format => "atom"), :class => "rss")
