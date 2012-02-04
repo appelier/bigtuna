@@ -1,14 +1,4 @@
-.build-status.tiny
-  %ul.part-status
-    - if build.parts.empty?
-      %li
-        %span{ :class => "label notice" } Queued
-    - build.parts.each_with_index do |part, index|
-      %li
-        %span{ :class => "label #{status_css_class(part.status)}" }
-          = link_to(formatted_status(part.status), build_path(build, :stderr => build.status == Build::STATUS_OK ? nil : 1, :anchor => "part_#{index}"))
-        %span.name
-          = part.name
+
 
 .build-details
   - if build.output[0]
@@ -18,7 +8,7 @@
         = render :partial => "builds/step", :locals => {:step => build.output[0], :step_no => 0}
   - build.parts.each_with_index do |part, index|
     %h3= part.name
-    %ol{:id => "part_#{index}", :class => 'list-with-status' }
+    %ol{:id => "part_#{index}", :class => 'list-with-status in-build' }
       - part.output.each_with_index do |output, index|
         %li{:id => "step_#{index + 1}", :class => output.exit_code == 0 ? "status_build_ok output_box" : "status_build_failed output_box"}
           = render :partial => "builds/step", :locals => {:step => output, :step_no => index + 1}

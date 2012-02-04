@@ -21,6 +21,17 @@
         %p
           Press the Build now button to start a build!
   .span4
+    - if @project.builds.any?
+      %ul.part-status
+        - if @project.builds.last.parts.empty?
+          %li
+            %span{ :class => "label notice" } Queued
+        - @project.builds.last.parts.each_with_index do |part, index|
+          %li
+            %span{ :class => "label #{status_css_class(part.status)}" }
+              = link_to(formatted_status(part.status), build_path(@project.builds.last, :stderr => @project.builds.last.status == Build::STATUS_OK ? nil : 1, :anchor => "part_#{index}"))
+            %span.name
+              = part.name
     - unless BigTuna.read_only?
       %div.project-actions
         = link_to("Edit", edit_project_path(@project), :class => "btn")
