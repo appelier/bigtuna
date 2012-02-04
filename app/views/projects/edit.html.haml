@@ -1,29 +1,38 @@
-= form_for(@project, :url => project_path(@project)) do |f|
-  = render :partial => "form", :locals => {:f => f}
+.page-header
+  %h1
+    = @project.name
 
-%h2 New configuration
-= form_for(StepList.new, :url => step_lists_path(:project_id => @project)) do |f|
-  = render :partial => "step_lists/form", :locals => {:f => f}
-  %div.hint
-    Special variables are available.
-    %ul
-      %li= "<tt><b>%build_dir%</b> directory where build is checked out</tt>".html_safe
-      %li= "<tt><b>%project_dir%</b> directory shared by all builds in project</tt>".html_safe
-    = "You can comment a step with <tt>#</tt>".html_safe
+.row
+  .span8
+    %h2 Edit project
+    = form_for(@project, :url => project_path(@project)) do |f|
+      = render :partial => "form", :locals => {:f => f}
+  .span8
+    - unless @project.step_lists.empty?
+      %h2 Available configurations
+      - @project.step_lists.each do |step_list|
+        %div.hint
+          %ul
+            - step_list.shared_variables.each do |variable|
+              %li= "<tt><b>%#{variable.name}%</b> #{variable.value}</tt>".html_safe
+          = link_to("Edit config-specific vars", shared_variables_path(:step_list_id => step_list))
+        = form_for(step_list, :url => step_list_path(step_list, :project_id => @project), :html => {:method => "PUT"}) do |f|
+          = render :partial => "step_lists/form", :locals => {:f => f}
+        - unless step_list.new_record?
+          = form_for(step_list, :url => step_list_path(step_list, :project_id => @project), :html => {:method => "DELETE", :id => "remove_step_list_#{step_list.id}"}) do |f|
+            %button.crit_button{:type => "submit"} Remove
 
-%h2 Available configurations
-- @project.step_lists.each do |step_list|
-  %div.hint
-    %ul
-      - step_list.shared_variables.each do |variable|
-        %li= "<tt><b>%#{variable.name}%</b> #{variable.value}</tt>".html_safe
-    = link_to("Edit config-specific vars", shared_variables_path(:step_list_id => step_list))
-  = form_for(step_list, :url => step_list_path(step_list, :project_id => @project), :html => {:method => "PUT"}) do |f|
-    = render :partial => "step_lists/form", :locals => {:f => f}
-  - unless step_list.new_record?
-    = form_for(step_list, :url => step_list_path(step_list, :project_id => @project), :html => {:method => "DELETE", :id => "remove_step_list_#{step_list.id}"}) do |f|
-      %button.crit_button{:type => "submit"} Remove
+    %h2 New configuration
+    = form_for(StepList.new, :url => step_lists_path(:project_id => @project)) do |f|
+      = render :partial => "step_lists/form", :locals => {:f => f}
+      %div.hint
+        Special variables are available.
+        %ul
+          %li= "<tt><b>%build_dir%</b> directory where build is checked out</tt>".html_safe
+          %li= "<tt><b>%project_dir%</b> directory shared by all builds in project</tt>".html_safe
+        = "You can comment a step with <tt>#</tt>".html_safe
 
+    
 - content_for :sidebar do
   - unless BigTuna.read_only?
     %li= link_to("Project", project_path(@project), :class => "black_button")

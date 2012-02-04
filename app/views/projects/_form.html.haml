@@ -2,66 +2,66 @@
   - f.object.errors.full_messages.each do |msg|
     %p= msg
 
-.clearfix
-  = f.label(:name)
-  .input
-    = f.text_field(:name, :class => 'textfield')
-.clearfix
-  = f.label(:vcs_type)
-  .input
+.control-group
+  = f.label(:name, :class => 'control-label')
+  .controls
+    = f.text_field(:name)
+
+.control-group
+  = f.label(:vcs_type, :class => 'control-label')
+  .controls
     = f.select(:vcs_type, BigTuna.vcses.map { |klass| [klass::NAME, klass::VALUE] }, :class => 'textfield')
-.clearfix
-  = f.label(:vcs_source)
-  .input
-    = f.text_field(:vcs_source, :class => 'span6')
-    %span.help-block Typically the address of your repo
 
-.clearfix
-  = f.label(:vcs_branch)
-  .input
+.control-group
+  = f.label(:vcs_source, :class => 'control-label')
+  .controls
+    = f.text_field(:vcs_source, :class => 'span4')
+    %p.help-block Typically the address of your repo
+
+.control-group
+  = f.label(:vcs_branch, :class => 'control-label')
+  .controls
     = f.text_field(:vcs_branch)
-    %span.help-block Branch for BigTuna to pull from
+    %p.help-block  Branch for BigTuna to pull from
 
-.clearfix
-  = f.label(:fetch_type)
-  .input
-    %ul.inputs-list
-      %li
-        %label
-          = f.radio_button(:fetch_type, :clone)
-          %span Clone
-          %span.help-block Will set up a brand new copy of the repo every time
-      %li
-        %label
-          = f.radio_button(:fetch_type, :incremental)
-          %span Incremental
-          %span.help-block Will build over the previous build (saves time)
-.clearfix
-  = f.label(:max_builds)
-  .input
+
+.control-group
+  = f.label(:fetch_type, :class => 'control-label')
+  .controls
+    %label.radio
+      = f.radio_button(:fetch_type, :clone)
+      Clone
+    %span.help-block Will set up a brand new copy of the repo every time
+    %label.radio
+      = f.radio_button(:fetch_type, :incremental)
+      Incremental
+    %span.help-block Will build over the previous build (saves time)
+
+
+.control-group
+  = f.label(:max_builds, :class => 'control-label')
+  .controls
     = f.text_field(:max_builds, :class => 'span1')
-    %span.help-block How many builds to keep in memory
+    %p.help-block How many builds to keep in memory
 
-.clearfix
+.control-group
   %label Hooks
-  .input
-    %ul.inputs-list
-      - BigTuna.hooks.each do |hook|
-        %li
-          %label{:for => "project_hooks_#{hook::NAME}"}
-            = check_box_tag("project[hooks][#{hook::NAME}]", hook::NAME, f.object.hooks.map { |e| e.hook_name }.include?(hook::NAME))
-            %span= hook::NAME
-            = link_to("Configure", project_config_hook_path(f.object, hook::NAME)) if f.object.hooks.map { |e| e.hook_name }.include?(hook::NAME)
+  .controls
+    - BigTuna.hooks.each do |hook|
+      %label{:class => 'checkbox', :for => "project_hooks_#{hook::NAME}"}
+        = check_box_tag("project[hooks][#{hook::NAME}]", hook::NAME, f.object.hooks.map { |e| e.hook_name }.include?(hook::NAME))
+        = hook::NAME
+        = link_to("Configure", project_config_hook_path(f.object, hook::NAME)) if f.object.hooks.map { |e| e.hook_name }.include?(hook::NAME)
 
-.clearfix
-  = f.label(:hook_name)
-  .input
+.control-group
+  = f.label(:hook_name, :class => 'control-label')
+  .controls
     = f.text_field(:hook_name)
-    %span.help-block POST to http://big.tuna.host/hooks/build/:hook_name: to build automatically
+    %p.help-block POST to http://big.tuna.host/hooks/build/:hook_name: to build automatically
     = f.hidden_field(:hook_update, {:value => true})
 
-.actions
-  %button.btn.large.primary{:type => "submit"}
+.form-actions
+  %button.btn.btn-primary{:type => "submit"}
     = f.object.new_record? ? "Create project" : "Update"
-  = link_to("Back to project", project_path(f.object), :class => "btn large") unless f.object.new_record?
+  = link_to("Back to project", project_path(f.object), :class => "btn") unless f.object.new_record?
 
