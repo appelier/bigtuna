@@ -1,5 +1,5 @@
 %h3 Recent Builds
-%ul.list-with-status
+%ul.list-with-status.in-recent-builds
   - @builds.each do |build|
     %li{ :class => build.status }
       - if build.status == 'status_build_in_progress'

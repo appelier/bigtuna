@@ -11,15 +11,15 @@
       = link_to("Build now", build_project_path(@build.project), :class => "btn crm large success pull-right")
 
 #build.row
-  .span11
+  .span8
     #ajax-reload= @build.ajax_reload?
 
     = render :partial => 'build', :locals => { :build => @build }
-    
+
     - unless @build.finished?
       - build_path_params = params[:stderr] ? {:format => :js, :stderr => 1} : {:format => :js}
       = ajaxReload(build_path(@build, build_path_params))
-  .span5
+  .span4
     - unless BigTuna.read_only?
       %div.project-actions
         = link_to("Edit", edit_project_path(@build.project), :class => "btn small")

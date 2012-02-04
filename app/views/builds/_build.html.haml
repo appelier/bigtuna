@@ -1,7 +1,7 @@
-.build-status
+.build-status.tiny
   %ul.part-status
     - if build.parts.empty?
-      %li      
+      %li
         %span{ :class => "label notice" } Queued
     - build.parts.each_with_index do |part, index|
       %li
@@ -13,7 +13,7 @@
 .build-details
   - if build.output[0]
     %h3 VCS
-    %ol.list-with-status
+    %ol.list-with-status.in-build
       %li{ :class => build.output[0].exit_code == 0 ? "status_build_ok" : "status_build_failed"}
         = render :partial => "builds/step", :locals => {:step => build.output[0], :step_no => 0}
   - build.parts.each_with_index do |part, index|
