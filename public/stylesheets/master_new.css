@@ -39,6 +39,14 @@ h1.project-title {
   margin-top: 52px;
 }
 
+.in-recent-builds h1.project-title {
+  margin-top: 35px;
+}
+
+.table.commit-data td {
+  border-top: 0;
+}
+
 .navbar-fixed-top .brand {
   padding-right: 0;
   padding-left: 0;

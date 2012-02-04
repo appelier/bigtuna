@@ -13,14 +13,14 @@
       .updown
         = link_to("&uarr;".html_safe, arrange_project_path(project, :up => true)) unless project.first?
         = link_to("&darr;".html_safe, arrange_project_path(project, :down => true)) unless project.last?
-    .span3.offset1
+    .span3.offset2
       %h1{:class => "project-title #{project.status}"}
         = link_to(project.name, project_path(project))
 
-    .span6.offset1
+    .span5.offset1
       - if project.recent_build
         - build = project.recent_build
-        %table.table
+        %table.table.commit-data
           %thead
             %tr
               %th{:style => 'width: 20%'}
