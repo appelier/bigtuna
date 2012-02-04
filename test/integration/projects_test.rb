@@ -6,7 +6,7 @@ class ProjectsTest < ActionController::IntegrationTest
 
   test "user can add a project" do
     visit "/"
-    click_link "New project"
+    click_link "New Project"
     fill_in "Name", :with => "My shiny project"
     select "Git", :from => "Vcs type"
     fill_in "Vcs source", :with => "test/files/repo"
@@ -120,7 +120,7 @@ class ProjectsTest < ActionController::IntegrationTest
     build = project.recent_build
     job = Delayed::Job.order("created_at DESC").first
     job.invoke_job
-    click_link build.display_name
+    click_link "##{build.build_no}"
     assert page.has_content?("fatal: repository 'no/such/repo' does not exist")
   end
 
@@ -129,8 +129,9 @@ class ProjectsTest < ActionController::IntegrationTest
       :name => "Atom project",
       :vcs_source => "no/such/repo",
     }, "echo 'ha'")
-    visit "/projects/#{[project.id, project.name.to_url].join("-")}"
-    assert page.has_link?("Feed")
+    path = "/projects/#{[project.id, project.name.to_url].join("-")}"
+    visit path
+    assert page.has_xpath?("//a[@href='#{path}/feed.atom']")
   end
 
   test "project should have an atom feed" do
@@ -156,8 +157,8 @@ class ProjectsTest < ActionController::IntegrationTest
       :max_builds => 3,
     }, "echo 'ha'")
     visit "/projects/#{[project.id, project.name.to_url].join("-")}/edit"
-    within("#sidebar") do
-      click_link_or_button "Project"
+    within(".nav") do
+      click_link_or_button "Atom project 2"
     end
     assert_equal current_path, "/projects/#{[project.id, project.name.to_url].join("-")}"
   end
