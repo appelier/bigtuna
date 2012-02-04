@@ -141,30 +141,6 @@ li.status_build_failed {
   margin-top: 0;
 }
 
-.navbar-fixed-top .brand {
-  padding-right: 0;
-  padding-left: 0;
-  margin-left: 7px;
-  float: right;
-  font-size: 14px;
-  color: #bbb;
-  margin-top: 4px;
-  -webkit-transition: all .2s linear;
-  -moz-transition: all .2s linear;
-  transition: all .2s linear;
-}
-
-.navbar-fixed-top .brand.hint {
-  color: #999;
-  font-size: 12px;
-  margin-top: 6px;
-}
-
-.navbar-fixed-top a.brand:hover {
-  text-shadow: 0 1px 0 rgba(255, 255, 255, .1), 0 0 30px rgba(255, 255, 255, .125);
-  color: #fff;
-}
-
 .build-status.tiny {
   margin-left: 0;
   margin-top: 1em;

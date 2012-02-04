@@ -1,16 +1,16 @@
-
-
 .build-details
   - if build.output[0]
-    %h3 VCS
-    %ol.list-with-status.in-build
-      %li{ :class => build.output[0].exit_code == 0 ? "status_build_ok" : "status_build_failed"}
+    %h3{ :class => build.output[0].exit_code == 0 ? "status_build_ok" : "status_build_failed"}
+      VCS
+    %ul.unstyled
+      %li
         = render :partial => "builds/step", :locals => {:step => build.output[0], :step_no => 0}
   - build.parts.each_with_index do |part, index|
-    %h3= part.name
-    %ol{:id => "part_#{index}", :class => 'list-with-status in-build' }
+    %h3{ :class => build.output[0].exit_code == 0 ? "status_build_ok" : "status_build_failed"}
+      = part.name
+    %ul{:id => "part_#{index}", :class => 'unstyled' }
       - part.output.each_with_index do |output, index|
-        %li{:id => "step_#{index + 1}", :class => output.exit_code == 0 ? "status_build_ok output_box" : "status_build_failed output_box"}
+        %li{:id => "step_#{index + 1}"}
           = render :partial => "builds/step", :locals => {:step => output, :step_no => index + 1}
       - if build.status == Build::STATUS_PROGRESS
         %li{ :class => Build::STATUS_PROGRESS }

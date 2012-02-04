@@ -1,8 +1,26 @@
-%h3 Recent Builds
 %ul.list-with-status.in-recent-builds
   - @builds.each do |build|
-    %li{ :class => build.status }
-      - if build.status == 'status_build_in_progress'
-        %div.pulse
-      = link_to("##{build.build_no}", build_path(build, :stderr => build.status == Build::STATUS_OK ? nil : 1))
-      = format_stability(build.project.stability)
+    .span4.offset1
+      %h1{:class => "project-title #{build.status}"}= link_to("Build ##{build.build_no}", build_path(build, :stderr => build.status == Build::STATUS_OK ? nil : 1))
+
+    .span6
+      %table.table
+        %thead
+          %tr
+            %th{:style => 'width: 20%'}
+            %th{:style => 'width: 80%'}
+        %tbody
+          %tr
+            %td Commit
+            %td
+              %code= build.commit_data? ? build.commit : "Commit hash not yet available"
+          %tr
+            %td Author
+            %td= build.commit_data? ? (mail_to(build.email, build.author)).html_safe : "Author not yet available"
+          %tr
+            %td Date
+            %td= build.commit_data? ? l(build.committed_at, :format => :long) : "Commit date not yet available"
+          %tr
+            %td Message
+            %td
+              %code= build.commit_data? ? build.commit_message : "Message not yet available"

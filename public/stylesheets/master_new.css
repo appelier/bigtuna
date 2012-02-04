@@ -1,0 +1,69 @@
+#ajax-reload {
+  display: none;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+h1.status_build_ok a, h3.status_build_ok {
+  color: #468847;
+}
+
+.btn-tiny {
+  padding: 2px;
+}
+
+.btn-shared-variable-removal {
+  float: right;
+  margin-right: 190px;
+  margin-top: -20px;
+}
+
+h1.status_build_failed a, h3.status_build_failed {
+  color: #B94A48;
+}
+
+h1.status_build_in_progress a {
+  color: #F89406;
+}
+
+.updown {
+  float: right;
+  width: 2.2em;
+  text-align: right;
+  margin-top: 84px;
+}
+
+h1.project-title {
+  margin-top: 70px;
+}
+
+.navbar-fixed-top .brand {
+  padding-right: 0;
+  padding-left: 0;
+  margin-left: 7px;
+  float: right;
+  font-size: 14px;
+  color: #bbb;
+  margin-top: 4px;
+  -webkit-transition: all .2s linear;
+  -moz-transition: all .2s linear;
+  transition: all .2s linear;
+}
+
+.navbar-fixed-top .brand.hint {
+  color: #999;
+  font-size: 12px;
+  margin-top: 6px;
+}
+
+.navbar-fixed-top a.brand:hover {
+  text-shadow: 0 1px 0 rgba(255, 255, 255, .1), 0 0 30px rgba(255, 255, 255, .125);
+  color: #fff;
+}
+
+.btn-group.light {
+  margin-top: 15px;
+  font-weight: normal;
+}

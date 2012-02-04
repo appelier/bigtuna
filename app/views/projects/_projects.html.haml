@@ -8,14 +8,37 @@
       = link_to("Set up a new project", new_project_path, :class => 'btn btn-primary btn-large jumbo')
 
 - @projects.each do |project|
-  %ol.list-with-status.build-status.projects
-    %li{:class => "#{project.status} project", :id => dom_id(project)}
-      - unless BigTuna.read_only?
-        .updown
-          = link_to("&uarr;".html_safe, arrange_project_path(project, :up => true)) unless project.first?
-          = link_to("&darr;".html_safe, arrange_project_path(project, :down => true)) unless project.last?
-      .stability
-        = format_stability(project.stability)
-      %h2= link_to(project.name, project_path(project))
+  .row
+    - unless BigTuna.read_only?
+      .updown
+        = link_to("&uarr;".html_safe, arrange_project_path(project, :up => true)) unless project.first?
+        = link_to("&darr;".html_safe, arrange_project_path(project, :down => true)) unless project.last?
+    .span3.offset1
+      %h1{:class => "project-title #{project.status}"}= link_to(project.name, project_path(project))
+
+    .span6.offset1
       - if project.recent_build
-        = render :partial => "builds/build_data", :locals => {:build => project.recent_build}
+        - build = project.recent_build
+        %table.table
+          %thead
+            %tr
+              %th{:style => 'width: 20%'}
+              %th{:style => 'width: 80%'}
+          %tbody
+            %tr
+              %td Commit
+              %td
+                %code= build.commit_data? ? build.commit : "Commit hash not yet available"
+            %tr
+              %td Author
+              %td= build.commit_data? ? (mail_to(build.email, build.author)).html_safe : "Author not yet available"
+            %tr
+              %td Date
+              %td= build.commit_data? ? l(build.committed_at, :format => :long) : "Commit date not yet available"
+            %tr
+              %td Message
+              %td
+                %code= build.commit_data? ? build.commit_message : "Message not yet available"
+            %tr
+              %td Stability
+              %td= format_stability(project.stability)

@@ -1,19 +1,50 @@
-%hr
-.build-information
-  %span.label Scheduled
-  = time_ago_in_words(@build.scheduled_at)
-  ago
-  %br
-  - if @build.started?
-    %span.label Started
-    = time_ago_in_words(@build.started_at)
-    ago
-    %br
-  - if @build.finished?
-    %span.label Duration
-    = build_duration(@build)
-    %br
-  %span.label Directory
-  %code.directory= truncate(strip_rails_root(@build.build_dir), :length => 28, :omission => '…')
-%hr
-  = render :partial => "builds/build_data", :locals => {:build => @build}
+%table.table
+  %thead
+    %tr
+      %th{:style => 'width: 10%'}
+      %th{:style => 'width: 90%'}
+
+  %tbody
+    %tr
+      %td
+        %span.label.label-info Commit
+      %td
+        %code= @build.commit_data? ? @build.commit : "Commit hash not yet available"
+    %tr
+      %td
+        %span.label.label-info Author
+      %td= @build.commit_data? ? (mail_to(@build.email, @build.author)).html_safe : "Author not yet available"
+    %tr
+      %td
+        %span.label.label-info Date
+      %td= @build.commit_data? ? l(@build.committed_at, :format => :long) : "Commit date not yet available"
+    %tr
+      %td
+        %span.label.label-info Message
+      %td
+        %pre= @build.commit_data? ? @build.commit_message : "Message not yet available"
+    %tr
+      %td
+        %span.label.label-info Scheduled
+      %td
+        = time_ago_in_words(@build.scheduled_at)
+        ago
+    - if @build.started?
+      %tr
+        %td
+          %span.label.label-info Started
+        %td
+          = time_ago_in_words(@build.started_at)
+          ago
+
+    - if @build.finished?
+      %tr
+        %td
+          %span.label.label-info Duration
+        %td
+          = build_duration(@build)
+    %tr
+      %td
+        %span.label.label-info Directory
+      %td
+        %code= truncate(strip_rails_root(@build.build_dir), :length => 40, :omission => '..')
