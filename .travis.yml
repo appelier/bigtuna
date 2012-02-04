@@ -11,7 +11,3 @@ before_script:
   - "RAILS_ENV=test bundle exec rake db:create"
   - "RAILS_ENV=test bundle exec rake db:migrate"
 script: bundle exec rake test HGUSER='test@example.com'
-notifications:
-  email:
-    - antek.piechnik@gmail.com
-    - michal.bugno@gmail.com
