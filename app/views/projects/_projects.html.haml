@@ -5,7 +5,7 @@
     %p
       Add a new project and start continuously testing your software!
     %p
-      = link_to("Set up a new project", new_project_path, :class => 'btn primary large')
+      = link_to("Set up a new project", new_project_path, :class => 'btn btn-primary btn-large jumbo')
 
 - @projects.each do |project|
   %ol.list-with-status.build-status.projects
@@ -16,6 +16,6 @@
           = link_to("&darr;".html_safe, arrange_project_path(project, :down => true)) unless project.last?
       .stability
         = format_stability(project.stability)
-      %h3= link_to(project.name, project_path(project))
+      %h2= link_to(project.name, project_path(project))
       - if project.recent_build
         = render :partial => "builds/build_data", :locals => {:build => project.recent_build}

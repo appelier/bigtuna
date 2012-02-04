@@ -33,7 +33,7 @@ samp {
 }
 
 .commit-detail code.commit {
-  font-size:.7em;
+  font-size:.8em;
 }
 .commit-detail blockquote {
   margin-top: 1em;
@@ -92,7 +92,7 @@ pre.step:hover {
 
 .list-with-status li {
   background-repeat: no-repeat;
-  background-position: 0px 0px;
+  background-position: 0px 10px;
   margin:0;
   padding:0;
   padding-left: 18px;
@@ -151,7 +151,7 @@ li.status_build_failed {
   background-color: #FFF;
   position: relative;
   padding: 1.4em;
-  margin: -1em auto 2em 0;
+  margin: -1em auto 2em 3em;
   border: solid 1px #DDD;
   box-shadow: 2px 3px 4px #EEE;
   -webkit-box-shadow: 2px 3px 4px #EEE;
