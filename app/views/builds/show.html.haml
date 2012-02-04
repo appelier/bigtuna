@@ -8,7 +8,7 @@
       on
       %code= @build.project.vcs_branch
     - unless BigTuna.read_only?
-      = link_to("Build now", build_project_path(@build.project), :class => "btn crm large success pull-right")
+      = link_to("Build now", build_project_path(@build.project), :class => "btn crm btn-large btn-success pull-right")
 
 #build.row
   .span8
@@ -22,14 +22,14 @@
   .span4
     - unless BigTuna.read_only?
       %div.project-actions
-        = link_to("Edit", edit_project_path(@build.project), :class => "btn small")
-        = link_to("Duplicate", duplicate_project_path(@build.project), :class => "btn small")
-        = link_to("Remove project", remove_project_path(@build.project), :class => "btn small danger")
-    = render :partial => 'build_details'
-    - if params[:stderr].nil?
-      %li= link_to("Show stderr", build_path(@build, :stderr => 1), :class => "black_button")
-    - else
-      %li= link_to("Hide stderr", build_path(@build), :class => "black_button")
+        - if params[:stderr].nil?
+          = link_to("Show stderr", build_path(@build, :stderr => 1), :class => "btn btn-small btn-warning")
+        - else
+          = link_to("Hide stderr", build_path(@build), :class => "btn btn-small btn-warning")
+        = link_to("Edit", edit_project_path(@build.project), :class => "btn btn-small")
+        = link_to("Duplicate", duplicate_project_path(@build.project), :class => "btn btn-small")
+        = link_to("Remove project", remove_project_path(@build.project), :class => "btn btn-small btn-danger")
+      = render :partial => 'build_details'
 
 - content_for :topbar do
   %li= link_to("", feed_project_path(@project, :format => "atom"), :class => "rss")
