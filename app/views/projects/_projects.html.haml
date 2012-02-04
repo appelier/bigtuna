@@ -14,7 +14,8 @@
         = link_to("&uarr;".html_safe, arrange_project_path(project, :up => true)) unless project.first?
         = link_to("&darr;".html_safe, arrange_project_path(project, :down => true)) unless project.last?
     .span3.offset1
-      %h1{:class => "project-title #{project.status}"}= link_to(project.name, project_path(project))
+      %h1{:class => "project-title #{project.status}"}
+        = link_to(project.name, project_path(project))
 
     .span6.offset1
       - if project.recent_build
@@ -28,13 +29,13 @@
             %tr
               %td Commit
               %td
-                %code= build.commit_data? ? build.commit : "Commit hash not yet available"
-            %tr
-              %td Author
-              %td= build.commit_data? ? (mail_to(build.email, build.author)).html_safe : "Author not yet available"
-            %tr
-              %td Date
-              %td= build.commit_data? ? l(build.committed_at, :format => :long) : "Commit date not yet available"
+                - if build.commit_data?
+                  %code= truncate(build.commit, :length => 10, :omission => '..')
+                  by
+                  = (mail_to(build.email, build.author)).html_safe
+                  = " on #{l(build.committed_at, :format => :long)}"
+                - else
+                  Commit data not yet available
             %tr
               %td Message
               %td
