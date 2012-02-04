@@ -46,7 +46,7 @@ class ProjectsTest < ActionController::IntegrationTest
     end
     run_delayed_jobs()
     visit "/"
-    assert page.has_css?("#project_#{project.id}.#{Build::STATUS_OK}")
+    assert page.has_css?("#project_#{project.id} h1.#{Build::STATUS_OK}")
   end
 
   test "project build can fail" do
@@ -61,7 +61,7 @@ class ProjectsTest < ActionController::IntegrationTest
     end
     run_delayed_jobs()
     visit "/"
-    assert page.has_css?("#project_#{project.id}.#{Build::STATUS_FAILED}")
+    assert page.has_css?("#project_#{project.id} h1.#{Build::STATUS_FAILED}")
   end
 
   test "removing projects from list" do

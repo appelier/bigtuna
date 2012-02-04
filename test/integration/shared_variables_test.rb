@@ -30,7 +30,7 @@ class SharedVariablesTest < ActionController::IntegrationTest
     v = SharedVariable.create!(:name => "name", :value => "value", :step_list => @step)
     visit edit_project_path(@project)
     click_link "Edit configuration specific variables"
-    within("#edit_shared_variable_#{v.id}") do
+    within("#edit_shared_variable_#{v.id}.form-horizontal") do
       fill_in "Name", :with => "newname"
       fill_in "Value", :with => "newvalue"
       click_button "Update"
