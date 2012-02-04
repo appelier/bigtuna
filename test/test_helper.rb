@@ -54,6 +54,7 @@ class ActiveSupport::TestCase
         job.invoke_job
         job.destroy
         ran_jobs << job
+        sleep(0.3) if ENV["DB"] == 'mysql'
       end
     end
     ran_jobs
