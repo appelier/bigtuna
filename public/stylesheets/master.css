@@ -1,3 +1,7 @@
+.btn-pull-down {
+  margin-top: 4px;
+}
+
 .pull-up {
   margin-bottom: 10px;
 }
@@ -340,3 +344,4 @@ pre.step {
     opacity: 0;
   }
 }
+
