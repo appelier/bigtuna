@@ -118,12 +118,19 @@ li.status_build_failed {
   background-image: url(../images/failed.png);
 }
 
+.span11 .build-status {
+  margin-top: 0;
+}
+
 .build-status {
   background-color: #FFF;
   position: relative;
-  padding: 1.5em;
+  padding: 1.4em;
   margin: -1em auto 2em 0;
-  border-bottom: solid 1px #eee;
+  border: solid 1px #DDD;
+  box-shadow: 2px 3px 4px #EEE;
+  -webkit-box-shadow: 2px 3px 4px #EEE;
+  -moz-box-shadow: 2px 3px 4px #EEE;
 }
 
 .build-status:before, .build-status:after {
@@ -134,6 +141,7 @@ li.status_build_failed {
   left: 2px;
   bottom: 22px;
   background: transparent;
+  /*
   -webkit-transform: skew(-10deg) rotate(-10deg);
   -moz-transform: skew(-10deg) rotate(-10deg);
   -ms-transform: skew(-10deg) rotate(-10deg);
@@ -143,16 +151,19 @@ li.status_build_failed {
   -moz-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
   z-index: -1;
+  */
 }
 
 .build-status:after {
   left: auto;
   right: 2px;
+  /*
   -webkit-transform: skew(10deg) rotate(10deg);
   -moz-transform: skew(10deg) rotate(10deg);
   -ms-transform: skew(10deg) rotate(10deg);
   -o-transform: skew(10deg) rotate(10deg);
   transform: skew(10deg) rotate(10deg);
+  */
 }
 
 li.status_build_failed {
