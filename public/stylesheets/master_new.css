@@ -7,7 +7,7 @@ a:hover {
 }
 
 h1.status_build_ok a, h3.status_build_ok {
-  color: #468847;
+  color: #39B549;
 }
 
 .btn-tiny {
@@ -21,7 +21,7 @@ h1.status_build_ok a, h3.status_build_ok {
 }
 
 h1.status_build_failed a, h3.status_build_failed {
-  color: #B94A48;
+  color: #C00;
 }
 
 h1.status_build_in_progress a {
