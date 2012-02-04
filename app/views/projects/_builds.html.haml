@@ -6,3 +6,4 @@
         %div.pulse
       = link_to("##{build.build_no}", build_path(build, :stderr => build.status == Build::STATUS_OK ? nil : 1)) 
       = format_stability(build.project.stability)
+

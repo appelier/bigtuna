@@ -26,9 +26,12 @@
           = link_to("Show stderr", build_path(@build, :stderr => 1), :class => "btn btn-small btn-warning")
         - else
           = link_to("Hide stderr", build_path(@build), :class => "btn btn-small btn-warning")
-        = link_to("Edit", edit_project_path(@build.project), :class => "btn btn-small")
-        = link_to("Duplicate", duplicate_project_path(@build.project), :class => "btn btn-small")
-        = link_to("Remove project", remove_project_path(@build.project), :class => "btn btn-small btn-danger")
+        %br
+        = link_to("Project home", project_path(@build.project), :class => "btn-pull-down btn btn-small")
+        = link_to("Edit project", edit_project_path(@build.project), :class => "btn-pull-down btn btn-small")
+        - unless BigTuna.read_only?
+          = form_tag(build_path(@build), :method => "DELETE") do
+            %button{:class => 'btn btn-small btn-danger btn-pull-down', :type => "submit"} Delete build
       = render :partial => 'build_details'
 
 - content_for :topbar do
