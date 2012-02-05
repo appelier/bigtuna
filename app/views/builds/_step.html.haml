@@ -4,7 +4,7 @@
   - if step.exit_code.nil?
     %samp.command= "Task was not executed"
   - elsif step.exit_code != 0
-    %samp.command= "Exit code: #{step.exit_code}"
+    %samp.command= "Exit code: <strong>#{step.exit_code}</strong>".html_safe
   %pre{:class => step.exit_code == 0 ? 'code' : 'code failed'}
     %p.command= "$ #{step.command}"
     - if !step.exit_code.nil? and step.has_output?
