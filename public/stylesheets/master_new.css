@@ -2,6 +2,38 @@
   display: none;
 }
 
+pre.code {
+  word-wrap: break-word;
+  line-height: 140%;
+  font-size: 90%;
+  margin-top: 5px;
+  color: white;
+  background-color: #444;
+  text-shadow: none;
+  text-shadow: 0 1px 0 #292929;
+}
+
+pre.code p {
+  margin: 0;
+  background-color: #555;
+  margin-left: -9px;
+  padding: 0 9px;
+  font-family: inherit;
+  line-height: inherit;
+  font-size: inherit;
+  width: 752px;
+  margin-top: 0px;
+}
+
+pre.code.failed {
+  background-color: #B94A48;
+  text-shadow: 0 1px 0 #333;
+}
+
+pre.code.failed p {
+  background-color: #d75b59;
+}
+
 a:hover {
   text-decoration: none;
 }

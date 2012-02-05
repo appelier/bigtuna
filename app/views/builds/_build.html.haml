@@ -6,7 +6,7 @@
       %li
         = render :partial => "builds/step", :locals => {:step => build.output[0], :step_no => 0}
   - build.parts.each_with_index do |part, index|
-    %h3{ :class => build.output[0].exit_code == 0 ? "status_build_ok" : "status_build_failed"}
+    %h3{ :class => part.output[0].exit_code == 0 ? "status_build_ok" : "status_build_failed"}
       = part.name
     %ul{:id => "part_#{index}", :class => 'unstyled' }
       - part.output.each_with_index do |output, index|
