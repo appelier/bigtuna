@@ -2,6 +2,12 @@
   display: none;
 }
 
+code.page-code {
+  border: 0;
+  color: #555;
+
+}
+
 pre.code {
   word-wrap: break-word;
   line-height: 140%;

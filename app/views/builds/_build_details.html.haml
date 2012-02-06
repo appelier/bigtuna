@@ -9,7 +9,7 @@
       %td
         %span.label.label-info Commit
       %td
-        %code= @build.commit_data? ? @build.commit : "Commit hash not yet available"
+        %code.page-code= @build.commit_data? ? @build.commit : "Commit hash not yet available"
     %tr
       %td
         %span.label.label-info Author
@@ -22,7 +22,7 @@
       %td
         %span.label.label-info Message
       %td
-        %pre= @build.commit_data? ? @build.commit_message : "Message not yet available"
+        %code.page-code= @build.commit_data? ? @build.commit_message : "Message not yet available"
     %tr
       %td
         %span.label.label-info Scheduled
@@ -47,7 +47,7 @@
       %td
         %span.label.label-info Directory
       %td
-        %code= truncate(strip_rails_root(@build.build_dir), :length => 40, :omission => '..')
+        %code.page-code= truncate(strip_rails_root(@build.build_dir), :length => 40, :omission => '..')
 
 
 
