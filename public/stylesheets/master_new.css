@@ -5,7 +5,6 @@
 code.page-code {
   border: 0;
   color: #555;
-
 }
 
 pre.code {
@@ -27,7 +26,7 @@ pre.code p {
   font-family: inherit;
   line-height: inherit;
   font-size: inherit;
-  width: 752px;
+  width: 99.9%;
   margin-top: 0px;
 }
 
