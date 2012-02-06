@@ -30,7 +30,7 @@
               %td Commit
               %td
                 - if build.commit_data?
-                  %code{:class => "page-code", :title => build.commit}= truncate(build.commit, :length => 10, :omission => '..')
+                  %code{:class => "dark", :title => build.commit}= truncate(build.commit, :length => 10, :omission => '..')
                   by
                   = (mail_to(build.email, build.author)).html_safe
                   = " on #{l(build.committed_at, :format => :long)}"
@@ -39,7 +39,7 @@
             %tr
               %td Message
               %td
-                %code.page-code= build.commit_data? ? build.commit_message : "Message not yet available"
+                %pre.unobstrusive= build.commit_data? ? build.commit_message : "Message not yet available"
             %tr
               %td Stability
               %td= format_stability(project.stability)

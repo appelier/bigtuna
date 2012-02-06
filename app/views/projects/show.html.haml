@@ -3,9 +3,9 @@
     = @project.name
     %small
       via
-      %code= @project.vcs_source
+      %code.dark= @project.vcs_source
       on
-      %code= @project.vcs_branch
+      %code.dark= @project.vcs_branch
     - unless BigTuna.read_only?
       = link_to("Build now", build_project_path(@project), :class => "btn crm btn-large btn-success pull-right")
     .btn-toolbar
