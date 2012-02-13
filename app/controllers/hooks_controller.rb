@@ -1,5 +1,6 @@
 class HooksController < ApplicationController
   skip_before_filter :verify_authenticity_token
+  skip_before_filter :gapps_required, :only => [:autobuild, :github, :bitbucket]
 
   def autobuild
     project = Project.where(:hook_name => params[:hook_name]).first
