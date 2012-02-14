@@ -12,7 +12,6 @@ class ApplicationController < ActionController::Base
   private
 
   def gapps?
-    session[:gapps_user] = "marcin.stecki@netguru.pl"
     session[:gapps_user].present?
   end
 
