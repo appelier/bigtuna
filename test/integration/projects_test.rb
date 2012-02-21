@@ -140,14 +140,20 @@ class ProjectsTest < ActionController::IntegrationTest
       :vcs_source => "no/such/repo",
       :max_builds => 3,
     }, "echo 'ha'")
-    build_1 = Build.make(:project => project, :created_at => 2.weeks.ago)
-    build_2 = Build.make(:project => project, :created_at => 1.week.ago)
+    build_1 = Build.make(:project => project, :build_no => 1, :created_at => 3.weeks.ago)
+    build_2 = Build.make(:project => project, :build_no => 2, :created_at => 2.week.ago)
+    build_3 = Build.make(:project => project, :build_no => 3, :created_at => 1.week.ago)
+    build_1.update_attributes!({:status => Build::STATUS_FAILED})
+    build_2.update_attributes!({:status => Build::STATUS_OK})
+    build_3.update_attributes!({:status => Build::STATUS_PROGRESS})
+
     visit "/projects/#{[project.id, project.name.to_url].join("-")}/feed.atom"
     parsed = Crack::XML.parse(page.body)
     assert_equal "Atom project 2 CI", parsed["feed"]["title"]
-    assert_equal 2, parsed["feed"]["entry"].size
-    assert_equal "#{build_1.display_name} - #{build_1.status == Build::STATUS_OK ? "SUCCESS" : "FAILED"}", parsed["feed"]["entry"][0]["title"]
-    assert_equal "#{build_2.display_name} - #{build_2.status == Build::STATUS_OK ? "SUCCESS" : "FAILED"}", parsed["feed"]["entry"][1]["title"]
+    assert_equal 3, parsed["feed"]["entry"].size
+    assert_equal "#{build_1.display_name} - FAILED", parsed["feed"]["entry"][2]["title"]
+    assert_equal "#{build_2.display_name} - SUCCESS", parsed["feed"]["entry"][1]["title"]
+    assert_equal "#{build_3.display_name} - IN PROGRESS", parsed["feed"]["entry"][0]["title"]
   end
 
   test "navigating to project details on edit" do

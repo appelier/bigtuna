@@ -17,8 +17,6 @@ class ProjectTest < ActiveSupport::TestCase
   test "Project.ajax_reload? method with ajax_reload => always" do
     BigTuna.stubs(:ajax_reload).returns('always')
 
-
-
     project = project_with_steps({
       :name => "Project",
       :vcs_source => "test/files/repo",
