@@ -1,7 +1,9 @@
 .bundle
+vendor/bundle
 bin/*
 log/*.log
 tmp/**/*
+tmp/
 
 .DS_Store
 *.swp

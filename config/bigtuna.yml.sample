@@ -5,3 +5,5 @@
 #   ajax_reload: false                     # "building" or "always"
 #   build_dir: "tmp"                       # default: "builds"
 #   log: "log/bigtuna.log"                 # default: use Rails log
+#   google_apps_domain: example.com        # default: nil
+

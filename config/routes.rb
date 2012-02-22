@@ -18,6 +18,10 @@ BigTuna::Application.routes.draw do
 
   end
 
+  if BigTuna.google_apps_domain
+    match '/auth/gapps/callback', :to => 'sessions#authenticate_gapps'
+  end
+
   match "/hooks/build/:hook_name", :to => "hooks#autobuild"
   match "/hooks/build/github/:secure", :to => "hooks#github"
   match "/hooks/build/bitbucket/:secure", :to => "hooks#bitbucket"

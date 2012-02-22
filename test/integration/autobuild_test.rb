@@ -35,6 +35,19 @@ class AutobuildTest < ActionController::IntegrationTest
     end
   end
 
+  test "dont care about google_apps domain config" do
+    with_config(:google_apps_domain, "somedomain.com") do
+      project1 = github_project(:name => "obywatelkagc", :vcs_branch => "master")
+      with_github_token do
+        assert_difference("project1.builds.count", +1) do
+          post "/hooks/build/github/#{@token}", :payload => github_payload(project1)
+          assert_status_code(200)
+          assert response.body.include?(%{build for the following projects were triggered: "#{project1.name}"})
+        end
+      end
+    end
+  end
+
   test "build all projects that match name and branch specified by github" do
     project1 = github_project(:name => "obywatelgc", :vcs_branch => "master")
     project2 = github_project(:name => "obywatelgc2", :vcs_branch => "master")
