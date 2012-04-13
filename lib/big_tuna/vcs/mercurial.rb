@@ -36,7 +36,7 @@ module BigTuna::VCS
     end
 
     def update(where_to)
-      command = "hg pull -u"
+      command = "hg pull && hg update -C #{self.branch}"
       BigTuna::Runner.execute(where_to, command)
     end
   end
