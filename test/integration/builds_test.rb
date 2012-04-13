@@ -10,9 +10,12 @@ class BuildsTest < ActionController::IntegrationTest
     visit "/"
     click_link_or_button "myproject"
     build = project.recent_build
-    within("#build_#{build.id}") do
+    within('.in-recent-builds') do
+      click_link_or_button "Build ##{build.id}"
+    end
+    within(".page-header .btn-group") do
       assert_difference("Build.count", -1) do
-        click_button "Delete"
+        click_button "Delete build"
       end
     end
   end
@@ -27,7 +30,9 @@ class BuildsTest < ActionController::IntegrationTest
     run_delayed_jobs()
     visit "/"
     click_link_or_button "myproject"
-    click_link_or_button "Build #1"
+    within('.in-recent-builds') do
+      click_link_or_button "#1"
+    end
     assert page.has_css?("#step_1")
     assert page.has_css?("#step_2")
     assert page.has_css?("#step_3")
@@ -57,8 +62,8 @@ class BuildsTest < ActionController::IntegrationTest
       click_link_or_button "Build now"
     end
     visit build_path(project.recent_build)
-    within("#sidebar") do
-      click_link_or_button "Edit"
+    within(".page-header .btn-group") do
+      click_link_or_button "Edit project"
     end
     assert_equal current_path, "/projects/#{[project.id, project.name.to_url].join("-")}/edit"
   end
@@ -69,6 +74,6 @@ class BuildsTest < ActionController::IntegrationTest
     click_link_or_button "Build now"
     run_delayed_jobs()
     visit "/projects/#{[project.id, project.name.to_url].join("-")}"
-    assert page.has_xpath?("//div[@class='status_build_ok project']")
+    assert page.has_css?("h1.status_build_ok")
   end
 end

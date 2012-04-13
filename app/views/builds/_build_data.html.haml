@@ -1,15 +1,12 @@
-%tr
-  %td.title Commit
-  %td.value= build.commit_data? ? build.commit : "Commit hash not yet available"
-%tr
-  %td.title Committed&nbsp;at
-  %td.value
-    = build.commit_data? ? l(build.committed_at, :format => :long) : "Commit date not yet available"
-    = build.commit_data? ? (" by " + mail_to(build.email, build.author)).html_safe : "Author not yet available"
-%tr
-  %td.title Message
-  %td.value= build.commit_data? ? build.commit_message : "Message not yet available"
-- build.parts.each_with_index do |part, index|
-  %tr
-    %td.title= part.name
-    %td.value= link_to(formatted_status(part.status), build_path(build, :stderr => build.status == Build::STATUS_OK ? nil : 1, :anchor => "part_#{index}"))
+.commit-detail
+  %span.label Commit
+  %code.commit= build.commit_data? ? build.commit : "Commit hash not yet available"
+  %br
+  %span.label Author
+  = build.commit_data? ? (mail_to(build.email, build.author)).html_safe : "Author not yet available"
+  %br
+  %span.label Date
+  = build.commit_data? ? l(build.committed_at, :format => :long) : "Commit date not yet available"
+  %blockquote
+    = build.commit_data? ? build.commit_message : "Message not yet available"
+

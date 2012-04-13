@@ -2,23 +2,29 @@
 %html
   %head
     %title BigTuna Continuous Integration
-    = stylesheet_link_tag "reset.css"
-    = stylesheet_link_tag "master.css"
+    = stylesheet_link_tag "bootstrap.css"
+    = stylesheet_link_tag "bootstrap-responsive.css"
+    = stylesheet_link_tag "master_new.css"
     = javascript_include_tag :all
     = csrf_meta_tag
     %meta{:"http-equiv" => "Content-Type", :content => "text/html;charset=UTF-8"}
     %meta{:name => "keywords", :content => "keywords"}
     %meta{:name => "description", :content => "description"}
-  %body
-    #main
-      %div#ad
-        checked with
-        = link_to("BigTuna", "http://bigtuna.appelier.com", :target => "_blank", :title => "BigTuna v#{BigTuna::VERSION}")
-      #content
-        = flash[:error]
-        = flash[:notice]
-        = yield
-      %ol#sidebar
-        %li= link_to("home", root_path, :class => "black_button")
-        = yield :sidebar
-      #footer
+  %body{ :style => 'padding-top: 60px;' }
+    .navbar.navbar-fixed-top
+      .navbar-inner
+        .container
+          = link_to("BigTuna", "http://bigtuna.appelier.com", :target => "_blank", :title => "BigTuna v#{BigTuna::VERSION}", :class => "brand")
+          %span.brand.hint checked with
+          %ul.nav
+            %li
+              = link_to("Projects", root_path)
+            = yield :topbar
+
+
+    .container
+      = flash[:error]
+      = flash[:notice]
+      = yield
+
+    = yield :sidebar

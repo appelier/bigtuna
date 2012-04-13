@@ -1,4 +1,6 @@
-%h2= "Shared variables for &quot;#{@step_list.project.name}&quot;".html_safe
+.page-header
+  %h1= "Shared variables for &quot;#{@step_list.project.name}&quot;".html_safe
+
 %p You can set up configuration&ndash;specific <tt>%variables%</tt> here. Real&ndash;life examples would be
 %ul
   %li= "<tt><b>%runner%</b> rvm 1.8.7 exec</tt>".html_safe
@@ -13,28 +15,39 @@
 
 %p Shared variables cannot contain other shared variables except <tt>%build_dir%</tt> and <tt>%project_dir%</tt>.
 
-%h3 Create new variable
-= form_for(@shared_variable, :url => shared_variables_path(:step_list_id => @step_list)) do |f|
-  %div
-    = f.label(:name)
-    = f.text_field(:name)
-  %div
-    = f.label(:value)
-    = f.text_field(:value)
-  %div
-    %button.black_button{:type => "submit"}
-      = f.object.new_record? ? "Create" : "Update"
-
-%h3 Already existing variables
-- @shared_variables.each do |variable|
-  = form_for(variable, :url => shared_variable_path(variable, :step_list_id => @step_list)) do |f|
-    %div
-      = f.label(:name)
-      = f.text_field(:name)
-    %div
-      = f.label(:value)
-      = f.text_field(:value)
-    %div
-      %button.black_button{:type => "submit"} Update
-  = form_for(variable, :url => shared_variable_path(variable, :step_list_id => @step_list), :html => {:method => :delete}) do |f|
-    %button.crit_button{:type => "submit"} Remove
+.row
+  .span6
+    %h3
+      Create new variable
+    %p.help-block Specify the name and the value
+    = form_for(@shared_variable, :url => shared_variables_path(:step_list_id => @step_list), :html => { :class => 'form-horizontal'}) do |f|
+      .control-group
+        = f.label(:name)
+        .controls
+          = f.text_field(:name)
+      .control-group
+        = f.label(:value)
+        .controls
+          = f.text_field(:value)
+      .form-actions
+        %button{:type => "submit", :class => 'btn btn-primary'}
+          = f.object.new_record? ? "Create" : "Update"
+  .span6
+    - unless @shared_variables.empty?
+      %h3 Already existing variables
+      - @shared_variables.each do |variable|
+        %hr
+        %h3= variable.name
+        = form_for(variable, :url => shared_variable_path(variable, :step_list_id => @step_list), :html => {:method => :delete}) do |f|
+          %button{:class => 'btn btn-danger btn-small btn-tiny btn-shared-variable-removal', :type => "submit"} Remove 
+        = form_for(variable, :url => shared_variable_path(variable, :step_list_id => @step_list), :html => { :class => 'form-horizontal'}) do |f|
+          .control-group
+            = f.label(:name)
+            .controls
+              = f.text_field(:name)
+          .control-group
+            = f.label(:value)
+            .controls
+              = f.text_field(:value)
+          .form-actions
+            %button{:class => 'btn btn-primary', :type => "submit"} Update

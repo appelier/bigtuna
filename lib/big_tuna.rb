@@ -1,5 +1,5 @@
 module BigTuna
-  VERSION = "0.1.4"
+  VERSION = "0.1.5"
 
   DEFAULT_CONFIG = {
     "read_only" => false,

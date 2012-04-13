@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem "rails", "~> 3.0.3"
+gem "rails", "~> 3.0.11"
 gem "sqlite3-ruby"
 gem "haml"
 gem "delayed_job"
@@ -21,6 +21,11 @@ gem "notifo"
 # campfire notifications
 gem "tinder"
 
+case ENV["DB"]
+when "mysql" then gem "mysql2", "~>0.2.0"
+when "postgres" then gem "pg"
+end
+
 group :development, :test do
   gem "capybara"
   gem "launchy"
@@ -30,7 +35,6 @@ group :development, :test do
   gem "mocha"
   gem "database_cleaner"
   gem "crack"
-  gem "webmock"
 
   platforms :mri_18 do
     gem "ruby-debug"
@@ -39,4 +43,8 @@ group :development, :test do
   platforms :mri_19 do
     gem "ruby-debug19"
   end
+end
+
+group :test do
+  gem "webmock"
 end

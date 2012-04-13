@@ -6,3 +6,8 @@ function ajaxReload(url){
     $.ajax({method: 'get', url : url});
   }
 }
+
+jQuery('ol.list-with-status div.command_box').click(function() {
+  //console.log($('pre.step', this));
+  console.log ('foo');
+});

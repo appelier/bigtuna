@@ -402,7 +402,8 @@ class ProjectTest < ActiveSupport::TestCase
       :name => "Project",
       :vcs_source => "test/files/repo",
     }, "ls -al file")
-    create_project_builds(project, Build::STATUS_OK, Build::STATUS_OK, Build::STATUS_OK, Build::STATUS_OK, Build::STATUS_FAILED, Build::STATUS_FAILED)
+    hard_update_project_builds(project, Build::STATUS_FAILED, Build::STATUS_FAILED, Build::STATUS_OK, Build::STATUS_OK, Build::STATUS_OK, Build::STATUS_OK)
+    project.reload
     assert_equal 4, project.stability
   end
 
@@ -420,7 +421,8 @@ class ProjectTest < ActiveSupport::TestCase
       :name => "Project",
       :vcs_source => "test/files/repo",
     }, "ls -al file")
-    create_project_builds(project, Build::STATUS_FAILED, Build::STATUS_PROGRESS, Build::STATUS_IN_QUEUE, Build::STATUS_FAILED, Build::STATUS_OK, Build::STATUS_OK, Build::STATUS_FAILED)
+    hard_update_project_builds(project, Build::STATUS_FAILED, Build::STATUS_PROGRESS, Build::STATUS_IN_QUEUE, Build::STATUS_FAILED, Build::STATUS_OK, Build::STATUS_OK, Build::STATUS_FAILED)
+    project.reload
     assert_equal 2, project.stability
   end
 
@@ -446,6 +448,29 @@ class ProjectTest < ActiveSupport::TestCase
     assert_difference("Delayed::Job.count", +1) do
       3.times { project.build! }
     end
+  end
+
+  test "renaming a project with zero builds" do
+    project = project_with_steps({:vcs_source => "test/files/repo"}, "true", "true\nfalse")
+    assert_equal 0, project.total_builds
+    project.update_attributes({:name => "new name"})
+    assert_equal "new name", project.name
+  end
+
+  test 'by default a project should build by cloning' do
+    project = project_with_steps({:vcs_source => "test/files/repo"}, "true", "true\nfalse")
+
+    project.save!
+
+    assert_equal :clone, project.fetch_type, 'by default a project should build by cloning'
+  end
+
+  test 'should persist the fetch_type' do
+    project = project_with_steps({:vcs_source => "test/files/repo", :fetch_type => :incremental}, "true", "true\nfalse")
+
+    project.save!
+
+    assert_equal :incremental, project.fetch_type, 'should persist the fetch_type'
   end
 
   test "duplicating a project makes a copy" do
@@ -482,29 +507,6 @@ class ProjectTest < ActiveSupport::TestCase
     assert_equal project_clone.hook_name, project_with_empty_hook.hook_name
   end
 
-  test "renaming a project with zero builds" do
-    project = project_with_steps({:vcs_source => "test/files/repo"}, "true", "true\nfalse")
-    assert_equal 0, project.total_builds
-    project.update_attributes({:name => "new name"})
-    assert_equal "new name", project.name
-  end
-
-  test 'by default a project should build by cloning' do
-    project = project_with_steps({:vcs_source => "test/files/repo"}, "true", "true\nfalse")
-
-    project.save!
-
-    assert_equal :clone, project.fetch_type, 'by default a project should build by cloning'
-  end
-
-  test 'should persist the fetch_type' do
-    project = project_with_steps({:vcs_source => "test/files/repo", :fetch_type => :incremental}, "true", "true\nfalse")
-
-    project.save!
-
-    assert_equal :incremental, project.fetch_type, 'should persist the fetch_type'
-  end
-
   private
   def create_project_builds(project, *statuses)
     statuses.reverse.each do |status|
@@ -513,5 +515,12 @@ class ProjectTest < ActiveSupport::TestCase
       build = project.recent_build
       build.update_attributes!(:status => status)
     end
+  end
+
+  def hard_update_project_builds(project, *statuses)
+    statuses.reverse.each_with_index do |status, index|
+      build = Build.make(:project => project, :created_at => index.weeks.ago)
+      build.update_attributes!({:status => status})
+     end
   end
 end

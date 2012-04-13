@@ -1,4 +1,4 @@
-ENV["RAILS_ENV"] = "test"
+ENV["RAILS_ENV"] ||= "test"
 require File.expand_path('../../config/environment', __FILE__)
 require 'rails/test_help'
 require 'webmock/test_unit'
@@ -54,6 +54,7 @@ class ActiveSupport::TestCase
         job.invoke_job
         job.destroy
         ran_jobs << job
+        sleep(0.3) if ENV["DB"] == 'mysql'
       end
     end
     ran_jobs

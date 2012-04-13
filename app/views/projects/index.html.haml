@@ -1,8 +1,7 @@
-#listing
-  = render :partial => 'projects'
-  
+= render :partial => 'projects'
+
 = ajaxReload(projects_path(:format => :js))
 
-- content_for :sidebar do
+- content_for :topbar do
   - unless BigTuna.read_only?
-    %li= link_to("New project", new_project_path, :class => 'black_button')
+    %li= link_to("New Project", new_project_path)

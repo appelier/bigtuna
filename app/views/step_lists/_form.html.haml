@@ -1,11 +1,14 @@
-%div
-  = f.label(:name)
-  %br
-  = f.text_field(:name, :class => 'textfield')
-%div
-  = f.label(:steps)
-  %br
-  = f.text_area(:steps, :class => 'textarea')
-%div
-  %button.black_button{:type => "submit"}
-    = f.object.new_record? ? "Create" : "Update"
+.control-group
+  = f.label(:name, :class => 'control-label')
+  .controls
+    = f.text_field(:name)
+
+.control-group
+  = f.label(:steps, :class => 'control-label')
+  .controls
+    = f.text_area(:steps, :cols => 10, :rows => 5)
+
+.form-actions
+  %button.btn.btn-primary{:type => "submit"}
+    = f.object.new_record? ? "Create configuration" : "Update configuration"
+

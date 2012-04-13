@@ -1,15 +1,14 @@
 %div{:id => "step_outer_#{step_no}", :class => step.exit_code == 0 ? "status_build_ok output_box" : "status_build_failed output_box"}
-  .command_box
-    %tt.command= "#{step.command}"
+  - unless step.exit_code == 0
+    %span.label.label-important FAILED
+  %samp.command= "#{step.command}"
   - if step.exit_code.nil?
-    %br
-    %tt.command= "Task was not executed"
+    %samp.command= "Task was not executed"
   - elsif step.exit_code != 0
-    %br
-    %tt.command= "Exit code: #{step.exit_code}"
+    %samp.command= "Exit code: #{step.exit_code}"
   - if !step.exit_code.nil? and step.has_output?
-    %pre
+    %samp.step
       - step.all.each do |type, text|
-        - if (type != BigTuna::Runner::Output::TYPE_STDERR or params[:stderr])
-          %span{:class => type}= strip_shell_colorization(text)
+        - if ((type != BigTuna::Runner::Output::TYPE_STDERR or params[:stderr]) and !text.empty?)
+          %pre{ :class => step.exit_code == 0 ? '' : "alert-danger alert"}= strip_shell_colorization(text)
 %br

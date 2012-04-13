@@ -13,20 +13,21 @@ class HooksController < ApplicationController
   def github
     payload = JSON.parse(params[:payload])
     branch = payload["ref"].split("/").last
-    url = payload["repository"]["url"]
-    public_source = url.gsub(/^https:\/\//, "git://") + ".git"
-    private_source = url.gsub(/^https:\/\//, "git@").
-                         gsub(/github.com\//, "github.com:") + ".git"
+    github_project_path = payload["repository"]["url"].match( %r{github\.com/(.*)} )[1]
+    search_term = "%github.com_#{github_project_path}.git"
 
-    project = Project.where(["(vcs_source = ? or vcs_source = ?) AND (vcs_branch = ?)",
-                              public_source, private_source, branch]).first
+    projects = Project.where(["vcs_source LIKE ?", search_term]).where(:vcs_branch => branch).all
 
     if BigTuna.github_secure.nil?
       render :text => "github secure token is not set up", :status => 403
-    elsif project and params[:secure] == BigTuna.github_secure
-      trigger_and_respond(project)
+    elsif projects.present? && params[:secure] == BigTuna.github_secure
+      projects.each(&:build!)
+      render :text => "build for the following projects were triggered: " +
+        projects.map(&:name).map(&:inspect).join(', '), :status => 200
+    elsif projects.empty?
+      render :text => "project not found", :status => 404
     else
-      render :text => "invalid secure token", :status => 404
+      render :text => "invalid secure token", :status => 403
     end
   end
 

@@ -1,2 +1,7 @@
-= form_for(@project, :url => projects_path) do |f|
+.page-header
+  %h1
+    Set up a new project
+    %small Provide BigTuna with all the necessary data to set up a project.
+
+= form_for(@project, :url => projects_path, :html => { :class => 'form-horizontal'}) do |f|
   = render :partial => "form", :locals => {:f => f}
