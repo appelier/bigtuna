@@ -7,17 +7,18 @@ module BigTuna
     end
 
     def build_still_fails(build, config)
-      enqueue(config, full_msg(build, 'still fails'))
+      enqueue(config, full_msg(build, 'still fails'), "vuvuzela")
     end
 
     def build_failed(build, config)
-      enqueue(config, full_msg(build, 'failed'))
+      enqueue(config, full_msg(build, 'failed'), "vuvuzela")
     end
 
     class Job
-      def initialize(config, message)
+      def initialize(config, message, sound)
         @config = config
         @message = message
+        @sound = sound
       end
 
       def perform
@@ -29,17 +30,18 @@ module BigTuna
                                           :ssl => use_ssl)
           room = campfire.find_room_by_name(@config['room'])
           room.speak(@message)
+          room.play(@sound) if @sound
         end
       end
     end
 
   private
-    def enqueue(config, message)
-      Delayed::Job.enqueue(Job.new(config, message))
+    def enqueue(config, message, sound = nil)
+      Delayed::Job.enqueue(Job.new(config, message, sound))
     end
 
     def full_msg(build, status)
-      "Build '#{build.display_name}' in '#{build.project.name}' #{status} (#{build_url(build)})"
+      "#{build.project.name} build ##{build.build_no} #{status} @ #{build.commit[0..6]} by #{build.author} (#{build_url(build)})"
     end
   end
 end
