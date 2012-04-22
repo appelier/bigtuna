@@ -23,8 +23,8 @@ gem "notifo"
 gem "tinder"
 
 case ENV["DB"]
-when "mysql" then gem "mysql2", "~>0.2.0"
 when "postgres" then gem "pg"
+else gem "mysql2", "~>0.2.0"
 end
 
 group :development, :test do
