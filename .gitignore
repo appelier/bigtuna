@@ -19,3 +19,5 @@ db/*.sqlite
 
 builds/*
 test/files/*
+
+.rvmrc
