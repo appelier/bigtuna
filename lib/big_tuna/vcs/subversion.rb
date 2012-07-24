@@ -36,8 +36,10 @@ module BigTuna::VCS
     end
 
     def update(where_to)
-      command = 'svn update'
-      BigTuna::Runner.execute(where_to, command)
+      BigTuna::Runner.execute(where_to, 'svn st --no-ignore').stdout.each do |file|
+        FileUtils.rm_rf(File.join(where_to, file[1..-1].strip)) if %w(? I).include?(file[0..0])
+      end
+      BigTuna::Runner.execute(where_to, 'svn update')
     end
   end
 end
