@@ -88,6 +88,7 @@ GEM
     mime-types (1.17.2)
     mocha (0.9.12)
     multipart-post (1.1.0)
+    mysql2 (0.2.18)
     nokogiri (1.4.4)
     notifo (0.1.0)
       httparty (~> 0.4.5)
@@ -186,6 +187,7 @@ DEPENDENCIES
   launchy
   machinist
   mocha
+  mysql2 (~> 0.2.0)
   nokogiri
   notifo
   open4
