@@ -15,29 +15,29 @@ module BigTuna::VCS
 
     def head_info
       info = {}
-      command = "svn log -l 1"
+      command = "svn log -l 1 --xml"
       begin
         output = BigTuna::Runner.execute(source, command)
       rescue BigTuna::Runner::Error => e
         raise BigTuna::VCS::Error.new("Couldn't access repository log")
       end
-      log = output.stdout[1].match(/(\S+) \| (\S+) \| (.+) \|/)
-      info[:commit] = log[1]
+      log = output.stdout.join.match(/revision="(\d+)"><author>(\S+)<\/author><date>(\S+)<\/date><msg>(.*)<\/msg>/)
+      info[:commit] = "r#{log[1]}"
       info[:author] = log[2]
-      email = begin
-        YAML.load(File.read('config/email_addresses.yml'))[log[2]]
-      rescue
-        nil
-      end
-      info[:email] = email
+      info[:email] = log[2] # svn does not have email addresses associated
       info[:committed_at] = Time.parse(log[3])
-      info[:commit_message] = output.stdout[3..-2]
+      info[:commit_message] = log[4]
       [info, command]
     end
 
     def clone(where_to)
       command = "svn checkout #{source} #{where_to}"
       BigTuna::Runner.execute(Dir.pwd, command)
+    end
+
+    def update(where_to)
+      command = 'svn update'
+      BigTuna::Runner.execute(where_to, command)
     end
   end
 end
