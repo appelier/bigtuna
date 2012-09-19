@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem "rails", "~> 3.0.11"
+gem "rails", "~> 3.0.17"
 gem "sqlite3"
 gem "haml"
 gem "delayed_job"
