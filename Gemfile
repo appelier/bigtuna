@@ -42,7 +42,7 @@ group :development, :test do
   end
 
   platforms :mri_19 do
-    gem "ruby-debug19"
+    gem "debugger"
   end
 end
 
