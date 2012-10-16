@@ -1,0 +1,6 @@
+%div
+  = label_tag("token")
+  = text_area_tag("configuration[token]", @hook.configuration["token"])
+%div
+  = label_tag("room_id")
+  = text_area_tag("configuration[room_id]", @hook.configuration["room_id"])
