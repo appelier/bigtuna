@@ -85,4 +85,25 @@ class HooksTest < ActionController::IntegrationTest
     click_button "Edit"
     assert_status_code 200
   end
+
+  test "hipchat hook has a valid configuration form" do
+    project = project_with_steps({
+      :name => "Koss",
+      :vcs_source => "test/files/repo",
+      :max_builds => 2,
+      :hooks => {"hipchat" => "hipchat"},
+    }, "ls")
+
+    visit edit_project_path(project)
+    within("#hook_hipchat") do
+      click_link "Configure"
+    end
+    assert page.has_field?("configuration_token")
+    assert page.has_field?("configuration_room_id")
+
+    click_button "Edit"
+    assert_status_code 200
+  end
+
 end
+
