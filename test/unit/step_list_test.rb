@@ -1,3 +1,5 @@
+require 'test_helper'
+
 class StepListTest < ActiveSupport::TestCase
   test "steps cant be blank" do
     assert_invalid(StepList, :steps) { |p| p.steps = "" }
