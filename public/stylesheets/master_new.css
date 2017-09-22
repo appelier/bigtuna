@@ -110,6 +110,10 @@ h1.project-title {
   margin-top: 6px;
 }
 
+.navbar-fixed-top .user_name {
+  margin-right: 10px;
+}
+
 .navbar-fixed-top a.brand:hover {
   text-shadow: 0 1px 0 rgba(255, 255, 255, .1), 0 0 30px rgba(255, 255, 255, .125);
   color: #fff;

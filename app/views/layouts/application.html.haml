@@ -14,12 +14,17 @@
     .navbar.navbar-fixed-top
       .navbar-inner
         .container
-          = link_to("BigTuna", "http://bigtuna.appelier.com", :target => "_blank", :title => "BigTuna v#{BigTuna::VERSION}", :class => "brand")
-          %span.brand.hint checked with
           %ul.nav
             %li
               = link_to("Projects", root_path)
             = yield :topbar
+
+          .pull-right
+            = link_to("BigTuna", "http://bigtuna.appelier.com", :target => "_blank", :title => "BigTuna v#{BigTuna::VERSION}", :class => "brand")
+            %span.brand.hint checked with
+            -if gapps?
+              %span.brand.hint.user_name #{session[:gapps_user]}
+
 
 
     .container
